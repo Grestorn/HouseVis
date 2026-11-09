@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://housevis.local/schema/global.schema.json",
+  "title": "HouseVis: global settings",
+  "description": "Settings for the whole house, on every device (edited in the Windows app, menu \"Globale Einstellungen …\"). The file is optional; missing entries use the defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "patternProperties": {
+    "^(\\$schema|_.*)$": {
+      "description": "Reference to the schema or a comment; ignored."
+    }
+  },
+  "properties": {
+    "language": {
+      "enum": ["de", "en"],
+      "description": "The app's language on every device showing this house. Without it each device uses its system language (German for every German variant, otherwise English)."
+    },
+    "indicators": {
+      "description": "Icon per indicator kind: \"heating\" and \"cooling\" for the rooms, and the kinds of the indicators in house.json (e.g. \"music\"). Icons are names from the app's list (src/model/indicatorIcons.ts, Fluent Emoji), e.g. \"fire\"; \"hidden\" instead of an icon: that kind is not shown (the default for \"music-paused\").",
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]{0,39}$" },
+      "additionalProperties": { "type": "string", "pattern": "^[a-z0-9-]{1,40}$" }
+    }
+  }
+}

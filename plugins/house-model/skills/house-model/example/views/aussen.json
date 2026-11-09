@@ -1,0 +1,6 @@
+{
+  "title": "Außen",
+  "direction": "south",
+  "fill": 0.8,
+  "rooms": ["garage"]
+}

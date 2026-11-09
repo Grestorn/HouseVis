@@ -1,0 +1,16 @@
+{
+  "title": "Von Nordosten",
+  "camera": { "azimuth": 19.5, "elevation": 11.9 },
+  "rooms": ["flur-kg", "waschkueche", "vorrat", "kueche", "diele", "gaeste-wc", "arbeitszimmer"],
+  "roofs": { "wing": "transparent" },
+  "labels": {
+    "gaeste-wc": { "temperature": { "height": 0.05, "offset": [-0.23, 0.51] } },
+    "diele": { "temperature": { "height": 0.14, "offset": [-0.38, 2.19] } },
+    "vorrat": { "name": { "wall": "vorrat@0.3,4.72-0.3,9.2", "shift": 1.69, "height": 0.28 } },
+    "flur-kg": { "name": { "wall": "flur-kg@5.72,0.3-5.72,9.2", "shift": 3.7, "height": 0.15 } },
+    "arbeitszimmer": { "temperature": { "height": 0.05, "offset": [-0.29, 0.2] }, "indicators": { "height": 2.27, "offset": [1.05, -0.71] } },
+    "kueche": { "temperature": { "height": 0.05, "offset": [-0.63, 0.33] }, "indicators": { "height": 1.4, "offset": [-0.46, -0.83] }, "name": { "wall": "kueche@0.37,6.32-0.37,9.14", "shift": 0.82, "height": 0.24 } },
+    "waschkueche": { "temperature": { "offset": [-0.31, 0.79], "height": 0.3 }, "name": { "wall": "waschkueche@7.32,4.52-7.32,9.2", "shift": 1.56, "height": 0.15 }, "indicators": { "height": 1.07, "offset": [-0.36, 0.23] } }
+  },
+  "hide": ["ground", "pavilion", "Garage", "outbuilding", "Carport"]
+}

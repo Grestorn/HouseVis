@@ -1,0 +1,71 @@
+{
+  "default": "pc",
+  "devices": [
+    {
+      "id": "pc",
+      "name": "PC",
+      "platform": "desktop",
+      "aspect": { "width": 16, "height": 10 },
+      "landscape": {
+        "pages": [
+          { "id": "haus", "title": "Haus vorn", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          {
+            "id": "65ffa8d1-3d60-46aa-b19a-bbe31a28b0f9",
+            "title": "Haus hinten",
+            "icon": "house",
+            "components": [
+              { "type": "view", "view": "nordost", "area": { "x": 0, "y": 0, "width": 67.9, "height": 84.4 } },
+              { "type": "view", "view": "suedwest", "area": { "x": 50.8, "y": 46.5, "width": 49.2, "height": 53.5 } }
+            ],
+            "weather": true
+          },
+          { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "aussen", "title": "Außen", "icon": "trees", "components": [{ "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }], "weather": true },
+          { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
+        ]
+      }
+    },
+    {
+      "id": "tablet",
+      "name": "Tablet",
+      "platform": "android",
+      "aspect": { "width": 16, "height": 10 },
+      "keepAwake": true,
+      "presenceRoom": "eltern",
+      "landscape": {
+        "pages": [
+          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
+        ]
+      },
+      "portrait": {
+        "pages": [
+          {
+            "id": "haus",
+            "title": "Haus",
+            "icon": "house",
+            "weather": true,
+            "components": [
+              { "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 58 } },
+              { "type": "view", "view": "nordost", "area": { "x": 0, "y": 60, "width": 100, "height": 40 }, "frame": true }
+            ]
+          },
+          { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
+        ]
+      }
+    },
+    {
+      "id": "telefon",
+      "name": "Telefon",
+      "platform": "android",
+      "aspect": { "width": 20, "height": 9 },
+      "portrait": {
+        "pages": [
+          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "aussen", "title": "Außen", "icon": "trees", "components": [{ "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] }
+        ]
+      }
+    }
+  ]
+}

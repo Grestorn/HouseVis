@@ -1,0 +1,1626 @@
+{
+  "_comment": "Datapoints of the demo house; their controls are in demo/miniserver/LoxAPP3.json (the demo Miniserver).",
+  "sources": {
+    "miniserver": {
+      "type": "loxone"
+    }
+  },
+  "datapoints": {
+    "hobbyraum.temperature": {
+      "source": "miniserver",
+      "label": "Hobbyraum",
+      "loxone": {
+        "control": "1c0de002-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "hobbyraum.target-temperature": {
+      "source": "miniserver",
+      "label": "Hobbyraum",
+      "loxone": {
+        "control": "1c0de002-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "hobbyraum.climate-mode": {
+      "source": "miniserver",
+      "label": "Hobbyraum",
+      "loxone": {
+        "control": "1c0de002-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "hobbyraum.climate-override": {
+      "source": "miniserver",
+      "label": "Hobbyraum",
+      "loxone": {
+        "control": "1c0de002-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "hobbyraum.heating": {
+      "source": "miniserver",
+      "label": "Hobbyraum Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de002-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "hobbyraum.cooling": {
+      "source": "miniserver",
+      "label": "Hobbyraum Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de002-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "wohnen.temperature": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen",
+      "loxone": {
+        "control": "1c0de003-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "wohnen.target-temperature": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen",
+      "loxone": {
+        "control": "1c0de003-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "wohnen.climate-mode": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen",
+      "loxone": {
+        "control": "1c0de003-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "wohnen.climate-override": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen",
+      "loxone": {
+        "control": "1c0de003-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "wohnen.heating": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de003-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "wohnen.cooling": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de003-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "kueche.temperature": {
+      "source": "miniserver",
+      "label": "Küche",
+      "loxone": {
+        "control": "1c0de004-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "kueche.target-temperature": {
+      "source": "miniserver",
+      "label": "Küche",
+      "loxone": {
+        "control": "1c0de004-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "kueche.climate-mode": {
+      "source": "miniserver",
+      "label": "Küche",
+      "loxone": {
+        "control": "1c0de004-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "kueche.climate-override": {
+      "source": "miniserver",
+      "label": "Küche",
+      "loxone": {
+        "control": "1c0de004-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "kueche.heating": {
+      "source": "miniserver",
+      "label": "Küche Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de004-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "kueche.cooling": {
+      "source": "miniserver",
+      "label": "Küche Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de004-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "diele.temperature": {
+      "source": "miniserver",
+      "label": "Diele",
+      "loxone": {
+        "control": "1c0de005-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "diele.target-temperature": {
+      "source": "miniserver",
+      "label": "Diele",
+      "loxone": {
+        "control": "1c0de005-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "diele.climate-mode": {
+      "source": "miniserver",
+      "label": "Diele",
+      "loxone": {
+        "control": "1c0de005-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "diele.climate-override": {
+      "source": "miniserver",
+      "label": "Diele",
+      "loxone": {
+        "control": "1c0de005-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "diele.heating": {
+      "source": "miniserver",
+      "label": "Diele Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de005-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "diele.cooling": {
+      "source": "miniserver",
+      "label": "Diele Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de005-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "gaestezimmer.temperature": {
+      "source": "miniserver",
+      "label": "Gästezimmer",
+      "loxone": {
+        "control": "1c0de006-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "gaestezimmer.target-temperature": {
+      "source": "miniserver",
+      "label": "Gästezimmer",
+      "loxone": {
+        "control": "1c0de006-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "gaestezimmer.climate-mode": {
+      "source": "miniserver",
+      "label": "Gästezimmer",
+      "loxone": {
+        "control": "1c0de006-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "gaestezimmer.climate-override": {
+      "source": "miniserver",
+      "label": "Gästezimmer",
+      "loxone": {
+        "control": "1c0de006-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "gaestezimmer.heating": {
+      "source": "miniserver",
+      "label": "Gästezimmer Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de006-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "gaestezimmer.cooling": {
+      "source": "miniserver",
+      "label": "Gästezimmer Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de006-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "arbeitszimmer.temperature": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer",
+      "loxone": {
+        "control": "1c0de007-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "arbeitszimmer.target-temperature": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer",
+      "loxone": {
+        "control": "1c0de007-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "arbeitszimmer.climate-mode": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer",
+      "loxone": {
+        "control": "1c0de007-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "arbeitszimmer.climate-override": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer",
+      "loxone": {
+        "control": "1c0de007-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "arbeitszimmer.heating": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de007-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "arbeitszimmer.cooling": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de007-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "eltern.temperature": {
+      "source": "miniserver",
+      "label": "Eltern",
+      "loxone": {
+        "control": "1c0de008-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "eltern.target-temperature": {
+      "source": "miniserver",
+      "label": "Eltern",
+      "loxone": {
+        "control": "1c0de008-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "eltern.climate-mode": {
+      "source": "miniserver",
+      "label": "Eltern",
+      "loxone": {
+        "control": "1c0de008-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "eltern.climate-override": {
+      "source": "miniserver",
+      "label": "Eltern",
+      "loxone": {
+        "control": "1c0de008-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "eltern.heating": {
+      "source": "miniserver",
+      "label": "Eltern Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de008-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "eltern.cooling": {
+      "source": "miniserver",
+      "label": "Eltern Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de008-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "bad.temperature": {
+      "source": "miniserver",
+      "label": "Bad",
+      "loxone": {
+        "control": "1c0de009-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "bad.target-temperature": {
+      "source": "miniserver",
+      "label": "Bad",
+      "loxone": {
+        "control": "1c0de009-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "bad.climate-mode": {
+      "source": "miniserver",
+      "label": "Bad",
+      "loxone": {
+        "control": "1c0de009-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "bad.climate-override": {
+      "source": "miniserver",
+      "label": "Bad",
+      "loxone": {
+        "control": "1c0de009-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "bad.heating": {
+      "source": "miniserver",
+      "label": "Bad Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de009-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "bad.cooling": {
+      "source": "miniserver",
+      "label": "Bad Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de009-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "kind-1.temperature": {
+      "source": "miniserver",
+      "label": "Kind 1",
+      "loxone": {
+        "control": "1c0de00a-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "kind-1.target-temperature": {
+      "source": "miniserver",
+      "label": "Kind 1",
+      "loxone": {
+        "control": "1c0de00a-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "kind-1.climate-mode": {
+      "source": "miniserver",
+      "label": "Kind 1",
+      "loxone": {
+        "control": "1c0de00a-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "kind-1.climate-override": {
+      "source": "miniserver",
+      "label": "Kind 1",
+      "loxone": {
+        "control": "1c0de00a-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "kind-1.heating": {
+      "source": "miniserver",
+      "label": "Kind 1 Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de00a-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "kind-1.cooling": {
+      "source": "miniserver",
+      "label": "Kind 1 Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de00a-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "kind-2.temperature": {
+      "source": "miniserver",
+      "label": "Kind 2",
+      "loxone": {
+        "control": "1c0de00b-0000-0000-ffffdec0de000000",
+        "state": "tempActual"
+      },
+      "unit": "°C"
+    },
+    "kind-2.target-temperature": {
+      "source": "miniserver",
+      "label": "Kind 2",
+      "loxone": {
+        "control": "1c0de00b-0000-0000-ffffdec0de000000",
+        "state": "tempTarget"
+      },
+      "unit": "°C"
+    },
+    "kind-2.climate-mode": {
+      "source": "miniserver",
+      "label": "Kind 2",
+      "loxone": {
+        "control": "1c0de00b-0000-0000-ffffdec0de000000",
+        "state": "activeMode"
+      }
+    },
+    "kind-2.climate-override": {
+      "source": "miniserver",
+      "label": "Kind 2",
+      "loxone": {
+        "control": "1c0de00b-0000-0000-ffffdec0de000000",
+        "state": "overrideReason"
+      }
+    },
+    "kind-2.heating": {
+      "source": "miniserver",
+      "label": "Kind 2 Heizbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de00b-0000-0000-ffffdec0de000000",
+        "demand": "heating"
+      }
+    },
+    "kind-2.cooling": {
+      "source": "miniserver",
+      "label": "Kind 2 Kühlbedarf",
+      "loxone": {
+        "control": "1c0de001-0000-0000-ffffdec0de000000",
+        "state": "controls"
+      },
+      "as": {
+        "type": "climateDemand",
+        "control": "1c0de00b-0000-0000-ffffdec0de000000",
+        "demand": "cooling"
+      }
+    },
+    "technik.temperature": {
+      "source": "miniserver",
+      "label": "Technik Temperatur",
+      "loxone": {
+        "control": "1c0de00c-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C"
+    },
+    "waschkueche.temperature": {
+      "source": "miniserver",
+      "label": "Waschküche Temperatur",
+      "loxone": {
+        "control": "1c0de00d-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C"
+    },
+    "gaeste-wc.temperature": {
+      "source": "miniserver",
+      "label": "Gäste-WC Temperatur",
+      "loxone": {
+        "control": "1c0de00e-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C"
+    },
+    "studio.temperature": {
+      "source": "miniserver",
+      "label": "Studio Temperatur",
+      "loxone": {
+        "control": "1c0de00f-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C"
+    },
+    "pavillon.temperature": {
+      "source": "miniserver",
+      "label": "Pavillon Temperatur",
+      "loxone": {
+        "control": "1c0de010-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C",
+      "as": {
+        "type": "number",
+        "scale": 0.1,
+        "decimals": 1
+      }
+    },
+    "hobbyraum.presence": {
+      "source": "miniserver",
+      "label": "Hobbyraum",
+      "loxone": {
+        "control": "1c0de011-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "wohnen.presence": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen",
+      "loxone": {
+        "control": "1c0de012-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "kueche.presence": {
+      "source": "miniserver",
+      "label": "Küche",
+      "loxone": {
+        "control": "1c0de013-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "diele.presence": {
+      "source": "miniserver",
+      "label": "Diele",
+      "loxone": {
+        "control": "1c0de014-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "gaestezimmer.presence": {
+      "source": "miniserver",
+      "label": "Gästezimmer",
+      "loxone": {
+        "control": "1c0de015-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "arbeitszimmer.presence": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer",
+      "loxone": {
+        "control": "1c0de016-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "eltern.presence": {
+      "source": "miniserver",
+      "label": "Eltern",
+      "loxone": {
+        "control": "1c0de017-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "bad.presence": {
+      "source": "miniserver",
+      "label": "Bad",
+      "loxone": {
+        "control": "1c0de018-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "flur-og.presence": {
+      "source": "miniserver",
+      "label": "Flur OG",
+      "loxone": {
+        "control": "1c0de019-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "kind-1.presence": {
+      "source": "miniserver",
+      "label": "Kind 1",
+      "loxone": {
+        "control": "1c0de01a-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "kind-2.presence": {
+      "source": "miniserver",
+      "label": "Kind 2",
+      "loxone": {
+        "control": "1c0de01b-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "garage.presence": {
+      "source": "miniserver",
+      "label": "Garage",
+      "loxone": {
+        "control": "1c0de01c-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": {
+        "type": "boolean",
+        "threshold": 0.5
+      }
+    },
+    "light.hobbyraum": {
+      "source": "miniserver",
+      "label": "Hobbyraum Decke",
+      "loxone": {
+        "control": "1c0de01d-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "hobbyraum.light": {
+      "source": "miniserver",
+      "label": "Hobbyraum",
+      "loxone": {
+        "control": "1c0de01d-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "flur-kg.light": {
+      "source": "miniserver",
+      "label": "Flur KG",
+      "loxone": {
+        "control": "1c0de01e-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "technik.light": {
+      "source": "miniserver",
+      "label": "Technik",
+      "loxone": {
+        "control": "1c0de01f-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "waschkueche.light": {
+      "source": "miniserver",
+      "label": "Waschküche",
+      "loxone": {
+        "control": "1c0de020-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.wohnen.decke": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen Decke",
+      "loxone": {
+        "control": "1c0de021-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "light.wohnen.essen": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen Essplatz",
+      "loxone": {
+        "control": "1c0de021-0000-0000-ffffdec0de000000/AI2",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "wohnen.light": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen",
+      "loxone": {
+        "control": "1c0de021-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "kueche.light": {
+      "source": "miniserver",
+      "label": "Küche",
+      "loxone": {
+        "control": "1c0de022-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "kueche.light-level": {
+      "source": "miniserver",
+      "label": "Küche Spots",
+      "loxone": {
+        "control": "1c0de023-0000-0000-ffffdec0de000000",
+        "state": "position"
+      },
+      "unit": "%"
+    },
+    "light.diele": {
+      "source": "miniserver",
+      "label": "Diele Decke",
+      "loxone": {
+        "control": "1c0de024-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "diele.light": {
+      "source": "miniserver",
+      "label": "Diele",
+      "loxone": {
+        "control": "1c0de024-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "gaeste-wc.light": {
+      "source": "miniserver",
+      "label": "Gäste-WC",
+      "loxone": {
+        "control": "1c0de025-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.gaestezimmer": {
+      "source": "miniserver",
+      "label": "Gästezimmer Decke",
+      "loxone": {
+        "control": "1c0de026-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "gaestezimmer.light": {
+      "source": "miniserver",
+      "label": "Gästezimmer",
+      "loxone": {
+        "control": "1c0de026-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "garderobe.light": {
+      "source": "miniserver",
+      "label": "Garderobe",
+      "loxone": {
+        "control": "1c0de027-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.arbeitszimmer": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer Decke",
+      "loxone": {
+        "control": "1c0de028-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "arbeitszimmer.light": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer",
+      "loxone": {
+        "control": "1c0de028-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.eltern": {
+      "source": "miniserver",
+      "label": "Eltern Decke",
+      "loxone": {
+        "control": "1c0de029-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "eltern.light": {
+      "source": "miniserver",
+      "label": "Eltern",
+      "loxone": {
+        "control": "1c0de029-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.bad": {
+      "source": "miniserver",
+      "label": "Bad Decke",
+      "loxone": {
+        "control": "1c0de02a-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "bad.light": {
+      "source": "miniserver",
+      "label": "Bad",
+      "loxone": {
+        "control": "1c0de02a-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "flur-og.light": {
+      "source": "miniserver",
+      "label": "Flur OG",
+      "loxone": {
+        "control": "1c0de02b-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.kind-1": {
+      "source": "miniserver",
+      "label": "Kind 1 Decke",
+      "loxone": {
+        "control": "1c0de02c-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "kind-1.light": {
+      "source": "miniserver",
+      "label": "Kind 1",
+      "loxone": {
+        "control": "1c0de02c-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "light.kind-2": {
+      "source": "miniserver",
+      "label": "Kind 2 Decke",
+      "loxone": {
+        "control": "1c0de02d-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "kind-2.light": {
+      "source": "miniserver",
+      "label": "Kind 2",
+      "loxone": {
+        "control": "1c0de02d-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "studio.light": {
+      "source": "miniserver",
+      "label": "Studio",
+      "loxone": {
+        "control": "1c0de02e-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "garage.light": {
+      "source": "miniserver",
+      "label": "Garage Licht",
+      "loxone": {
+        "control": "1c0de02f-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "light.pavillon": {
+      "source": "miniserver",
+      "label": "Pavillon Decke",
+      "loxone": {
+        "control": "1c0de030-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "light.aussen.weg": {
+      "source": "miniserver",
+      "label": "Außenbeleuchtung Weg",
+      "loxone": {
+        "control": "1c0de05c-0000-0000-ffffdec0de000000/AI1",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "light.aussen.eingang": {
+      "source": "miniserver",
+      "label": "Außenbeleuchtung Eingang",
+      "loxone": {
+        "control": "1c0de05c-0000-0000-ffffdec0de000000/AI2",
+        "state": "color"
+      },
+      "as": "color"
+    },
+    "kueche-vitrine.light": {
+      "source": "miniserver",
+      "label": "Küche Vitrine",
+      "loxone": {
+        "control": "1c0de05d-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "pavillon.light": {
+      "source": "miniserver",
+      "label": "Pavillon",
+      "loxone": {
+        "control": "1c0de030-0000-0000-ffffdec0de000000",
+        "state": "activeMoods"
+      },
+      "as": {
+        "type": "boolean",
+        "notEquals": "[778]"
+      }
+    },
+    "fenster.hobbyraum-west-1": {
+      "source": "miniserver",
+      "label": "Fenster hobbyraum-west-1",
+      "loxone": {
+        "control": "1c0de031-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.waschkueche-north-1": {
+      "source": "miniserver",
+      "label": "Fenster waschkueche-north-1",
+      "loxone": {
+        "control": "1c0de032-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.wohnen-south-1": {
+      "source": "miniserver",
+      "label": "Fenster wohnen-south-1",
+      "loxone": {
+        "control": "1c0de033-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.wohnen-south-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-south-1",
+      "loxone": {
+        "control": "1c0de034-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.wohnen-south-1.lamellen": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-south-1",
+      "loxone": {
+        "control": "1c0de034-0000-0000-ffffdec0de000000",
+        "state": "shadePosition"
+      }
+    },
+    "beschattung.wohnen-south-1-2.position": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-south-1-2",
+      "loxone": {
+        "control": "1c0de035-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.wohnen-south-1-2.lamellen": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-south-1-2",
+      "loxone": {
+        "control": "1c0de035-0000-0000-ffffdec0de000000",
+        "state": "shadePosition"
+      }
+    },
+    "fenster.wohnen-south-2": {
+      "source": "miniserver",
+      "label": "Fenster wohnen-south-2",
+      "loxone": {
+        "control": "1c0de036-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.wohnen-south-2.gekippt": {
+      "source": "miniserver",
+      "label": "Fenster wohnen-south-2 gekippt",
+      "loxone": {
+        "control": "1c0de037-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.wohnen-south-2.position": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-south-2",
+      "loxone": {
+        "control": "1c0de038-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.wohnen-south-2.lamellen": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-south-2",
+      "loxone": {
+        "control": "1c0de038-0000-0000-ffffdec0de000000",
+        "state": "shadePosition"
+      }
+    },
+    "fenster.wohnen-west-1": {
+      "source": "miniserver",
+      "label": "Fenster wohnen-west-1",
+      "loxone": {
+        "control": "1c0de039-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.wohnen-west-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung wohnen-west-1",
+      "loxone": {
+        "control": "1c0de03a-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.kueche-west-1": {
+      "source": "miniserver",
+      "label": "Fenster kueche-west-1",
+      "loxone": {
+        "control": "1c0de03b-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": {
+        "type": "boolean",
+        "invert": true
+      }
+    },
+    "beschattung.kueche-west-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung kueche-west-1",
+      "loxone": {
+        "control": "1c0de03c-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.diele-north-1": {
+      "source": "miniserver",
+      "label": "Fenster diele-north-1",
+      "loxone": {
+        "control": "1c0de03d-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.gaeste-wc-north-1": {
+      "source": "miniserver",
+      "label": "Fenster gaeste-wc-north-1",
+      "loxone": {
+        "control": "1c0de03e-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.gaeste-wc-north-1.gekippt": {
+      "source": "miniserver",
+      "label": "Fenster gaeste-wc-north-1 gekippt",
+      "loxone": {
+        "control": "1c0de03f-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.gaestezimmer-east-1": {
+      "source": "miniserver",
+      "label": "Fenster gaestezimmer-east-1",
+      "loxone": {
+        "control": "1c0de040-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.gaestezimmer-east-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung gaestezimmer-east-1",
+      "loxone": {
+        "control": "1c0de041-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.gaestezimmer-east-1.lamellen": {
+      "source": "miniserver",
+      "label": "Beschattung gaestezimmer-east-1",
+      "loxone": {
+        "control": "1c0de041-0000-0000-ffffdec0de000000",
+        "state": "shadePosition"
+      }
+    },
+    "fenster.arbeitszimmer-south-1.position": {
+      "source": "miniserver",
+      "label": "Fenster arbeitszimmer-south-1",
+      "loxone": {
+        "control": "1c0de042-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.arbeitszimmer-south-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung arbeitszimmer-south-1",
+      "loxone": {
+        "control": "1c0de043-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.arbeitszimmer-east-1": {
+      "source": "miniserver",
+      "label": "Fenster arbeitszimmer-east-1",
+      "loxone": {
+        "control": "1c0de044-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.arbeitszimmer-east-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung arbeitszimmer-east-1",
+      "loxone": {
+        "control": "1c0de045-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.arbeitszimmer-east-1.lamellen": {
+      "source": "miniserver",
+      "label": "Beschattung arbeitszimmer-east-1",
+      "loxone": {
+        "control": "1c0de045-0000-0000-ffffdec0de000000",
+        "state": "shadePosition"
+      }
+    },
+    "garage.tor.position": {
+      "source": "miniserver",
+      "label": "Garagentor",
+      "loxone": {
+        "control": "1c0de046-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.eltern-west-1": {
+      "source": "miniserver",
+      "label": "Fenster eltern-west-1",
+      "loxone": {
+        "control": "1c0de047-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.eltern-west-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung eltern-west-1",
+      "loxone": {
+        "control": "1c0de048-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.eltern-west-2.position": {
+      "source": "miniserver",
+      "label": "Beschattung eltern-west-2",
+      "loxone": {
+        "control": "1c0de049-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.bad-west-1": {
+      "source": "miniserver",
+      "label": "Fenster bad-west-1",
+      "loxone": {
+        "control": "1c0de04a-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.bad-west-1.gekippt": {
+      "source": "miniserver",
+      "label": "Fenster bad-west-1 gekippt",
+      "loxone": {
+        "control": "1c0de04b-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.kind-2-east-1": {
+      "source": "miniserver",
+      "label": "Fenster kind-2-east-1",
+      "loxone": {
+        "control": "1c0de04c-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "beschattung.kind-2-east-1.position": {
+      "source": "miniserver",
+      "label": "Beschattung kind-2-east-1",
+      "loxone": {
+        "control": "1c0de04d-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.studio-east-1": {
+      "source": "miniserver",
+      "label": "Fenster studio-east-1",
+      "loxone": {
+        "control": "1c0de04e-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "fenster.kind-1-roof-south": {
+      "source": "miniserver",
+      "label": "Fenster kind-1-roof-south",
+      "loxone": {
+        "control": "1c0de04f-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.kind-1-roof-south.position": {
+      "source": "miniserver",
+      "label": "Beschattung kind-1-roof-south",
+      "loxone": {
+        "control": "1c0de050-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "beschattung.kind-2-roof-south.position": {
+      "source": "miniserver",
+      "label": "Beschattung kind-2-roof-south",
+      "loxone": {
+        "control": "1c0de051-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "fenster.studio-roof-north": {
+      "source": "miniserver",
+      "label": "Fenster studio-roof-north",
+      "loxone": {
+        "control": "1c0de052-0000-0000-ffffdec0de000000",
+        "state": "position"
+      }
+    },
+    "musik.hobbyraum": {
+      "source": "miniserver",
+      "label": "Hobbyraum (Audio)",
+      "loxone": {
+        "control": "1c0de053-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "musik.hobbyraum.fitness": {
+      "source": "miniserver",
+      "label": "Fitness (Audio)",
+      "loxone": {
+        "control": "1c0de054-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "musik.wohnen": {
+      "source": "miniserver",
+      "label": "Wohnen/Essen (Audio)",
+      "loxone": {
+        "control": "1c0de055-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "musik.kueche": {
+      "source": "miniserver",
+      "label": "Küche (Audio)",
+      "loxone": {
+        "control": "1c0de056-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "musik.arbeitszimmer": {
+      "source": "miniserver",
+      "label": "Arbeitszimmer (Audio)",
+      "loxone": {
+        "control": "1c0de057-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "musik.bad": {
+      "source": "miniserver",
+      "label": "Bad (Audio)",
+      "loxone": {
+        "control": "1c0de058-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "musik.kind-1": {
+      "source": "miniserver",
+      "label": "Kind 1 (Audio)",
+      "loxone": {
+        "control": "1c0de059-0000-0000-ffffdec0de000000",
+        "state": "playState"
+      }
+    },
+    "waschmaschine.status": {
+      "source": "miniserver",
+      "label": "Waschmaschine Status",
+      "loxone": {
+        "control": "1c0de05a-0000-0000-ffffdec0de000000",
+        "state": "textAndIcon"
+      },
+      "as": "text"
+    },
+    "waschmaschine.leistung": {
+      "source": "miniserver",
+      "label": "Waschmaschine Leistung",
+      "loxone": {
+        "control": "1c0de05b-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "W"
+    },
+    "aussen.helligkeit": {
+      "source": "miniserver",
+      "label": "Wetterstation Helligkeit",
+      "loxone": {
+        "control": "1c0de05e-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "lx"
+    },
+    "aussen.temperatur": {
+      "source": "miniserver",
+      "label": "Außentemperatur",
+      "loxone": {
+        "control": "1c0de05f-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C"
+    },
+    "aussen.gefuehlt": {
+      "source": "miniserver",
+      "label": "Gefühlte Temperatur",
+      "loxone": {
+        "control": "1c0de060-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°C"
+    },
+    "aussen.feuchte": {
+      "source": "miniserver",
+      "label": "Relative Luftfeuchte",
+      "loxone": {
+        "control": "1c0de061-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "%"
+    },
+    "aussen.wind": {
+      "source": "miniserver",
+      "label": "Windgeschwindigkeit",
+      "loxone": {
+        "control": "1c0de062-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "km/h"
+    },
+    "aussen.windrichtung": {
+      "source": "miniserver",
+      "label": "Windrichtung",
+      "loxone": {
+        "control": "1c0de063-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "unit": "°"
+    },
+    "aussen.windwarnung": {
+      "source": "miniserver",
+      "label": "Windwarnung",
+      "loxone": {
+        "control": "1c0de064-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "aussen.regen": {
+      "source": "miniserver",
+      "label": "Regen",
+      "loxone": {
+        "control": "1c0de065-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "aussen.sonne": {
+      "source": "miniserver",
+      "label": "Sonnenschein",
+      "loxone": {
+        "control": "1c0de066-0000-0000-ffffdec0de000000",
+        "state": "active"
+      },
+      "as": "boolean"
+    },
+    "aussen.wettertyp": {
+      "source": "miniserver",
+      "label": "Wettertyp",
+      "loxone": {
+        "control": "1c0de067-0000-0000-ffffdec0de000000",
+        "state": "value"
+      }
+    }
+  }
+}

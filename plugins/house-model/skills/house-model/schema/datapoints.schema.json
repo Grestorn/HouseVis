@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://housevis.local/schema/datapoints.schema.json",
+  "title": "HouseVis: datapoints",
+  "description": "Where the displayed values come from. Every datapoint has its own id, names its source and that source's address, and says how the raw value is converted. Rooms and openings in house.json refer only to the id; the same datapoint may be used several times. Credentials are never stored here but in the device settings.",
+  "type": "object",
+  "required": [
+    "sources",
+    "datapoints"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^(\\$schema|_.*)$": {
+      "description": "Reference to the schema or a comment; ignored."
+    }
+  },
+  "properties": {
+    "sources": {
+      "description": "Data sources by name. The name is used in the datapoints; each device sets up the connection (address, sign-in) itself.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "const": "loxone",
+                "description": "Loxone Miniserver, live values via the WebSocket."
+              }
+            }
+          }
+        ]
+      }
+    },
+    "datapoints": {
+      "description": "Datapoints by id, e.g. \"kueche.temperatur\".",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9.-]{0,79}$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/datapoint"
+      }
+    }
+  },
+  "$defs": {
+    "datapoint": {
+      "type": "object",
+      "required": [
+        "source"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Name of a source from \"sources\"."
+        },
+        "loxone": {
+          "$ref": "#/$defs/loxoneAddress"
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional description for humans, e.g. the name in Loxone Config."
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 12,
+          "description": "Unit for the display, e.g. \"°C\", \"%\", \"W\"."
+        },
+        "as": {
+          "description": "Conversion of the raw value. Short form \"number\", \"boolean\", \"text\" or \"color\"; without it, \"number\" applies. \"color\" parses Loxone colors such as \"hsv(30,80,100)\" and \"temp(80,2700)\" (brightness, Kelvin).",
+          "oneOf": [
+            {
+              "enum": [
+                "number",
+                "boolean",
+                "text",
+                "color"
+              ]
+            },
+            {
+              "$ref": "#/$defs/asNumber"
+            },
+            {
+              "$ref": "#/$defs/asBoolean"
+            },
+            {
+              "$ref": "#/$defs/asText"
+            },
+            {
+              "$ref": "#/$defs/asColor"
+            },
+            {
+              "$ref": "#/$defs/asClimateDemand"
+            }
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "loxone"
+          ]
+        }
+      ]
+    },
+    "loxoneAddress": {
+      "description": "A state of a Loxone control. The UUID is that of the control (uuidAction in LoxApp3.json or the UUID in Loxone Config); the state is the name from its \"states\", e.g. \"tempActual\" on the room controller or \"active\" on the presence detector.",
+      "type": "object",
+      "required": [
+        "control",
+        "state"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "control": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{16}(/[A-Za-z0-9]+)?$",
+          "description": "UUID of the control or subcontrol (then with a suffix such as \"/AI1\")."
+        },
+        "state": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9]{0,63}$",
+          "description": "Name of the state."
+        }
+      }
+    },
+    "asNumber": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "number"
+        },
+        "scale": {
+          "type": "number",
+          "description": "Factor applied to the raw value (default 1)."
+        },
+        "offset": {
+          "type": "number",
+          "description": "Added after scaling (default 0)."
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6,
+          "description": "Decimal places in the display."
+        }
+      }
+    },
+    "asBoolean": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "boolean"
+        },
+        "equals": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "description": "True if the raw value equals exactly this value."
+        },
+        "notEquals": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "description": "True if the raw value does not equal this value, e.g. \"[778]\" (light mood \"Off\")."
+        },
+        "threshold": {
+          "type": "number",
+          "description": "True if the raw value is greater (default 0)."
+        },
+        "invert": {
+          "type": "boolean",
+          "description": "Invert the result, e.g. for contacts that report \"1\" when closed."
+        }
+      }
+    },
+    "asText": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "text"
+        }
+      }
+    },
+    "asColor": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "color"
+        }
+      }
+    },
+    "asClimateDemand": {
+      "description": "true while a room controller (IRoomControllerV2) demands heating or cooling. The address is the climate controller's state \"controls\" (a list of the room controllers with their demand: -1 cooling, 0 none, 1 heating); \"control\" picks the room controller by its UUID. Unlike a valve, it tells heating and cooling apart.",
+      "type": "object",
+      "required": ["type", "control", "demand"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "climateDemand" },
+        "control": { "type": "string", "description": "uuidAction of the room controller." },
+        "demand": { "enum": ["heating", "cooling"] }
+      }
+    }
+  }
+}

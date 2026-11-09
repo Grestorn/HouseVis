@@ -1,0 +1,14 @@
+{
+  "name": "housevis",
+  "owner": {
+    "name": "Martin Korndörfer"
+  },
+  "description": "HouseVis: the house-model skill for Claude Code",
+  "plugins": [
+    {
+      "name": "house-model",
+      "source": "./plugins/house-model",
+      "description": "Builds a HouseVis 3D house model (house.json) from floor plans, sections and photos and maps it to the Loxone Miniserver. Needs the HouseVis Windows app."
+    }
+  ]
+}

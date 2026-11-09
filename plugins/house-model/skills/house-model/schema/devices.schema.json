@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://housevis.local/schema/devices.schema.json",
+  "title": "HouseVis: devices",
+  "description": "The devices that show the house. Each device has, per orientation, a sequence of pages; a page shows views from the views/ folder placed on it, or the Loxone web interface alone. Which device the Windows app shows is chosen in its menu and stored; without a choice, \"default\" applies. See docs/devices.md.",
+  "type": "object",
+  "required": ["default", "devices"],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^(\\$schema|_.*)$": {
+      "description": "Reference to the schema or a comment; ignored."
+    }
+  },
+  "properties": {
+    "default": {
+      "$ref": "#/$defs/id",
+      "description": "Id of the device the Windows app shows without a choice of its own."
+    },
+    "devices": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/device" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,39}$",
+      "description": "Lower-case letters, digits and hyphens, at most 40 characters (also UUIDs)."
+    },
+    "device": {
+      "type": "object",
+      "required": ["id", "name", "platform"],
+      "anyOf": [{ "required": ["landscape"] }, { "required": ["portrait"] }],
+      "additionalProperties": false,
+      "patternProperties": { "^_.*$": { "description": "Comment; ignored." } },
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "platform": {
+          "enum": ["desktop", "android", "ios"],
+          "description": "desktop: Windows, macOS and Linux (they behave the same); android; ios."
+        },
+        "aspect": {
+          "type": "object",
+          "description": "Screen shape in landscape as a ratio, e.g. 16:10; portrait swaps it. Only for the editor's preview.",
+          "required": ["width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+          }
+        },
+        "keepAwake": {
+          "type": "boolean",
+          "description": "While the app is on screen, the display neither dims nor sleeps (e.g. a wall tablet). Default false."
+        },
+        "presenceRoom": {
+          "$ref": "#/$defs/id",
+          "description": "A room of house.json with a presence datapoint: while it reports nobody there, the screen turns black (Android: lowest backlight) and the app keeps running; presence brings it back at once, and a tap wakes it for a minute. The screen then never sleeps, as with keepAwake."
+        },
+        "lightMode": {
+          "enum": ["real", "simple"],
+          "description": "How light sources are drawn on this device: real with three.js lights, simple with glowing bodies and painted pools of light, for weaker devices (docs/lights.md). Default: simple on android, real otherwise."
+        },
+        "reducedFrameRate": {
+          "type": "boolean",
+          "description": "Every animation (presence glow, anemometer, moving windows, clouds, rain, snow) steps 10 times a second instead of 30, for weak devices. Default false."
+        },
+        "landscape": { "$ref": "#/$defs/orientation" },
+        "portrait": { "$ref": "#/$defs/orientation", "description": "If missing, the landscape pages apply (and vice versa)." }
+      }
+    },
+    "orientation": {
+      "type": "object",
+      "required": ["pages"],
+      "additionalProperties": false,
+      "properties": {
+        "pages": { "type": "array", "items": { "$ref": "#/$defs/page" } }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": ["id", "title", "icon"],
+      "oneOf": [{ "required": ["components"] }, { "required": ["loxone"] }],
+      "additionalProperties": false,
+      "patternProperties": { "^_.*$": { "description": "Comment; ignored." } },
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 30, "description": "Short text in the navigation bar." },
+        "icon": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Name of a Lucide icon from the app's list (src/model/pageIcons.ts)."
+        },
+        "components": {
+          "type": "array",
+          "description": "What the page shows, each placed in percent of the page.",
+          "items": { "$ref": "#/$defs/component" }
+        },
+        "weather": {
+          "type": "boolean",
+          "description": "Only with components: the current weather as the page's sky behind all its views, rain or snow lightly over them (docs/weather.md). Needs the weather roles in house.json (\"data\"); drawn once however many views the page holds."
+        },
+        "loxone": {
+          "type": "object",
+          "description": "The Loxone web interface, alone and filling the page, wherever the user left it (it cannot be steered from outside). No settings yet.",
+          "additionalProperties": false,
+          "properties": {}
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": ["type", "view", "area"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "view" },
+        "view": { "$ref": "#/$defs/id", "description": "Id of a view in views/." },
+        "area": {
+          "type": "object",
+          "required": ["x", "y", "width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "x": { "type": "number", "minimum": 0, "maximum": 100 },
+            "y": { "type": "number", "minimum": 0, "maximum": 100 },
+            "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+          }
+        },
+        "frame": { "type": "boolean", "description": "Drawn with a frame and its title." }
+      }
+    }
+  }
+}

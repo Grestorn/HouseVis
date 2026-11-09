@@ -1,0 +1,3 @@
+{
+  "indicators": { "heating": "fire", "cooling": "snowflake", "comfort": "sun", "eco": "seedling", "paused": "pause-button", "protection": "shield", "music": "speaker-high-volume", "music-paused": "muted-speaker", "washing": "basket" }
+}

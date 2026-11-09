@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://housevis.local/schema/view.schema.json",
+  "title": "HouseVis: view",
+  "description": "A fixed view of the house. The file name (without .json) is the id of the view that devices.json refers to; lower-case letters, digits and hyphens are allowed.",
+  "type": "object",
+  "required": ["title", "rooms"],
+  "anyOf": [
+    { "required": ["direction"] },
+    { "required": ["camera"], "properties": { "camera": { "required": ["azimuth"] } } }
+  ],
+  "not": { "required": ["direction", "camera"], "properties": { "camera": { "required": ["azimuth"] } } },
+  "additionalProperties": false,
+  "patternProperties": { "^(\\$schema|_.*)$": { "description": "Reference to the schema or a comment; ignored." } },
+  "properties": {
+    "title": { "type": "string", "minLength": 1, "maxLength": 60, "description": "Caption, e.g. \"Von Südwesten\"." },
+    "direction": {
+      "enum": ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"],
+      "description": "Compass direction from which the house is viewed; shorthand for \"camera.azimuth\" (north 0, northeast 45, …). A view has exactly one of the two."
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Where the camera stands. Without \"target\" and \"distance\" it frames the whole model (see \"fill\").",
+      "properties": {
+        "azimuth": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360,
+          "description": "Compass bearing of the camera seen from the house, in degrees clockwise from north: 0 north, 90 east, 225 southwest."
+        },
+        "elevation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 89,
+          "description": "Angle of the line of sight above the horizon, in degrees (default about 6.8, a shallow view from slightly above)."
+        },
+        "target": {
+          "type": "array",
+          "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }],
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Point the camera looks at, kept in the middle of the image: [x, y, height] in meters, x and y as in the plan, height above the lowest floor. Default: the center of the model."
+        },
+        "distance": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Distance of the camera from the target in meters. Default: the smallest at which the model fits; \"fill\" then no longer applies."
+        }
+      }
+    },
+    "rooms": {
+      "description": "The view's active rooms: they show their inside, name and values, and their exterior walls facing the camera become transparent automatically. All other rooms appear as a closed facade (whose walls \"walls\" can still make transparent or hide). Empty: the house from outside, every room closed.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$" }
+    },
+    "floors": {
+      "description": "Show only these storeys (floor ids from house.json), e.g. [\"eg\"] for the ground floor alone. Everything on the other storeys is left out: rooms, slabs, windows, roof parts, structures, pavilions; the terrain stays (hide it with \"ground\"). The walls keep the heights they have in the whole house. Default: all storeys.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$" }
+    },
+    "hide": {
+      "description": "Tags whose elements this view leaves out (house.json \"tags\"): \"roof\" (roof parts with their windows and gables), \"ground\" (the terrain with its areas and pits), \"outside\" (terrain, pavilions, outbuildings without walls, outdoor areas and whatever house.json tags so), \"structure\", \"pavilion\", \"outbuilding\", or a tag of your own from house.json. An element is left out if it carries one of them. A roof part's or structure's own setting in \"roofs\" or \"structures\" beats this, e.g. all roofs hidden except one.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 40 }
+    },
+    "toggles": {
+      "description": "Tags that get a switch on the page, e.g. [\"roof\", \"outside\"]: the viewer turns those groups off and on there, live and without moving the camera (not saved). Unlike \"hide\", nothing else adapts: gable walls stay when the roof is switched off. A tag in \"hide\" gets no switch.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 40 }
+    },
+    "fill": {
+      "type": "number",
+      "exclusiveMinimum": 0.3,
+      "maximum": 1,
+      "description": "Maximum share of the area the model takes up (default 0.9)."
+    },
+    "walls": {
+      "description": "Per wall: how this view draws it, instead of the automatic rule (camera-side exterior walls of cut-open rooms see-through, everything else solid). Keys are wall ids as the house check lists them with `--walls`: exterior walls of cut-open rooms (\"<area>@<x1>,<y1>-<x2>,<y2>\") and wall ends on the outline (\"<floor>@…\"). Interior walls cannot be set yet.",
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9-]*@-?[0-9.]+,-?[0-9.]+--?[0-9.]+,-?[0-9.]+$" },
+      "additionalProperties": { "$ref": "#/$defs/visibility" }
+    },
+    "labels": {
+      "description": "Per area id (as in house.json): where its labels sit in this view. The spots are computed automatically (temperature and indicators over the visible floor, the name on a visible back wall); these settings only move them, so they follow when a room is edited. Only areas the view cuts open get labels.",
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "description": "\"hidden\" for no name on the wall (e.g. when one name is enough for several floors), or where it sits: \"wall\" (id of one of the area's walls facing away from the camera; default the automatic choice), \"shift\" in meters along it (with \"wall\" from the wall's middle towards the end of its id, so it stays put when the camera changes; without, from the automatic spot to the right in the image), \"height\" of the text center above the floor (default just above it).",
+            "oneOf": [
+              { "const": "hidden" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "wall": { "type": "string" },
+                  "shift": { "type": "number" },
+                  "height": { "type": "number", "minimum": 0 }
+                }
+              }
+            ]
+          },
+          "temperature": {
+            "$ref": "#/$defs/labelPlace",
+            "description": "The temperature display. Default height 1.35 m above the room's floor."
+          },
+          "indicators": {
+            "$ref": "#/$defs/labelPlace",
+            "description": "The row of the room's indicators (e.g. music). They start from the same spot as the temperature; default height 30 cm below the ceiling (below a roof slope at that spot)."
+          }
+        }
+      }
+    },
+    "appearance": {
+      "description": "How this view draws see-through parts and outlines; what is missing keeps its default.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "glassOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Opacity of see-through walls, wall ends and structures, 0 (invisible) to 1 (opaque). Default 0.012."
+        },
+        "outlines": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Strength of the thin white outlines along the room walls, 0 (none) to 1 (opaque white). Default 0.35 for both.",
+          "properties": {
+            "solid": { "type": "number", "minimum": 0, "maximum": 1, "description": "On solid walls and sloped ceilings." },
+            "glass": { "type": "number", "minimum": 0, "maximum": 1, "description": "On see-through walls, where the outline is often all that shows the wall." }
+          }
+        },
+        "openingHighlight": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Open windows and doors in a signal color, so they stand out at once (frames in the color, glowing, panes tinted). Default #ff7a2f, full strength, pulsing.",
+          "properties": {
+            "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "Color as \"#rrggbb\"." },
+            "strength": { "type": "number", "minimum": 0, "maximum": 1, "description": "How strongly the color covers frame and pane, 0 (no highlighting) to 1." },
+            "pulse": { "type": "boolean", "description": "Let the color pulse." }
+          }
+        }
+      }
+    },
+    "structures": {
+      "description": "Per structure id (house.json \"structures\": pillars, lintels, canopies, parapets): how this view draws it, e.g. hidden because it stands in front of an active room. Default: as house.json says (\"transparent\", otherwise solid).",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/visibility" }
+    },
+    "roofs": {
+      "description": "Per roof part id: how this view draws it (default solid). A hidden part takes its roof windows and gable walls with it.",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/visibility" }
+    }
+  },
+  "$defs": {
+    "labelPlace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "offset": {
+          "type": "array",
+          "prefixItems": [{ "type": "number" }, { "type": "number" }],
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[east, north] in meters from the area's centroid: the label is fixed in the room and stays put when the camera changes. Negative means west or south. Without an offset the label floats over the center of the visible floor."
+        },
+        "height": {
+          "type": "number",
+          "description": "Height above the room's floor in meters; negative places it below the floor."
+        }
+      }
+    },
+    "visibility": {
+      "enum": ["solid", "transparent", "hidden"],
+      "description": "solid: closed (from outside the facade); transparent: see-through glass; hidden: not drawn at all."
+    }
+  }
+}

@@ -1,0 +1,1791 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://housevis.local/schema/house.schema.json",
+  "title": "HouseVis: house model",
+  "description": "Simplified model of a house for HouseVis. Coordinates in meters, x to the east, y to the north, origin freely chosen (e.g. southwest corner of the main building). All rooms are interior areas (structural dimensions without plaster); walls result from the gaps between the rooms. Walls may run in any direction. Limits of the model: the floors stand directly on top of each other in the given order.",
+  "type": "object",
+  "required": [
+    "version",
+    "floors",
+    "rooms",
+    "spaces",
+    "openings",
+    "roofWindows",
+    "roofs"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^(\\$schema|_.*)$": {
+      "description": "Reference to the schema or a comment; ignored."
+    }
+  },
+  "properties": {
+    "version": {
+      "const": 6,
+      "description": "Format version of this file. HouseVis reads only this version and refuses others with a message; older formats are not converted."
+    },
+    "data": {
+      "description": "House-wide datapoints from datapoints.json per role.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "outsideBrightness": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Brightness outside in lux (number), e.g. the brightness sensor of the Loxone weather station; the scene's daylight follows it, so lit rooms and light sources stand out at dusk and night. Without it the scene keeps its daylight look."
+        },
+        "outsideTemperature": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Outside temperature in °C (number), shown large in the weather station's panel. Loxone offers it from the weather station, the weather service and the merged System value; the System value may include further sensors (e.g. a heat pump's shaded one) and is usually the best ambient temperature."
+        },
+        "feltTemperature": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Felt temperature in °C (number), e.g. the Loxone weather service's."
+        },
+        "humidity": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Relative humidity outside in percent (number)."
+        },
+        "windSpeed": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Wind speed in km/h (number); the anemometer turns with it, the clouds drift with it."
+        },
+        "windDirection": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Wind direction in degrees (number), where the wind comes from: 0 north, 90 east (meteorological convention, as Loxone delivers it)."
+        },
+        "windWarning": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Wind warning (true/false), e.g. the weather station's; the anemometer turns red while it is on."
+        },
+        "rain": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Rain right now (true/false), e.g. the weather station's rain sensor; adds light rain when the weather type says none."
+        },
+        "sunshine": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "The sun is shining (true/false); a screen with weather shows the sun only then."
+        },
+        "weatherType": {
+          "$ref": "#/$defs/datapointRef",
+          "description": "Weather type of the Loxone weather service (number, codes 1–29 as Loxone documents them, docs/weather.md); a screen with weather shows the sky and precipitation for it."
+        }
+      }
+    },
+    "floors": {
+      "description": "Floors from bottom to top. The height is the floor-to-floor height (including the ceiling).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "height"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id",
+            "description": "Short id, e.g. \"ug\", \"eg\", \"og\"."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name, e.g. \"Erdgeschoss\"."
+          },
+          "height": {
+            "type": "number",
+            "exclusiveMinimum": 0.5,
+            "maximum": 10,
+            "description": "Floor height in meters."
+          },
+          "exteriorWall": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1.5,
+            "description": "Thickness of the exterior walls in meters (structural, e.g. 0.365). They lie outside the room polygons: the outer face is the room edge moved outwards by this much, and windows sit in the reveal. Default 0: the facade lies on the room edges."
+          }
+        }
+      }
+    },
+    "rooms": {
+      "description": "Rooms as they are named in the home automation. A room may consist of several areas (e.g. bedroom with walk-in closet).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id",
+            "description": "Stable id that areas, views and data sources refer to."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "Display name on the wall, as short as possible."
+          },
+          "data": {
+            "description": "Datapoints from datapoints.json per role. Value types: temperature, targetTemperature, lightLevel, climateMode and climateOverride number; heating, light and presence true/false; lightColor color.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "temperature": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Actual temperature (number)."
+              },
+              "targetTemperature": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Target temperature (number)."
+              },
+              "heating": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Heating active (true/false); shows a flame. Best the room controller's demand (conversion \"climateDemand\"), since a valve also opens for cooling."
+              },
+              "cooling": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Cooling active (true/false); shows a snowflake. The room controller's demand (conversion \"climateDemand\")."
+              },
+              "light": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Light on (true/false); the room is then shown lit."
+              },
+              "presence": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Presence detected (true/false)."
+              },
+              "lightColor": {
+                "description": "Light color (color); the room then glows in this color. A list mixes the colors of several channels, e.g. all outputs of a light controller: moods set the channels, the master color does not report them back.",
+                "oneOf": [
+                  { "$ref": "#/$defs/datapointRef" },
+                  {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": { "$ref": "#/$defs/datapointRef" }
+                  }
+                ]
+              },
+              "lightLevel": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Brightness of the light in percent (number, 0–100), only for light without brightness in the light color. Without this role the brightness from lightColor applies. Not the master brightness of a light controller: it is only a factor on the active mood."
+              },
+              "climateMode": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "The heat controller's active mode (IRoomControllerV2 \"activeMode\": 0 eco, 1 comfort, 2 building protection); shown as an icon in the temperature label."
+              },
+              "climateOverride": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "The heat controller's override reason (\"overrideReason\"); 2 (window open) and 15 (pause timer) show the room as paused."
+              }
+            }
+          }
+        }
+      }
+    },
+    "spaces": {
+      "description": "Floor areas of the rooms. Each area is a simple polygon of interior dimensions (edges in any direction, no self-crossing). Interior walls result from gaps narrower than 0.7 m between areas.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "roomId",
+          "floor",
+          "polygon"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id",
+            "description": "Unique id of the area, e.g. the room id; views and wall ids refer to it, so keep it stable."
+          },
+          "roomId": {
+            "$ref": "#/$defs/id",
+            "description": "Room whose values this area shows."
+          },
+          "name": {
+            "type": "string",
+            "description": "Plan name of its own if the area belongs to another room (e.g. \"Ankleide\" to the bedroom). Such areas get no label of their own."
+          },
+          "floor": {
+            "$ref": "#/$defs/id",
+            "description": "Id of the floor."
+          },
+          "polygon": {
+            "description": "Corner points [x, y] of the interior area in meters, in order. Edges may run in any direction; the outline must not cross itself.",
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "$ref": "#/$defs/point"
+            }
+          },
+          "height": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Deviating room height in meters; otherwise the floor height applies."
+          },
+          "outbuilding": {
+            "type": "boolean",
+            "description": "Lies outside the main building (e.g. garage) and does not count as a wall neighbor. A building of its own: with \"exteriorWall\" it has walls (facade from outside, room walls when active), without them it is an open shelter showing only its floor."
+          },
+          "exteriorWall": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1,
+            "description": "Outbuildings only: thickness of their walls in meters, outside the polygon like the house's (the polygon is the inside). Without it the outbuilding has no walls."
+          },
+          "level": {
+            "type": "number",
+            "minimum": -3,
+            "maximum": 3,
+            "description": "Outbuildings only: their floor relative to the storey's in meters, e.g. -0.32 for a garage lower than the house. \"height\" then counts from this floor; openings keep counting from the storey's."
+          },
+          "facadeColor": {
+            "$ref": "#/$defs/color",
+            "description": "Color of the exterior wall when the area is seen from outside in a view (default white)."
+          },
+          "tags": { "$ref": "#/$defs/tags" }
+        }
+      }
+    },
+    "openings": {
+      "description": "Windows and exterior doors in the walls.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "floor",
+          "start",
+          "end",
+          "sill",
+          "top"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id",
+            "description": "Unique id, e.g. \"kueche-west-1\"; datapoints, views and the editor refer to it."
+          },
+          "kind": {
+            "enum": [
+              "window",
+              "door"
+            ],
+            "description": "Window or door."
+          },
+          "data": {
+            "description": "Datapoints from datapoints.json per role.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "open": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Open (true/false), e.g. a window contact."
+              },
+              "tilted": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Tilted (true/false), only for contacts that distinguish it."
+              },
+              "position": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Degree of opening 0 (closed) to 1 (fully open), e.g. for motorized windows."
+              }
+            }
+          },
+          "floor": {
+            "$ref": "#/$defs/id"
+          },
+          "start": {
+            "$ref": "#/$defs/point",
+            "description": "One end of the opening in the floor plan, on the inner face of its wall, i.e. on an edge of the room polygon (5 mm tolerance). The room and the outward direction follow from that edge."
+          },
+          "end": {
+            "$ref": "#/$defs/point",
+            "description": "The other end, on the same edge. The order of start and end does not matter."
+          },
+          "sill": {
+            "type": "number",
+            "minimum": -2,
+            "description": "Bottom edge above the floor of the storey in meters. Negative only in an outbuilding whose floor lies lower (e.g. a garage at −0.32: its gates start there)."
+          },
+          "top": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Top edge above the floor of the storey in meters."
+          },
+          "operation": {
+            "enum": [
+              "turn",
+              "slide",
+              "top-hung",
+              "overhead",
+              "fixed"
+            ],
+            "description": "Type: \"turn\" side-hung sash (opens inwards, windows 30°, doors 90°), \"slide\" sliding sash (e.g. lift-and-slide door), \"top-hung\" hinged at the top (opens outwards at the bottom), \"overhead\" garage gate opening upwards into the room (up-and-over or sectional; one leaf, \"position\" is the share of the height that is clear), \"fixed\" fixed glazing. Default \"turn\"."
+          },
+          "side": {
+            "enum": [
+              "left",
+              "right"
+            ],
+            "description": "Seen from inside: hinge side for \"turn\", direction in which a \"slide\" sash opens. Default \"left\"."
+          },
+          "leaves": {
+            "enum": [
+              1,
+              2
+            ],
+            "description": "Number of sashes (default 1). With 2 and \"turn\" both sashes open towards the middle (hinges on the outside); with 2 and \"slide\" one sash slides in front of the other, towards \"side\"."
+          },
+          "fixedBelow": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Height of a fixed, non-opening lower part in meters from the bottom edge (e.g. balustrade glazing)."
+          },
+          "shades": {
+            "$ref": "#/$defs/shades"
+          },
+          "sidelight": {
+            "description": "Fixed glazed side panel next to the sash, e.g. at a front door. The width counts towards the opening.",
+            "type": "object",
+            "required": [
+              "side",
+              "width"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "side": {
+                "enum": [
+                  "left",
+                  "right"
+                ],
+                "description": "Seen from inside."
+              },
+              "width": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Width in meters."
+              }
+            }
+          },
+          "color": {
+            "$ref": "#/$defs/color",
+            "description": "A door's leaf color; a window's frame color (frame, sash frames, fixed parts), e.g. \"#f2f2f0\" for white frames. Default: dark brown-grey leaves, grey frames."
+          }
+        }
+      }
+    },
+    "roofWindows": {
+      "description": "Roof windows. Each lies in one slope of a roof part; the slope under \"center\" decides.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "roof",
+          "center",
+          "width",
+          "depth"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id",
+            "description": "Unique id, e.g. \"bad-roof-west\"; datapoints, views and the editor refer to it."
+          },
+          "roof": {
+            "$ref": "#/$defs/id",
+            "description": "Id of the roof part from \"roofs\"."
+          },
+          "center": {
+            "$ref": "#/$defs/point",
+            "description": "Center of the window in the floor plan."
+          },
+          "width": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Width along the eave (horizontal on the slope) in meters."
+          },
+          "depth": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Extent across the eave, measured in the floor plan (not along the slope), in meters."
+          },
+          "data": {
+            "description": "Datapoints from datapoints.json per role. An open roof window flips outwards 20° at the bottom.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "open": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Open (true/false)."
+              },
+              "position": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Degree of opening 0 (closed) to 1 (fully open), e.g. for motorized roof windows."
+              }
+            }
+          },
+          "shades": {
+            "$ref": "#/$defs/shades",
+            "description": "Shades; their \"from\"/\"to\" are meters along the width from the left edge, seen from outside looking up the slope."
+          }
+        }
+      }
+    },
+    "roofs": {
+      "description": "Roof as a list of parts. Within a part the surface is the lowest of its slopes; where parts overlap, the higher one counts (e.g. a wing running into the main roof forms valleys). Rooms on a part's floor end below its slopes.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "Gable roof: two slopes meeting at the ridge in the middle of the footprint, vertical gable walls at both ends.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "footprint",
+              "ridge",
+              "eaveHeight",
+              "ridgeHeight"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
+              },
+              "kind": {
+                "const": "gable"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
+              },
+              "footprint": {
+                "$ref": "#/$defs/footprint"
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
+              },
+              "tags": { "$ref": "#/$defs/tags" },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
+              },
+              "ridge": {
+                "enum": [
+                  "north-south",
+                  "east-west"
+                ],
+                "description": "Direction of the ridge (before rotation)."
+              },
+              "eaveHeight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height of the eaves above the floor in meters (at the edge of the footprint)."
+              },
+              "ridgeHeight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height of the ridge above the floor in meters."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Hip roof: four slopes with the same pitch; the ridge is shorter than the footprint by its width. The footprint must be at least as long along the ridge as it is wide.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "footprint",
+              "ridge",
+              "eaveHeight",
+              "ridgeHeight"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
+              },
+              "kind": {
+                "const": "hip"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
+              },
+              "footprint": {
+                "$ref": "#/$defs/footprint"
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
+              },
+              "tags": { "$ref": "#/$defs/tags" },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
+              },
+              "ridge": {
+                "enum": [
+                  "north-south",
+                  "east-west"
+                ],
+                "description": "Direction of the ridge (before rotation)."
+              },
+              "eaveHeight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height of the eaves above the floor in meters (at the edge of the footprint)."
+              },
+              "ridgeHeight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height of the ridge above the floor in meters."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Shed roof: one slope down towards side \"low\".",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "footprint",
+              "low",
+              "eaveHeight",
+              "ridgeHeight"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
+              },
+              "kind": {
+                "const": "shed"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
+              },
+              "footprint": {
+                "$ref": "#/$defs/footprint"
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
+              },
+              "tags": { "$ref": "#/$defs/tags" },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
+              },
+              "low": {
+                "enum": [
+                  "north",
+                  "south",
+                  "east",
+                  "west"
+                ],
+                "description": "Side of the footprint (before rotation) towards which the roof slopes down."
+              },
+              "eaveHeight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height at the low side above the floor in meters."
+              },
+              "ridgeHeight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height at the opposite, high side above the floor in meters."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Flat roof.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "footprint",
+              "height"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
+              },
+              "kind": {
+                "const": "flat"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
+              },
+              "footprint": {
+                "$ref": "#/$defs/footprint"
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
+              },
+              "tags": { "$ref": "#/$defs/tags" },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
+              },
+              "height": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height above the floor in meters."
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ground": {
+      "description": "Terrain around the house. Shown as a translucent surface so one can see which floors lie in the ground.",
+      "type": "object",
+      "required": [
+        "floor",
+        "level",
+        "outline"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "floor": {
+          "type": "string",
+          "description": "Floor whose level \"level\" refers to."
+        },
+        "level": {
+          "type": "number",
+          "description": "Height of the terrain relative to that floor in meters, e.g. -0.3."
+        },
+        "outline": {
+          "description": "Where the terrain ends: its outline in plan coordinates, at least 4 corners in order, every edge running east-west or north-south (right angles; an L-shaped plot or a cut-out corner is fine). The terrain is exactly this outline: nothing is derived from the house, the garage or the areas, so the model decides where the plot ends (e.g. at the street). The house and its outbuildings lie inside it; parts of areas outside it are cut off.",
+          "type": "array",
+          "minItems": 4,
+          "items": { "$ref": "#/$defs/point" }
+        },
+        "pits": {
+          "description": "Excavated areas, e.g. in front of basement windows: vertical walls down to \"bottom\". Sides along the house stay open.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "x0",
+              "x1",
+              "y0",
+              "y1",
+              "bottom"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "x0": {
+                "type": "number"
+              },
+              "x1": {
+                "type": "number"
+              },
+              "y0": {
+                "type": "number"
+              },
+              "y1": {
+                "type": "number"
+              },
+              "bottom": {
+                "type": "number",
+                "description": "Bottom relative to the floor of ground.floor, in meters."
+              },
+              "railing": {
+                "type": "boolean",
+                "description": "Railing along the free top edges."
+              },
+              "stairs": {
+                "description": "Stairs in the pit, only hinted: the steps descend towards side \"down\" down to \"bottom\".",
+                "type": "object",
+                "required": [
+                  "down"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "down": {
+                    "enum": [
+                      "north",
+                      "south",
+                      "east",
+                      "west"
+                    ],
+                    "description": "Direction in which the stairs lead down."
+                  },
+                  "landing": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Length of the landing at the bottom end in meters."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "areas": {
+          "description": "Areas in the terrain with their own color, e.g. terrace, gravel strip or paving. Nothing is drawn below the house.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "x0",
+              "x1",
+              "y0",
+              "y1",
+              "color"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "x0": {
+                "type": "number"
+              },
+              "x1": {
+                "type": "number"
+              },
+              "y0": {
+                "type": "number"
+              },
+              "y1": {
+                "type": "number"
+              },
+              "color": {
+                "$ref": "#/$defs/color"
+              }
+            }
+          }
+        }
+      }
+    },
+    "structures": {
+      "description": "Simple boxes outside the house, e.g. steps, landing, pillars or the lintel above the entrance. Floor-plan coordinates as for the rooms, heights relative to the floor of \"floor\".",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "floor",
+          "x0",
+          "x1",
+          "y0",
+          "y1",
+          "bottom",
+          "top"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,39}$",
+            "description": "Unique id, e.g. \"pfeiler-eingang\"; views refer to it (\"structures\" in views/<id>.json) to make the part transparent or hide it."
+          },
+          "name": {
+            "type": "string",
+            "description": "For orientation only; the editor shows it to name the part."
+          },
+          "floor": {
+            "type": "string"
+          },
+          "x0": {
+            "type": "number"
+          },
+          "x1": {
+            "type": "number"
+          },
+          "y0": {
+            "type": "number"
+          },
+          "y1": {
+            "type": "number"
+          },
+          "bottom": {
+            "type": "number",
+            "description": "Bottom edge relative to the floor in meters."
+          },
+          "top": {
+            "type": "number",
+            "description": "Top edge relative to the floor in meters."
+          },
+          "color": {
+            "$ref": "#/$defs/color",
+            "description": "Default: facade white."
+          },
+          "transparent": {
+            "type": "boolean",
+            "description": "Only hinted (like a cut-open wall), e.g. when the part lies in front of a room one looks into."
+          },
+          "tags": { "$ref": "#/$defs/tags" }
+        }
+      }
+    },
+    "pavilions": {
+      "description": "Light glass extensions such as a conservatory, hinted only by their outer edges. With \"roomId\" they show values of a room from rooms (e.g. light).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "floor",
+          "x0",
+          "x1",
+          "y0",
+          "y1",
+          "bottom",
+          "top",
+          "lowTop",
+          "low"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roomId": {
+            "type": "string",
+            "description": "Room from rooms whose values (light) the extension shows."
+          },
+          "floor": {
+            "type": "string",
+            "description": "Floor whose level the heights refer to."
+          },
+          "x0": {
+            "type": "number"
+          },
+          "x1": {
+            "type": "number"
+          },
+          "y0": {
+            "type": "number"
+          },
+          "y1": {
+            "type": "number"
+          },
+          "bottom": {
+            "type": "number",
+            "description": "Bottom edge in meters."
+          },
+          "top": {
+            "type": "number",
+            "description": "Top edge at the house in meters."
+          },
+          "lowTop": {
+            "type": "number",
+            "description": "Top edge at the low side in meters."
+          },
+          "low": {
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west"
+            ],
+            "description": "Side towards which the roof slopes down (away from the house)."
+          },
+          "tags": { "$ref": "#/$defs/tags" }
+        }
+      }
+    },
+    "weatherStation": {
+      "description": "The weather station on or by the house, drawn as a cup anemometer on a short mast where it really stands (docs/weather.md); the weather panel (temperature, felt temperature, wind, humidity from \"data\") hangs at it. The mast reaches down to the roof or terrain below. Implied tags \"weatherStation\" and \"outside\", plus \"roof\" when it stands on a roof, so the view's tag buttons can show or hide it.",
+      "type": "object",
+      "required": ["floor", "position", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "floor": {
+          "$ref": "#/$defs/id",
+          "description": "Storey its height refers to; for a station on a roof the storey the roof part belongs to."
+        },
+        "position": {
+          "$ref": "#/$defs/point",
+          "description": "Where the mast stands, in floor-plan coordinates."
+        },
+        "height": {
+          "type": "number",
+          "description": "Height of the cups above the storey's floor, in meters; above the roof or terrain at that point."
+        },
+        "tags": { "$ref": "#/$defs/tags" }
+      }
+    },
+    "lights": {
+      "description": "Light sources besides the room light (docs/lights.md): lanterns along a walkway, wall lights on the facade, lit furniture inside (pendant over the dining table, lit cupboards). Each shows its own light, or its room's without \"data\". Floor-plan coordinates as for the rooms. The house-model skill places them; they are not edited by hand in the app.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "Hangs from the ceiling over a point and shines down, e.g. over the dining table.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "position",
+              "height"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"esstisch\" or \"weg-1\"."
+              },
+              "kind": {
+                "const": "pendant"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey the light belongs to; its heights are above that storey's floor, like everywhere in house.json."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room from rooms whose light it follows when it has no \"data\". Default: the room of the area it lies in; give it only where the point cannot tell."
+              },
+              "data": {
+                "description": "Datapoints from datapoints.json per role, as for rooms: light true/false, lightColor color (a list mixes several channels), lightLevel number 0–100. Without any the light follows its room's light. Typically one output (LCx, subcontrol AIx, state \"color\") of a light controller, or a switch.",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "light": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Light on (true/false)."
+                  },
+                  "lightColor": {
+                    "description": "Light color (color); a list mixes the colors of several channels.",
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/datapointRef"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "#/$defs/datapointRef"
+                        }
+                      }
+                    ]
+                  },
+                  "lightLevel": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Brightness in percent (number, 0–100), only for a light without brightness in its color, e.g. a dimmer."
+                  }
+                }
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the lamp body while it is off; default per kind."
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Main dimension of the lamp body in meters (shade diameter, lantern head, width of a wall light); default per kind. Not for strips: their length is from–to."
+              },
+              "range": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "How far the light reaches, in meters; default per kind."
+              },
+              "beamAngle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 180,
+                "description": "Opening angle of the light cone in degrees, for lights shining in one direction; default per kind."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "position": {
+                "$ref": "#/$defs/point",
+                "description": "Point in the floor plan under the lamp."
+              },
+              "height": {
+                "type": "number",
+                "description": "Lower edge of the lamp above the floor, in meters (e.g. 1.5 over a table)."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Recessed in the ceiling, shines down.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "position"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"esstisch\" or \"weg-1\"."
+              },
+              "kind": {
+                "const": "ceilingSpot"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey the light belongs to; its heights are above that storey's floor, like everywhere in house.json."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room from rooms whose light it follows when it has no \"data\". Default: the room of the area it lies in; give it only where the point cannot tell."
+              },
+              "data": {
+                "description": "Datapoints from datapoints.json per role, as for rooms: light true/false, lightColor color (a list mixes several channels), lightLevel number 0–100. Without any the light follows its room's light. Typically one output (LCx, subcontrol AIx, state \"color\") of a light controller, or a switch.",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "light": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Light on (true/false)."
+                  },
+                  "lightColor": {
+                    "description": "Light color (color); a list mixes the colors of several channels.",
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/datapointRef"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "#/$defs/datapointRef"
+                        }
+                      }
+                    ]
+                  },
+                  "lightLevel": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Brightness in percent (number, 0–100), only for a light without brightness in its color, e.g. a dimmer."
+                  }
+                }
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the lamp body while it is off; default per kind."
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Main dimension of the lamp body in meters (shade diameter, lantern head, width of a wall light); default per kind. Not for strips: their length is from–to."
+              },
+              "range": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "How far the light reaches, in meters; default per kind."
+              },
+              "beamAngle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 180,
+                "description": "Opening angle of the light cone in degrees, for lights shining in one direction; default per kind."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "position": {
+                "$ref": "#/$defs/point",
+                "description": "Point in the floor plan under the spot."
+              },
+              "height": {
+                "type": "number",
+                "description": "Height of the ceiling it sits in, only where the area has none: outside, e.g. under a canopy (the bottom of the structure). Inside, the area's ceiling."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "On a post or bollard standing on the terrain or a floor, e.g. along a walkway.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "position",
+              "height"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"esstisch\" or \"weg-1\"."
+              },
+              "kind": {
+                "const": "lantern"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey the light belongs to; its heights are above that storey's floor, like everywhere in house.json."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room from rooms whose light it follows when it has no \"data\". Default: the room of the area it lies in; give it only where the point cannot tell."
+              },
+              "data": {
+                "description": "Datapoints from datapoints.json per role, as for rooms: light true/false, lightColor color (a list mixes several channels), lightLevel number 0–100. Without any the light follows its room's light. Typically one output (LCx, subcontrol AIx, state \"color\") of a light controller, or a switch.",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "light": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Light on (true/false)."
+                  },
+                  "lightColor": {
+                    "description": "Light color (color); a list mixes the colors of several channels.",
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/datapointRef"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "#/$defs/datapointRef"
+                        }
+                      }
+                    ]
+                  },
+                  "lightLevel": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Brightness in percent (number, 0–100), only for a light without brightness in its color, e.g. a dimmer."
+                  }
+                }
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the lamp body while it is off; default per kind."
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Main dimension of the lamp body in meters (shade diameter, lantern head, width of a wall light); default per kind. Not for strips: their length is from–to."
+              },
+              "range": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "How far the light reaches, in meters; default per kind."
+              },
+              "beamAngle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 180,
+                "description": "Opening angle of the light cone in degrees, for lights shining in one direction; default per kind."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "position": {
+                "$ref": "#/$defs/point",
+                "description": "Point in the floor plan where it stands."
+              },
+              "height": {
+                "type": "number",
+                "description": "Height of the lamp head above the storey's floor, in meters; the post reaches down to the terrain or floor it stands on (a 0.8 m bollard on terrain at -0.3 has height 0.5)."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "On a wall, inside or on the facade.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "position",
+              "side",
+              "height"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"esstisch\" or \"weg-1\"."
+              },
+              "kind": {
+                "const": "wallLight"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey the light belongs to; its heights are above that storey's floor, like everywhere in house.json."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room from rooms whose light it follows when it has no \"data\". Default: the room of the area it lies in; give it only where the point cannot tell."
+              },
+              "data": {
+                "description": "Datapoints from datapoints.json per role, as for rooms: light true/false, lightColor color (a list mixes several channels), lightLevel number 0–100. Without any the light follows its room's light. Typically one output (LCx, subcontrol AIx, state \"color\") of a light controller, or a switch.",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "light": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Light on (true/false)."
+                  },
+                  "lightColor": {
+                    "description": "Light color (color); a list mixes the colors of several channels.",
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/datapointRef"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "#/$defs/datapointRef"
+                        }
+                      }
+                    ]
+                  },
+                  "lightLevel": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Brightness in percent (number, 0–100), only for a light without brightness in its color, e.g. a dimmer."
+                  }
+                }
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the lamp body while it is off; default per kind."
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Main dimension of the lamp body in meters (shade diameter, lantern head, width of a wall light); default per kind. Not for strips: their length is from–to."
+              },
+              "range": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "How far the light reaches, in meters; default per kind."
+              },
+              "beamAngle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 180,
+                "description": "Opening angle of the light cone in degrees, for lights shining in one direction; default per kind."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "position": {
+                "$ref": "#/$defs/point",
+                "description": "Point on the inner face of the wall, i.e. on an edge of a room polygon, like the ends of an opening; also for a light on the facade (\"side\": \"outside\")."
+              },
+              "side": {
+                "enum": [
+                  "inside",
+                  "outside"
+                ],
+                "description": "Face of the wall it hangs on: inside the room, or outside on the facade (only on an exterior wall)."
+              },
+              "height": {
+                "type": "number",
+                "description": "Center of the light above the floor, in meters."
+              },
+              "beam": {
+                "enum": [
+                  "down",
+                  "up",
+                  "both"
+                ],
+                "description": "Where it shines along the wall; default down."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "A line of light, e.g. under a wall cupboard, in a shelf or a cove.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "from",
+              "to",
+              "height"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"esstisch\" or \"weg-1\"."
+              },
+              "kind": {
+                "const": "strip"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey the light belongs to; its heights are above that storey's floor, like everywhere in house.json."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room from rooms whose light it follows when it has no \"data\". Default: the room of the area it lies in; give it only where the point cannot tell."
+              },
+              "data": {
+                "description": "Datapoints from datapoints.json per role, as for rooms: light true/false, lightColor color (a list mixes several channels), lightLevel number 0–100. Without any the light follows its room's light. Typically one output (LCx, subcontrol AIx, state \"color\") of a light controller, or a switch.",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "light": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Light on (true/false)."
+                  },
+                  "lightColor": {
+                    "description": "Light color (color); a list mixes the colors of several channels.",
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/datapointRef"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "#/$defs/datapointRef"
+                        }
+                      }
+                    ]
+                  },
+                  "lightLevel": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Brightness in percent (number, 0–100), only for a light without brightness in its color, e.g. a dimmer."
+                  }
+                }
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the lamp body while it is off; default per kind."
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Main dimension of the lamp body in meters (shade diameter, lantern head, width of a wall light); default per kind. Not for strips: their length is from–to."
+              },
+              "range": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "How far the light reaches, in meters; default per kind."
+              },
+              "beamAngle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 180,
+                "description": "Opening angle of the light cone in degrees, for lights shining in one direction; default per kind."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "from": {
+                "$ref": "#/$defs/point",
+                "description": "One end in the floor plan."
+              },
+              "to": {
+                "$ref": "#/$defs/point",
+                "description": "The other end in the floor plan."
+              },
+              "height": {
+                "type": "number",
+                "description": "Height above the floor, in meters."
+              }
+            }
+          }
+        ]
+      }
+    },
+    "indicators": {
+      "description": "Indicators that appear depending on the state of datapoints, e.g. notes while music is playing. The rules are checked in order and the first matching one applies; if none matches, the indicator is hidden. The icon comes from the indicator's kind (global.json).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "rules"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "kind": {
+            "$ref": "#/$defs/indicatorKind"
+          },
+          "room": {
+            "$ref": "#/$defs/id",
+            "description": "Room in which the indicator appears just below the ceiling (position via the area's \"indicatorOffset\" and \"indicatorHeight\")."
+          },
+          "position": {
+            "$ref": "#/$defs/position",
+            "description": "Fixed position instead of a room (not displayed yet)."
+          },
+          "rules": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "when": {
+                  "$ref": "#/$defs/condition"
+                },
+                "show": {
+                  "type": "boolean",
+                  "description": "Show the indicator (default true)."
+                },
+                "kind": {
+                  "$ref": "#/$defs/indicatorKind",
+                  "description": "Different kind (and so icon) for this state, e.g. \"music-paused\"."
+                }
+              }
+            }
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "room"
+            ]
+          },
+          {
+            "required": [
+              "position"
+            ]
+          }
+        ]
+      }
+    },
+    "objects": {
+      "description": "Objects in the house (planned extension), e.g. a floor lamp that looks different when switched on. Either a 3D model from config/models/ or a simple basic shape. Variants are checked in order and the first matching one applies.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "position"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "room": {
+            "$ref": "#/$defs/id"
+          },
+          "position": {
+            "$ref": "#/$defs/position"
+          },
+          "rotation": {
+            "type": "number",
+            "description": "Rotation about the vertical axis in degrees."
+          },
+          "size": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "width": {
+                "type": "number"
+              },
+              "depth": {
+                "type": "number"
+              },
+              "height": {
+                "type": "number"
+              }
+            },
+            "description": "Dimensions in meters."
+          },
+          "model": {
+            "$ref": "#/$defs/model"
+          },
+          "shape": {
+            "enum": [
+              "box",
+              "cylinder",
+              "sphere"
+            ],
+            "description": "Basic shape if no model is given."
+          },
+          "color": {
+            "$ref": "#/$defs/color"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "when": {
+                  "$ref": "#/$defs/condition"
+                },
+                "show": {
+                  "type": "boolean"
+                },
+                "model": {
+                  "$ref": "#/$defs/model"
+                },
+                "color": {
+                  "$ref": "#/$defs/color"
+                },
+                "glow": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Self-illumination, e.g. for a lamp that is switched on."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "footprint": {
+      "type": "object",
+      "description": "Rectangle in the floor plan including the overhang, before \"rotation\".",
+      "required": [
+        "x0",
+        "x1",
+        "y0",
+        "y1"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "x0": {
+          "type": "number",
+          "description": "West edge."
+        },
+        "x1": {
+          "type": "number",
+          "description": "East edge."
+        },
+        "y0": {
+          "type": "number",
+          "description": "South edge."
+        },
+        "y1": {
+          "type": "number",
+          "description": "North edge."
+        }
+      }
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+    },
+    "tags": {
+      "description": "Tags of the element in addition to those its kind implies, so a view can leave groups of elements out (\"hide\" in views/<id>.json). Implied: roof parts \"roof\" (one that covers only outbuildings also gets their tags, so a \"Garage\" tag on the garage area reaches its roof); structures \"structure\"; pavilions \"pavilion\" and \"outside\"; outbuildings \"outbuilding\" (without walls of their own also \"outside\"); outdoor areas (height 0) \"outside\"; the terrain \"ground\" and \"outside\"; lights \"light\", the tags of the area they lie in, and \"outside\" when outside the building (no area, an outdoor area, or a facade). Add \"outside\" to what stands apart from the building (a garden wall, freestanding steps) and names of your own for groups, as you call them (e.g. \"Garage\" on the garage's area, roof part and pillars). An element can carry several tags.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 40, "pattern": "^\\S(.*\\S)?$" }
+    },
+    "datapointRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9.-]{0,79}$",
+      "description": "Id of a datapoint from datapoints.json."
+    },
+    "point": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Color as \"#rrggbb\"."
+    },
+    "indicatorKind": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,39}$",
+      "description": "What an indicator shows, e.g. \"music\"; global.json assigns each kind its icon (\"heating\" and \"cooling\" are the rooms' own)."
+    },
+    "model": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,39}\\.(glb|gltf)$",
+      "description": "File in config/models/."
+    },
+    "position": {
+      "type": "object",
+      "required": [
+        "floor",
+        "x",
+        "y"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "floor": {
+          "$ref": "#/$defs/id"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Height above the floor of the storey (default 0)."
+        }
+      }
+    },
+    "condition": {
+      "description": "Condition on datapoints. Either a comparison with \"datapoint\" and exactly one of equals, notEquals, above, below, isTrue, isFalse, or a combination with \"all\" (all) or \"any\" (at least one).",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "datapoint"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "datapoint": {
+              "$ref": "#/$defs/datapointRef"
+            },
+            "equals": {
+              "type": [
+                "number",
+                "string",
+                "boolean"
+              ]
+            },
+            "notEquals": {
+              "type": [
+                "number",
+                "string",
+                "boolean"
+              ]
+            },
+            "above": {
+              "type": "number"
+            },
+            "below": {
+              "type": "number"
+            },
+            "isTrue": {
+              "const": true
+            },
+            "isFalse": {
+              "const": true
+            }
+          },
+          "minProperties": 2,
+          "maxProperties": 2
+        },
+        {
+          "type": "object",
+          "required": [
+            "all"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "all": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "any"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "any": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "shades": {
+      "description": "Shading in front of the opening, outside. Usually one; several if e.g. a two-part door has a curtain per part.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "roller",
+              "blind"
+            ],
+            "description": "\"roller\" roller blind or shutter (Loxone animation 1), \"blind\" venetian blind with slats (animation 0)."
+          },
+          "from": {
+            "type": "number",
+            "description": "Start, if the shading covers only part of the opening: for wall openings meters from \"start\", for roof windows meters along the width from the left edge seen from outside looking up the slope."
+          },
+          "to": {
+            "type": "number",
+            "description": "End, measured like \"from\"."
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "position": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Closed 0 (open, up) to 1 (fully down); for Loxone \"position\" on the Jalousie control."
+              },
+              "slats": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Slat angle 0 (horizontal, open) to 1 (closed); for Loxone \"shadePosition\"."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
