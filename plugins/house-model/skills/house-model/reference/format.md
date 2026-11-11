@@ -102,7 +102,11 @@ opaque doors (front door, side door, basement door).
   take the opening chain values directly and put the cross coordinate on the room edge.
 - Width: the structural opening width from the plan (`1.01` for a 1.00 m window is fine).
   Plans often write `width / height` at the opening (`1.01 / 1.385`) and the sill height as
-  `BRH 85` (Brüstungshöhe, cm, usually from the finished floor; check the plan's legend).
+  `BRH 85` (Brüstungshöhe, cm). Permit drawings usually count it from the finished floor (FFB);
+  **construction drawings (Werkplanung) often from the raw floor (RFB, Rohfußboden)**, because
+  the shell is built from them. Check the legend or a section where both stand side by side
+  (`1,02` raw next to `87` finished); if raw, subtract the floor build-up (the difference
+  FFB − RFB from the section, often 0.12–0.18 m) and note it in `model-notes.md`.
 - `sill` = BRH; `top` = sill + opening height, or from the elevation / section. Typical values:
   living rooms sill 0.85–0.90, kitchens/bathrooms 1.10–1.45, tops 2.10–2.30, terrace doors sill 0.
 - Ids: `<spaceId>-<facing side>-<n>`, numbered left to right as seen from outside, e.g.
@@ -131,20 +135,49 @@ overlap (the higher one wins, valleys form by themselves); a garage has its own 
 - `floor`: the storey whose rooms reach into the roof (the attic, or the upper floor with knee
   walls). Its heights are relative to that storey's FFB. For a cold, unused attic above a full
   storey, put the roof on the top full storey and give heights relative to it.
-- `footprint`: outer wall outline **plus the overhangs** — eave overhang on the eave sides, verge
-  overhang (Ortgang) on the gable sides; sections and elevations dimension them (typical 0.3–0.8 m).
-- `ridge`: `north-south` or `east-west` (direction of the ridge line).
+A part is written as the plans dimension it (format 7); nothing needs converting:
+
+```json
+{ "id": "main", "kind": "gable", "floor": "og", "outline": { "x0": 0, "x1": 11, "y0": 0, "y1": 9.5 },
+  "overhang": { "south": 0.8, "north": 0.3, "east": 0.6, "west": 0.6 },
+  "ridge": "east-west", "eaveHeight": 1.2, "ridgeHeight": 4.5, "color": "#3a3d40" }
+```
+
+- `outline`: the **wall line** the roof sits on, the outer faces of the walls (Außenkante), as the
+  floor plan's outer dimension chain gives it. A roof over no walls (carport, canopy): its own
+  edges, no overhang. It must lie on the modelled outer wall faces **within 2 cm**: only walls on
+  it close up to the roof as gable walls. `house:check` marks a roof line `GABLE OPEN on <side>`
+  when no exterior wall stands on that side of the outline; move the outline (or the walls) until
+  it is gone.
+- `overhang`: how far the roof reaches beyond the outline — eave overhang on the eave sides, verge
+  overhang (Ortgang) on the gable sides; sections and elevations dimension them (typical
+  0.3–0.8 m). One number when all sides are equal, else per side (`north`/`south`/`east`/`west`,
+  missing sides 0): **different overhangs per side are normal** (an overhang only to the south, a
+  verge flush with the wall).
+- `ridge`: `north-south` or `east-west` (direction of the ridge line). A gable's slopes lie on the
+  two sides along it (east-west: `south` and `north`); a hip slopes on all four; a shed on `low`.
+- **`eaveHeight` is the height where the slope meets the wall line** (the outer wall face), above
+  the storey's FFB — what sections give (the height at the outer wall, or the knee wall height
+  plus the rafter seat). One number for every slope, or per sloped side when they differ
+  (`{ "south": 1.2, "north": 2.0 }`). The slope carries on down over the overhang by itself.
+- Then **either `ridgeHeight` or `pitch`**:
+  - `ridgeHeight` (from the section, `First`, often an absolute level mark → subtract the
+    storey's level): every slope gets the same pitch, the one at which the slopes across the ridge
+    meet at that height. With different eave heights the ridge moves off the middle by itself.
+    For a shed it is the height at the high side's wall line.
+  - `pitch` in degrees (`DN 30°`), one or per side (`{ "south": 38, "north": 45 }`): for slopes of
+    different pitch, or when the section gives the pitch but no ridge height.
+  If the section gives all three (eave, ridge, pitch), write eave and ridge and check the pitch:
+  house:check prints it per side (and the resulting top); differences above 1° mean a misread
+  value.
+- `rotation`: degrees counterclockwise around the outline's middle, for houses not aligned with
+  the axes; `ridge`, `low` and the overhang sides refer to the outline before rotation.
 - `color`: the roof covering as seen in the photos (`"#rrggbb"`, per part), e.g. anthracite
   tiles `#3a3d40`, red clay `#8a3a2a`, a grey flat roof or gravel `#8c8f92`. Default dark red, so
   set it whenever photos show the roof.
-- **`eaveHeight` is the height at the edge of the footprint**, i.e. at the end of the overhang,
-  not at the wall. Sections usually give the height where the roof meets the outer wall face
-  (or the knee wall height plus the rafter seat). Convert: `eave = height at wall − overhang ×
-  tan(pitch)`.
-- `ridgeHeight`: from the section (`First`, often an absolute level mark → subtract the storey's
-  level). Check: `ridge − eave = tan(pitch) × half the footprint width` (gable/hip). house:check
-  prints the pitch it results in; compare with the section's `DN 30°`. Differences above 1° mean
-  a misread value.
+- Older files (format 6, `footprint` with the overhangs in it and the eaves at its edge) are
+  converted when the app or house:check opens them; the old file stays beside it as
+  `house.v6.json`. Never write `footprint` any more.
 - **Roof windows** (`roofWindows`): `roof` = part id, `center` in plan coordinates, `width` along
   the eave, `depth` = extent across the eave **in the plan**, i.e. window length × cos(pitch).
   Typical sizes (width × length): 0.78 × 0.98, 0.78 × 1.18, 0.78 × 1.40, 1.14 × 1.18, 1.14 × 1.40,
@@ -175,12 +208,13 @@ overlap (the higher one wins, valleys form by themselves); a garage has its own 
   with `bottom`/`top` relative to their `floor`. Each needs a unique `id` (lower case, digits,
   hyphens, e.g. `pfeiler-eingang`): views refer to it to make a part transparent or hide it, so
   keep ids stable when the model is corrected; `name` says in the user's language what it is.
-- **Flat-roofed parts** (bump-outs, a single-storey wing): their walls end at the storey height,
-  the flat roof often sits higher on a parapet (Attika). Close the strip with grey `structures`
-  boxes along the outer faces. Boxes and roof must never share a face (the roof draws a 16 cm
-  edge band at its footprint outline, coplanar faces flicker): let the boxes stand 3 cm proud of
-  the footprint and end 1 cm below the roof surface. If the parapet frame also runs over a
-  recessed entrance, the flat roof's footprint covers the recess too.
+- **Flat-roofed parts** (bump-outs, a single-storey wing): the app carries their facade, in its
+  `facadeColor`, on up to a roof part of the same storey, so nothing needs closing below the
+  roof. A visible parapet (Attika) is drawn as `structures` boxes along the outer faces, from the
+  storey height up. Boxes and roof must never share a face (the roof draws a 16 cm
+  edge band at its outer edge, coplanar faces flicker): let the boxes stand 3 cm proud of the
+  roof's edge (outline plus overhang) and end 1 cm below the roof surface. If the parapet frame
+  also runs over a recessed entrance, the flat roof's outline covers the recess too.
 - `pavilions`: conservatories and glass extensions (only hinted); `roomId` if it is a Loxone room.
   `bottom`/`top`/`lowTop` are relative to the floor's FFB, not to the terrace: a conservatory
   2.75 m high at the house on a terrace at −0.15 gets `top: 2.60`. Manufacturer drawings give width,
@@ -205,7 +239,9 @@ overlap (the higher one wins, valleys form by themselves); a garage has its own 
 - Garage gates are doors with `"operation": "overhead"` (never `turn`: a 2.5 m leaf swinging out
   looks absurd); map their Loxone `position` (0 closed, 1 open) as for motorised windows.
   Model their roof as a roof part of its own: a view that looks across it hides it with
-  `"roofs": { "<id>": "hidden" }` in its view file (or `"transparent"`).
+  `"roofs": { "<id>": "hidden" }` in its view file (or `"transparent"`, `"solid"`). Without a
+  setting a roof part is `cutaway`: the slope facing the camera opens above the view's cut-open
+  rooms up to their ceiling, so rooms under a low roof (knee wall) need no setting.
 - `spaces[].facadeColor` for facade parts of another color (dark grey wood cladding, colored
   plaster); from the photos.
 
@@ -220,11 +256,11 @@ in `${CLAUDE_PLUGIN_ROOT}/skills/house-model/example/house.json`.
 
 | `kind` | For | Placed by | `height` (above the storey's floor) |
 |---|---|---|---|
-| `pendant` | lamp hanging from the ceiling | `position` under the lamp | lower edge of the lamp (over a table about 1.45–1.6) |
+| `pendant` | lamp hanging from the ceiling: a shade (default) or a slim tube (`"shape": "tube"`, `size` the diameter, default 0.06; `length`, default 0.3; narrow beam) | `position` under the lamp | lower edge of the lamp (over a table about 1.45–1.6; several tubes often at staggered heights) |
 | `ceilingSpot` | recessed spot | `position` | none inside (the area's ceiling); outside every area the ceiling it sits in, e.g. the bottom of a canopy (`structures`) |
 | `lantern` | bollard or lamp post | `position` where it stands | the lamp head (a 0.8 m bollard on terrain at -0.3 has 0.5) |
 | `wallLight` | wall lamp, inside or on the facade | `position` on the wall's **inner face** (an edge of a room polygon, like an opening's ends), `side` `inside`/`outside` | the lamp's center (outside typically 1.8–2.2, beside a door about door height) |
-| `strip` | line of light under a cupboard, in a shelf, a cove | `from`, `to` | the strip (under wall cupboards about 1.4) |
+| `strip` | line of light under a cupboard, in a shelf, a cove; also rising (under a sloped ceiling, along stairs) or upright (in a shelf's side, a door frame) | `from`, `to` | the `from` end (under wall cupboards about 1.4); `toHeight` for the `to` end when it rises; upright: `from` and `to` the same point, `height` the bottom, `toHeight` the top |
 
 - **Plan points, never wall ids.** A facade light uses the point on the inner face of its
   exterior wall with `"side": "outside"`; the scene puts it on the outer face. `house:check`
@@ -240,6 +276,21 @@ in `${CLAUDE_PLUGIN_ROOT}/skills/house-model/example/house.json`.
   they stay dark (`house:check` warns, it does not fail, so lights can be placed first and mapped
   afterwards).
 - **One output, several lamps:** three lanterns on one switch each name the same datapoint.
+- **Strips on furniture:** a strip under a wall cupboard, on top of a wardrobe or up a shelf's
+  edge sits on the piece (see *Furniture*): `"on": { "furniture": "<id>", "edge": "<edge>" }`
+  instead of `floor`, `from`, `to`, `height` and `toHeight`. It runs the edge's whole length,
+  moves with the piece and goes with its tags. Light falls down from a bottom edge (under a
+  cupboard: `bottom-front`), rises from a top edge (a cove: `top-front` or `top-back`) and
+  spreads outwards from an upright one (`front-left` …). Prefer this to a free strip whenever
+  the light belongs to a piece.
+- **Strips along stairs** rise with `toHeight`, the plan line following the stair's edge. Both
+  ends must lie inside the area the strip's middle is in: above its floor (0 is refused, use
+  e.g. 0.05) and at most at its ceiling. A storey's stairs are an area of that storey, not an
+  opening to the next one, so a strip that climbs a whole storey is **two strips**: one in the
+  lower storey from the bottom step to just below its ceiling, one in the upper storey from just
+  above its floor on along the stair line, both with the same `data`. The short piece through the
+  slab is hidden anyway. Ids like `treppe-eg`, `treppe-og`; render with `--lit=lights` and check
+  that the two pieces line up.
 - **Tags:** implied `light`, the area's tags (a lamp in the garage goes with "Garage"), and
   `outside` for lights outside the building. Add group names like for other elements ("Garten"
   for the walkway lanterns) so a view can switch them.
@@ -250,6 +301,36 @@ in `${CLAUDE_PLUGIN_ROOT}/skills/house-model/example/house.json`.
   show wall lights; photos at dusk show which lamps exist outside; the Loxone inventory's light
   outputs name what is switched ("Wandstrahler Haustür", "Erdkabel Leuchten Eingang"). Positions
   from photos and descriptions are *estimated* (to about ±20 cm), say so.
+
+## Furniture
+
+Simple boxes (lines with a faint fill) that show where furniture stands, mainly so lit furniture
+can carry its strips. Not a furnishing plan: model the pieces that matter (kitchen rows, wall
+cupboards, wardrobes, shelves with light, the dining table under a pendant), each as one box.
+
+- **Two forms**, both with `bottom` and `top` above the storey's floor:
+  - against a wall, also a slanted one: `from` and `to` are its **back edge** (plan points, e.g.
+    on the inner face of the wall it stands against), `from` the left end **as seen standing in
+    front of it**; `depth` towards the front. The front lies to the right of `from`→`to`. A
+    free-standing piece at an angle uses one long side as its back.
+  - along the plan axes: `x0`/`x1`/`y0`/`y1` and `front` (`north`/`south`/`east`/`west`, the
+    side facing into the room).
+- **Typical sizes:** kitchen row 0.6 deep, `top` 0.9; wall cupboard 0.35 deep, `bottom` about
+  1.45–1.5, `top` 2.1–2.3; wardrobe 0.6 deep, `top` 2.0–2.4; dining table `top` 0.75.
+- **Edges** (for strips) are named from the front, left and right as seen standing in front:
+  `top-front`, `bottom-front`, `top-back`, `bottom-back`, `top-left`, `bottom-left`,
+  `top-right`, `bottom-right`, and the upright `front-left`, `front-right`, `back-left`,
+  `back-right`.
+- `color` (lines and fill; default light grey) and `opacity` (0 lines only, 1 solid; default
+  0.25). Give a color only when it helps tell pieces apart (wood for a table).
+- **Room:** from the middle of the footprint; the piece shows when a view opens that room. `room`
+  only where the middle cannot tell. It must fit between its area's floor and ceiling.
+- **Tags:** implied `furniture` (one switch for all of it), the area's tags and `outside`. Add
+  group names on request ("Küche", "Einbauschränke").
+- **Sources:** floor plans usually draw kitchen rows, wardrobes and fixed furniture (built-in
+  units with their depth); photos and the user's words for the rest. Positions from photos are
+  estimated; say so. `house:check` lists each piece and draws its footprint with the front edge
+  thick: check that the thick edge faces into the room.
 
 ## Weather station
 
@@ -277,6 +358,43 @@ main roof's ridge). At most one.
   can show the sky without a station, and a station without values shows an empty panel.
 - Positions from photos are *estimated*, say so.
 
+## Indicators
+
+Icons that appear while a datapoint is in some state: music playing, mail in the mailbox, the
+washing machine done. Mapping the datapoints: `loxone-mapping.md` (audio zones there). The
+icon per kind is the user's choice (menu "Globale Einstellungen …"); a kind you invent gets a
+placeholder until they pick one, so say so.
+
+- **One thing is one indicator; its states are rules.** The rules are checked in order, the first
+  matching one applies, and it may name another `kind` (another icon) for its state. A rule
+  without `when` always matches: put it last as the default. Never make one indicator per state
+  ("mail", then a second for "no mail"); give the most important state the first rule (a package
+  before plain mail, so both at once shows the package):
+
+  ```json
+  { "id": "postkasten", "kind": "mail", "room": "vorraum", "rules": [
+    { "when": { "datapoint": "postkasten.packet", "equals": 1 }, "kind": "package" },
+    { "when": { "datapoint": "postkasten.mail", "equals": 1 } },
+    { "kind": "no-mail" }
+  ] }
+  ```
+
+  No rule matching hides it (stopped music shows nothing). `"show": false` in a rule hides it for
+  that state explicitly, ahead of later rules.
+- **In a room's row** (`room`): the usual case, for what concerns the room (music, a window
+  contact summary). Every indicator of a room shares its row; the views place the row.
+- **At a point** (`position` instead of `room`) for an indicator that belongs to a place of its own:
+  the mailbox by the front door, the washing machine in a cellar corner, the garage gate.
+  `{ "floor": "eg", "x": 6.1, "y": -0.4, "height": 1.2 }`, `height` the icon's middle above the
+  storey's floor (default 1.5; inside a room it must stay below the ceiling). It shows with the
+  room its point lies in; outside the building with `outside`. `tags` (only here) for a group of
+  the user's. Suggest it when the user names a place ("at the mailbox"); ask where if the plans
+  do not show it. `house:check` lists it per storey and marks it as a purple diamond in the plan;
+  `house:render` shows the icon there (the simulation shows every indicator).
+  Where the icon covers something in one view, the user drags it in the view editor ("Ansichten
+  bearbeiten …"); that view stores `"indicators": { "<id>": { "offset": [east, north], "height": h
+  } }` relative to the point. Leave it to them; move the point itself when it is wrong everywhere.
+
 ## Tags
 
 Tags let a view leave groups of elements out (`"hide": ["outside"]` in a view file) and let the
@@ -285,10 +403,14 @@ user name groups of their own. Background and rules: `${CLAUDE_PLUGIN_ROOT}/skil
 - **Implied tags come from the kind; never write them where the kind already says it.** Roof
   parts are `roof`; structures `structure`; pavilions `pavilion` + `outside`; areas with
   `outbuilding: true` `outbuilding` (without `exteriorWall` also `outside`); outdoor areas (`height: 0`) `outside`; the
-  terrain `ground` + `outside`; a roof part over outbuildings only also gets their tags.
+  terrain `ground` + `outside` (its pits too); a roof part over outbuildings only also gets their tags.
   Openings, roof windows and gables go with their area or roof part and have no tags of their own.
 - **Add `"tags"` only for what the kind cannot tell** (optional on `spaces`, `roofs`,
-  `structures`, `pavilions`):
+  `structures`, `pavilions`, `lights`, `furniture`, `ground.pits`, and `indicators` at a point):
+  - On pits a group name such as `"Lichtschacht"` when the user wants to leave the light wells out
+    with the basement (a view with `floors` without the basement still draws the terrain and its
+    pits; `"hide": ["Lichtschacht"]` leaves them out, and the terrain closes over them). Exterior
+    basement stairs are no light well: a tag of their own or none.
   - `outside` on structures and roof parts that stand apart from the building: garden walls,
     freestanding steps or a pergola, a carport roof and its posts. Structures attached to the
     house (entrance pillars and lintels, a balcony slab, a parapet, steps at the front door) are

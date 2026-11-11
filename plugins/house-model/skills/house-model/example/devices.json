@@ -8,7 +8,11 @@
       "aspect": { "width": 16, "height": 10 },
       "landscape": {
         "pages": [
-          { "id": "haus", "title": "Haus vorn", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "haus", "title": "Haus vorn", "icon": "house", "weather": true, "components": [
+              { "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } },
+              { "type": "clock", "area": { "x": 2, "y": 7, "width": 17, "height": 13 } },
+              { "type": "date", "area": { "x": 2, "y": 20, "width": 24, "height": 5 } }
+            ] },
           {
             "id": "65ffa8d1-3d60-46aa-b19a-bbe31a28b0f9",
             "title": "Haus hinten",
@@ -34,7 +38,11 @@
       "presenceRoom": "eltern",
       "landscape": {
         "pages": [
-          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [
+              { "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } },
+              { "type": "clock", "area": { "x": 2, "y": 7, "width": 17, "height": 13 } },
+              { "type": "date", "area": { "x": 2, "y": 20, "width": 24, "height": 5 } }
+            ] },
           { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
           { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
         ]

@@ -22,6 +22,7 @@
 | Problem | Was tun |
 |---|---|
 | Ein Fenster, eine Wand oder das Dach sitzt falsch | Claude genau sagen, was falsch ist („das Küchenfenster liegt 30 cm weiter links", „der First verläuft Ost–West") – in Claude Code oder im **Haus-Assistenten**. |
+| Ein Giebel ist offen, man sieht unters Dach | Die Außenkante des Dachs passt nicht auf die Außenwände (die Prüfung meldet „gable stays open"). Claude bitten, die Dachkante auf die Außenwände zu setzen. |
 | Ein Fenster zeigt offen, obwohl es zu ist (oder umgekehrt) | Der Loxone-Kontakt meldet andersherum: Claude sagen („Fenster Bad zeigt offen, wenn es zu ist"). |
 | Etwas wird falsch gezeichnet, obwohl das Modell stimmt (weiße Streifen, fehlende Flächen) | Das ist ein Fehler in HouseVis: bitte mit Bildschirmfoto [im Forum melden](https://forum.housevis.de/c/fehlerberichte). |
 | HouseVis zeigt das falsche Haus oder „Noch kein Hausmodell" | Menü → **Konfigurationsordner …**: den Ordner wählen, in dem deine `house.json` liegt. |

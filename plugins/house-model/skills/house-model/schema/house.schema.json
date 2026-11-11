@@ -21,8 +21,8 @@
   },
   "properties": {
     "version": {
-      "const": 6,
-      "description": "Format version of this file. HouseVis reads only this version and refuses others with a message; older formats are not converted."
+      "const": 7,
+      "description": "Format version of this file. HouseVis converts older files from version 6 on when it loads them (the Windows app writes the result back and keeps the old file as house.v<n>.json); anything else is refused with a message."
     },
     "data": {
       "description": "House-wide datapoints from datapoints.json per role.",
@@ -443,220 +443,85 @@
       }
     },
     "roofs": {
-      "description": "Roof as a list of parts. Within a part the surface is the lowest of its slopes; where parts overlap, the higher one counts (e.g. a wing running into the main roof forms valleys). Rooms on a part's floor end below its slopes.",
+      "description": "Roof as a list of parts, each as plans dimension it: the wall line it sits on (\"outline\"), how far it reaches beyond (\"overhang\"), and its slopes by their height at the wall line. Each slope is a plane through its side of the outline; within a part the surface is the lowest of them, cut off at the outline plus the overhangs. Where parts overlap, the higher one counts (e.g. a wing running into the main roof forms valleys). Rooms on a part's floor end below its slopes.",
       "type": "array",
       "items": {
         "oneOf": [
           {
             "type": "object",
-            "description": "Gable roof: two slopes meeting at the ridge in the middle of the footprint, vertical gable walls at both ends.",
-            "required": [
-              "id",
-              "kind",
-              "floor",
-              "footprint",
-              "ridge",
-              "eaveHeight",
-              "ridgeHeight"
-            ],
+            "description": "Gable roof: two slopes on the sides along the ridge, vertical gable walls at both ends. With \"ridgeHeight\" both slopes have the same pitch; with different eave heights or overhangs the ridge moves accordingly.",
+            "required": ["id", "kind", "floor", "outline", "ridge", "eaveHeight"],
             "additionalProperties": false,
             "properties": {
-              "id": {
-                "$ref": "#/$defs/id",
-                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
-              },
-              "kind": {
-                "const": "gable"
-              },
-              "floor": {
-                "$ref": "#/$defs/id",
-                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
-              },
-              "footprint": {
-                "$ref": "#/$defs/footprint"
-              },
-              "rotation": {
-                "type": "number",
-                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
-              },
+              "id": { "$ref": "#/$defs/id", "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it." },
+              "kind": { "const": "gable" },
+              "floor": { "$ref": "#/$defs/id", "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof." },
+              "outline": { "$ref": "#/$defs/outline" },
+              "overhang": { "$ref": "#/$defs/overhang" },
+              "rotation": { "$ref": "#/$defs/rotation" },
               "tags": { "$ref": "#/$defs/tags" },
-              "color": {
-                "$ref": "#/$defs/color",
-                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
-              },
-              "ridge": {
-                "enum": [
-                  "north-south",
-                  "east-west"
-                ],
-                "description": "Direction of the ridge (before rotation)."
-              },
-              "eaveHeight": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height of the eaves above the floor in meters (at the edge of the footprint)."
-              },
-              "ridgeHeight": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height of the ridge above the floor in meters."
-              }
+              "color": { "$ref": "#/$defs/roofColor" },
+              "ridge": { "enum": ["north-south", "east-west"], "description": "Direction of the ridge (before rotation); the slopes lie on the two sides along it (east-west: south and north)." },
+              "eaveHeight": { "$ref": "#/$defs/eaveHeight" },
+              "ridgeHeight": { "$ref": "#/$defs/ridgeHeight" },
+              "pitch": { "$ref": "#/$defs/pitch" }
             }
           },
           {
             "type": "object",
-            "description": "Hip roof: four slopes with the same pitch; the ridge is shorter than the footprint by its width. The footprint must be at least as long along the ridge as it is wide.",
-            "required": [
-              "id",
-              "kind",
-              "floor",
-              "footprint",
-              "ridge",
-              "eaveHeight",
-              "ridgeHeight"
-            ],
+            "description": "Hip roof: a slope on every side. With \"ridgeHeight\" all four have the same pitch and the ridge is shorter than the outline by its width.",
+            "required": ["id", "kind", "floor", "outline", "ridge", "eaveHeight"],
             "additionalProperties": false,
             "properties": {
-              "id": {
-                "$ref": "#/$defs/id",
-                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
-              },
-              "kind": {
-                "const": "hip"
-              },
-              "floor": {
-                "$ref": "#/$defs/id",
-                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
-              },
-              "footprint": {
-                "$ref": "#/$defs/footprint"
-              },
-              "rotation": {
-                "type": "number",
-                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
-              },
+              "id": { "$ref": "#/$defs/id", "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it." },
+              "kind": { "const": "hip" },
+              "floor": { "$ref": "#/$defs/id", "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof." },
+              "outline": { "$ref": "#/$defs/outline" },
+              "overhang": { "$ref": "#/$defs/overhang" },
+              "rotation": { "$ref": "#/$defs/rotation" },
               "tags": { "$ref": "#/$defs/tags" },
-              "color": {
-                "$ref": "#/$defs/color",
-                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
-              },
-              "ridge": {
-                "enum": [
-                  "north-south",
-                  "east-west"
-                ],
-                "description": "Direction of the ridge (before rotation)."
-              },
-              "eaveHeight": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height of the eaves above the floor in meters (at the edge of the footprint)."
-              },
-              "ridgeHeight": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height of the ridge above the floor in meters."
-              }
+              "color": { "$ref": "#/$defs/roofColor" },
+              "ridge": { "enum": ["north-south", "east-west"], "description": "Direction of the ridge (before rotation); \"ridgeHeight\" is reached by the slopes across it." },
+              "eaveHeight": { "$ref": "#/$defs/eaveHeight" },
+              "ridgeHeight": { "$ref": "#/$defs/ridgeHeight" },
+              "pitch": { "$ref": "#/$defs/pitch" }
             }
           },
           {
             "type": "object",
             "description": "Shed roof: one slope down towards side \"low\".",
-            "required": [
-              "id",
-              "kind",
-              "floor",
-              "footprint",
-              "low",
-              "eaveHeight",
-              "ridgeHeight"
-            ],
+            "required": ["id", "kind", "floor", "outline", "low", "eaveHeight"],
             "additionalProperties": false,
             "properties": {
-              "id": {
-                "$ref": "#/$defs/id",
-                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
-              },
-              "kind": {
-                "const": "shed"
-              },
-              "floor": {
-                "$ref": "#/$defs/id",
-                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
-              },
-              "footprint": {
-                "$ref": "#/$defs/footprint"
-              },
-              "rotation": {
-                "type": "number",
-                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
-              },
+              "id": { "$ref": "#/$defs/id", "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it." },
+              "kind": { "const": "shed" },
+              "floor": { "$ref": "#/$defs/id", "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof." },
+              "outline": { "$ref": "#/$defs/outline" },
+              "overhang": { "$ref": "#/$defs/overhang" },
+              "rotation": { "$ref": "#/$defs/rotation" },
               "tags": { "$ref": "#/$defs/tags" },
-              "color": {
-                "$ref": "#/$defs/color",
-                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
-              },
-              "low": {
-                "enum": [
-                  "north",
-                  "south",
-                  "east",
-                  "west"
-                ],
-                "description": "Side of the footprint (before rotation) towards which the roof slopes down."
-              },
-              "eaveHeight": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height at the low side above the floor in meters."
-              },
-              "ridgeHeight": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height at the opposite, high side above the floor in meters."
-              }
+              "color": { "$ref": "#/$defs/roofColor" },
+              "low": { "enum": ["north", "south", "east", "west"], "description": "Side of the outline (before rotation) towards which the roof slopes down." },
+              "eaveHeight": { "type": "number", "minimum": 0, "description": "Height at the low side's wall line above the floor, in meters." },
+              "ridgeHeight": { "type": "number", "minimum": 0, "description": "Height at the high side's wall line above the floor, in meters; or \"pitch\" instead." },
+              "pitch": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 90, "description": "Pitch in degrees; instead of \"ridgeHeight\"." }
             }
           },
           {
             "type": "object",
             "description": "Flat roof.",
-            "required": [
-              "id",
-              "kind",
-              "floor",
-              "footprint",
-              "height"
-            ],
+            "required": ["id", "kind", "floor", "outline", "height"],
             "additionalProperties": false,
             "properties": {
-              "id": {
-                "$ref": "#/$defs/id",
-                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
-              },
-              "kind": {
-                "const": "flat"
-              },
-              "floor": {
-                "$ref": "#/$defs/id",
-                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
-              },
-              "footprint": {
-                "$ref": "#/$defs/footprint"
-              },
-              "rotation": {
-                "type": "number",
-                "description": "Degrees counterclockwise around the center of the footprint, for houses not aligned with the axes. Default 0."
-              },
+              "id": { "$ref": "#/$defs/id", "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it." },
+              "kind": { "const": "flat" },
+              "floor": { "$ref": "#/$defs/id", "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof." },
+              "outline": { "$ref": "#/$defs/outline" },
+              "overhang": { "$ref": "#/$defs/overhang" },
+              "rotation": { "$ref": "#/$defs/rotation" },
               "tags": { "$ref": "#/$defs/tags" },
-              "color": {
-                "$ref": "#/$defs/color",
-                "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
-              },
-              "height": {
-                "type": "number",
-                "minimum": 0,
-                "description": "Height above the floor in meters."
-              }
+              "color": { "$ref": "#/$defs/roofColor" },
+              "height": { "type": "number", "minimum": 0, "description": "Height above the floor in meters." }
             }
           }
         ]
@@ -722,6 +587,10 @@
               "railing": {
                 "type": "boolean",
                 "description": "Railing along the free top edges."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags",
+                "description": "Tags of the pit in addition to the terrain's (\"ground\", \"outside\"), e.g. \"Lichtschacht\": a view that hides one leaves the pit out and the terrain closes over it. A switch on a page hides its walls, stairs and railing, but leaves its opening in the terrain."
               },
               "stairs": {
                 "description": "Stairs in the pit, only hinted: the steps descend towards side \"down\" down to \"bottom\".",
@@ -946,7 +815,7 @@
         "oneOf": [
           {
             "type": "object",
-            "description": "Hangs from the ceiling over a point and shines down, e.g. over the dining table.",
+            "description": "Hangs from the ceiling over a point and shines down, e.g. over the dining table: a bell-shaped shade, or a slim tube (\"shape\").",
             "required": [
               "id",
               "kind",
@@ -1032,6 +901,15 @@
               "height": {
                 "type": "number",
                 "description": "Lower edge of the lamp above the floor, in meters (e.g. 1.5 over a table)."
+              },
+              "shape": {
+                "enum": ["bell", "tube"],
+                "description": "bell (default): an open shade, wide light, the shade glowing when lit. tube: a slim closed cylinder (\"size\" its diameter, default 0.06; \"length\"), light only from its lower end in a narrow beam (default 40°), only that end glowing."
+              },
+              "length": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Only with \"shape\": \"tube\": length of the tube in meters; default 0.3. Its top (height + length) lies below the ceiling."
               }
             }
           },
@@ -1325,14 +1203,17 @@
           },
           {
             "type": "object",
-            "description": "A line of light, e.g. under a wall cupboard, in a shelf or a cove.",
+            "description": "A line of light, e.g. under a wall cupboard, in a shelf or a cove: either placed by \"floor\", \"from\", \"to\" and \"height\", or along an edge of a piece of furniture (\"on\"), which gives it all of these.",
             "required": [
               "id",
-              "kind",
-              "floor",
-              "from",
-              "to",
-              "height"
+              "kind"
+            ],
+            "oneOf": [
+              { "required": ["floor", "from", "to", "height"], "not": { "required": ["on"] } },
+              {
+                "required": ["on"],
+                "not": { "anyOf": [{ "required": ["floor"] }, { "required": ["from"] }, { "required": ["to"] }, { "required": ["height"] }, { "required": ["toHeight"] }] }
+              }
             ],
             "additionalProperties": false,
             "properties": {
@@ -1415,7 +1296,170 @@
               },
               "height": {
                 "type": "number",
-                "description": "Height above the floor, in meters."
+                "description": "Height above the floor, in meters (a strip: of its \"from\" end)."
+              },
+              "on": {
+                "type": "object",
+                "description": "Along an edge of a piece of furniture, its whole length; the strip moves with the piece and goes with its tags. Instead of \"floor\", \"from\", \"to\", \"height\" and \"toHeight\".",
+                "required": ["furniture", "edge"],
+                "additionalProperties": false,
+                "properties": {
+                  "furniture": { "$ref": "#/$defs/id", "description": "Id of the piece in \"furniture\"." },
+                  "edge": {
+                    "enum": ["top-front", "bottom-front", "top-back", "bottom-back", "top-left", "bottom-left", "top-right", "bottom-right", "front-left", "front-right", "back-left", "back-right"],
+                    "description": "Where two faces meet, named from the piece's front, left and right as seen standing in front of it. On a bottom edge the light falls down (under a cupboard), on a top edge it rises (a cove on top), on an upright edge it spreads outwards."
+                  }
+                }
+              },
+              "toHeight": {
+                "type": "number",
+                "description": "Only strips: height of the \"to\" end above the floor, for a strip that rises (under a sloped ceiling, along stairs) or stands upright (\"from\" and \"to\" the same point). Default: \"height\", a level strip."
+              }
+            }
+          }
+        ]
+      }
+    },
+    "furniture": {
+      "description": "Furniture as simple boxes (docs/furniture.md): lines with a faint fill, shown with its room; its edges can carry light strips. Either against a wall (\"from\", \"to\": its back edge, \"depth\"), which also fits a slanted wall, or along the plan axes (\"x0\"…\"y1\" and \"front\"). Implied tags \"furniture\", the tags of the area it stands in, and \"outside\" outside the building.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "floor",
+              "from",
+              "to",
+              "depth",
+              "bottom",
+              "top"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name as the user calls it, e.g. \"Oberschrank\"."
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey it stands on; its heights are above that storey's floor."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room it belongs to: it shows when a view opens that room. Default: the room of the area its middle lies in; give it only where the footprint cannot tell."
+              },
+              "bottom": {
+                "type": "number",
+                "description": "Bottom edge above the floor in meters (0 for a standing piece, e.g. 1.45 for a wall cupboard)."
+              },
+              "top": {
+                "type": "number",
+                "description": "Top edge above the floor in meters."
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of its lines and faint fill; default a light grey."
+              },
+              "opacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "How strongly its faces are filled: 0 lines only, 1 solid; default faint (0.25)."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "from": {
+                "$ref": "#/$defs/point",
+                "description": "Left end of its back edge, seen standing in front of it (plan point, e.g. on the wall it stands against)."
+              },
+              "to": {
+                "$ref": "#/$defs/point",
+                "description": "Right end of its back edge, seen from the front."
+              },
+              "depth": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "From the back edge towards the front, in meters."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "floor",
+              "x0",
+              "x1",
+              "y0",
+              "y1",
+              "front",
+              "bottom",
+              "top"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name as the user calls it, e.g. \"Oberschrank\"."
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey it stands on; its heights are above that storey's floor."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room it belongs to: it shows when a view opens that room. Default: the room of the area its middle lies in; give it only where the footprint cannot tell."
+              },
+              "bottom": {
+                "type": "number",
+                "description": "Bottom edge above the floor in meters (0 for a standing piece, e.g. 1.45 for a wall cupboard)."
+              },
+              "top": {
+                "type": "number",
+                "description": "Top edge above the floor in meters."
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of its lines and faint fill; default a light grey."
+              },
+              "opacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "How strongly its faces are filled: 0 lines only, 1 solid; default faint (0.25)."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "x0": {
+                "type": "number"
+              },
+              "x1": {
+                "type": "number"
+              },
+              "y0": {
+                "type": "number"
+              },
+              "y1": {
+                "type": "number"
+              },
+              "front": {
+                "enum": [
+                  "north",
+                  "south",
+                  "east",
+                  "west"
+                ],
+                "description": "The side its front faces; edges are named from it (left and right as seen standing in front)."
               }
             }
           }
@@ -1423,7 +1467,7 @@
       }
     },
     "indicators": {
-      "description": "Indicators that appear depending on the state of datapoints, e.g. notes while music is playing. The rules are checked in order and the first matching one applies; if none matches, the indicator is hidden. The icon comes from the indicator's kind (global.json).",
+      "description": "Indicators that appear depending on the state of datapoints, e.g. notes while music is playing. One thing is one indicator, its states are rules: they are checked in order and the first matching one applies (a rule without \"when\" always matches, e.g. \"no mail\" last); if none matches, the indicator is hidden. The icon comes from the kind (global.json), which a rule may change for its state.",
       "type": "array",
       "items": {
         "type": "object",
@@ -1442,11 +1486,15 @@
           },
           "room": {
             "$ref": "#/$defs/id",
-            "description": "Room in which the indicator appears just below the ceiling (position via the area's \"indicatorOffset\" and \"indicatorHeight\")."
+            "description": "Room in whose row of indicators it appears (each view places the row, \"labels\" in the view file; default just below the ceiling)."
           },
           "position": {
             "$ref": "#/$defs/position",
-            "description": "Fixed position instead of a room (not displayed yet)."
+            "description": "A point of its own instead of a room's row, for an indicator that belongs to a place (the mailbox by the front door): \"height\" is the icon's middle above the storey's floor (default 1.5). It shows with the room of the area the point lies in, or as \"outside\"."
+          },
+          "tags": {
+            "$ref": "#/$defs/tags",
+            "description": "Only with \"position\": tags of its own besides those of the area it lies in."
           },
           "rules": {
             "type": "array",
@@ -1570,41 +1618,83 @@
     }
   },
   "$defs": {
-    "footprint": {
+    "outline": {
       "type": "object",
-      "description": "Rectangle in the floor plan including the overhang, before \"rotation\".",
-      "required": [
-        "x0",
-        "x1",
-        "y0",
-        "y1"
-      ],
+      "description": "The wall line under a roof part, before \"rotation\": the outer faces of the walls it sits on (Außenkante), as the plans dimension them. For a roof over no walls (carport, canopy) its own edges.",
+      "required": ["x0", "x1", "y0", "y1"],
       "additionalProperties": false,
       "properties": {
-        "x0": {
-          "type": "number",
-          "description": "West edge."
-        },
-        "x1": {
-          "type": "number",
-          "description": "East edge."
-        },
-        "y0": {
-          "type": "number",
-          "description": "South edge."
-        },
-        "y1": {
-          "type": "number",
-          "description": "North edge."
-        }
+        "x0": { "type": "number", "description": "West edge." },
+        "x1": { "type": "number", "description": "East edge." },
+        "y0": { "type": "number", "description": "South edge." },
+        "y1": { "type": "number", "description": "North edge." }
       }
+    },
+    "perSide": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "north": { "type": "number" },
+        "south": { "type": "number" },
+        "east": { "type": "number" },
+        "west": { "type": "number" }
+      }
+    },
+    "overhang": {
+      "description": "How far the roof reaches beyond the outline, in meters (eave and verge overhang): one value for every side, or per side (before rotation), e.g. { \"south\": 0.8, \"east\": 0.4, \"west\": 0.4 }; missing sides 0. Default 0.",
+      "oneOf": [
+        { "type": "number", "minimum": 0 },
+        {
+          "allOf": [{ "$ref": "#/$defs/perSide" }],
+          "properties": { "north": { "minimum": 0 }, "south": { "minimum": 0 }, "east": { "minimum": 0 }, "west": { "minimum": 0 } }
+        }
+      ]
+    },
+    "rotation": {
+      "type": "number",
+      "description": "Degrees counterclockwise around the center of the outline, for houses not aligned with the axes. Default 0."
+    },
+    "roofColor": {
+      "$ref": "#/$defs/color",
+      "description": "Color of the roof covering seen from outside, e.g. \"#3a3d40\" for anthracite tiles. The seams are drawn a little darker. Default dark red."
+    },
+    "eaveHeight": {
+      "description": "Height above the floor, in meters, where a slope meets the outline: at the outer face of the wall (sections give it there, or the knee wall plus the rafter seat). One value for every slope, or per sloped side, e.g. { \"south\": 1.2, \"north\": 2.0 }.",
+      "oneOf": [
+        { "type": "number", "minimum": 0 },
+        {
+          "allOf": [{ "$ref": "#/$defs/perSide" }],
+          "properties": { "north": { "minimum": 0 }, "south": { "minimum": 0 }, "east": { "minimum": 0 }, "west": { "minimum": 0 } }
+        }
+      ]
+    },
+    "ridgeHeight": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Height of the ridge above the floor, in meters: every slope gets the same pitch, the one at which the slopes across the ridge meet at this height. Give it or \"pitch\"."
+    },
+    "pitch": {
+      "description": "Pitch in degrees (DN), one value for every slope or per sloped side; instead of \"ridgeHeight\", e.g. for slopes of different pitch.",
+      "oneOf": [
+        { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+        {
+          "allOf": [{ "$ref": "#/$defs/perSide" }],
+          "properties": {
+            "north": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+            "south": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+            "east": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+            "west": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 }
+          }
+        }
+      ]
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
     },
     "tags": {
-      "description": "Tags of the element in addition to those its kind implies, so a view can leave groups of elements out (\"hide\" in views/<id>.json). Implied: roof parts \"roof\" (one that covers only outbuildings also gets their tags, so a \"Garage\" tag on the garage area reaches its roof); structures \"structure\"; pavilions \"pavilion\" and \"outside\"; outbuildings \"outbuilding\" (without walls of their own also \"outside\"); outdoor areas (height 0) \"outside\"; the terrain \"ground\" and \"outside\"; lights \"light\", the tags of the area they lie in, and \"outside\" when outside the building (no area, an outdoor area, or a facade). Add \"outside\" to what stands apart from the building (a garden wall, freestanding steps) and names of your own for groups, as you call them (e.g. \"Garage\" on the garage's area, roof part and pillars). An element can carry several tags.",
+      "description": "Tags of the element in addition to those its kind implies, so a view can leave groups of elements out (\"hide\" in views/<id>.json). Implied: roof parts \"roof\" (one that covers only outbuildings also gets their tags, so a \"Garage\" tag on the garage area reaches its roof); structures \"structure\"; pavilions \"pavilion\" and \"outside\"; outbuildings \"outbuilding\" (without walls of their own also \"outside\"); outdoor areas (height 0) \"outside\"; the terrain and its pits \"ground\" and \"outside\"; lights \"light\", the tags of the area they lie in, and \"outside\" when outside the building (no area, an outdoor area, or a facade). Add \"outside\" to what stands apart from the building (a garden wall, freestanding steps) and names of your own for groups, as you call them (e.g. \"Garage\" on the garage's area, roof part and pillars). An element can carry several tags.",
       "type": "array",
       "uniqueItems": true,
       "items": { "type": "string", "minLength": 1, "maxLength": 40, "pattern": "^\\S(.*\\S)?$" }

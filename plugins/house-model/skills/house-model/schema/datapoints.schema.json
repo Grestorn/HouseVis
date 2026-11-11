@@ -99,6 +99,9 @@
             },
             {
               "$ref": "#/$defs/asClimateDemand"
+            },
+            {
+              "$ref": "#/$defs/asWindowMonitor"
             }
           ]
         }
@@ -225,6 +228,18 @@
         "type": { "const": "climateDemand" },
         "control": { "type": "string", "description": "uuidAction of the room controller." },
         "demand": { "enum": ["heating", "cooling"] }
+      }
+    },
+    "asWindowMonitor": {
+      "description": "One window or door of a \"Fenster- und Türüberwachung\" (WindowMonitor), for contacts that are not enabled for the user interface themselves. The address is the block's state \"windowStates\" (the windows' states separated by commas, in the order of the block's details.windows; each a bitmask: 1 closed, 2 tilted, 4 open, 8 locked, 16 unlocked); \"window\" picks the window, \"state\" the bit. true while that bit is set; no value while the sensor is offline.",
+      "type": "object",
+      "required": ["type", "window", "state"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "windowMonitor" },
+        "window": { "type": "integer", "minimum": 0, "description": "Position of the window in the block's details.windows, from 0 (the Loxone inventory lists them as \"windows\")." },
+        "state": { "enum": ["open", "tilted", "closed", "locked", "unlocked"], "description": "The bit that makes the value true: \"open\" for an opening's \"open\", \"tilted\" for its \"tilted\"." },
+        "name": { "type": "string", "description": "The window's name in the block. Optional; the Loxone inventory reports a datapoint whose window has another name now, e.g. because a window was added to the block and the positions shifted." }
       }
     }
   }

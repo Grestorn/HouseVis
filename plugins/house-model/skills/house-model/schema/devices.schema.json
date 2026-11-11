@@ -95,7 +95,7 @@
         },
         "components": {
           "type": "array",
-          "description": "What the page shows, each placed in percent of the page.",
+          "description": "What the page shows, each placed in percent of the page: views, and optionally a clock and a date.",
           "items": { "$ref": "#/$defs/component" }
         },
         "weather": {
@@ -110,25 +110,43 @@
         }
       }
     },
+    "area": {
+      "type": "object",
+      "description": "Position and size in percent of the page.",
+      "required": ["x", "y", "width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 100 },
+        "y": { "type": "number", "minimum": 0, "maximum": 100 },
+        "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+      }
+    },
     "component": {
+      "type": "object",
+      "required": ["type"],
+      "properties": { "type": { "enum": ["view", "clock", "date"] } },
+      "oneOf": [{ "$ref": "#/$defs/viewComponent" }, { "$ref": "#/$defs/widgetComponent" }]
+    },
+    "viewComponent": {
       "type": "object",
       "required": ["type", "view", "area"],
       "additionalProperties": false,
       "properties": {
         "type": { "const": "view" },
         "view": { "$ref": "#/$defs/id", "description": "Id of a view in views/." },
-        "area": {
-          "type": "object",
-          "required": ["x", "y", "width", "height"],
-          "additionalProperties": false,
-          "properties": {
-            "x": { "type": "number", "minimum": 0, "maximum": 100 },
-            "y": { "type": "number", "minimum": 0, "maximum": 100 },
-            "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
-            "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
-          }
-        },
+        "area": { "$ref": "#/$defs/area" },
         "frame": { "type": "boolean", "description": "Drawn with a frame and its title." }
+      }
+    },
+    "widgetComponent": {
+      "type": "object",
+      "description": "clock: the current time; date: today's date in its long form with weekday and month. Both as the device's system settings format them (language and region, 12 or 24 hours), the text filling the area; drawn over the page's views. Each at most once per page.",
+      "required": ["type", "area"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["clock", "date"] },
+        "area": { "$ref": "#/$defs/area" }
       }
     }
   }

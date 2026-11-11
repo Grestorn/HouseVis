@@ -26,6 +26,7 @@ unter Windows und auf Android-Tablets.
 | **ein 3D-Modell meines eigenen Hauses bekommen** | [2 – Das Hausmodell erstellen](2-hausmodell.md) |
 | Ansichten, Seiten, ein Wandtablet einrichten | [3 – Die App benutzen](3-app-benutzen.md) |
 | etwas beheben, das falsch aussieht | [4 – Probleme lösen](4-probleme-loesen.md) |
+| sehen, was eine Version Neues bringt | [Versionen](versionen.md) |
 | **Hilfe bekommen, einen Fehler melden, eine Idee vorschlagen** | **[das Forum: forum.housevis.de](https://forum.housevis.de)** |
 
 ## Kurz gesagt

@@ -26,6 +26,7 @@ Windows and on Android tablets.
 | **get a 3D model of my own house** | [2 – Creating the house model](2-house-model.md) |
 | arrange views, pages, a wall tablet | [3 – Using the app](3-using-the-app.md) |
 | fix something that looks wrong | [4 – Troubleshooting](4-troubleshooting.md) |
+| see what is new in a version | [Version history](versions.md) |
 | **get help, report a bug, suggest an idea** | **[the forum: forum.housevis.de](https://forum.housevis.de)** (in German) |
 
 ## In short

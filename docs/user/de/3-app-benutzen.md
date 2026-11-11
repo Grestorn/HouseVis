@@ -10,12 +10,14 @@
   die Loxone-Oberfläche.
 - **Schalter** (oben im Bild): Teile des Hauses beim Anschauen ein- und ausblenden, z. B. das Dach
   oder alles Äußere.
-- **Statusfeld** (oben links): die Verbindung zum Miniserver.
+- **Statusfeld** (oben links): nur wenn die Werte nicht live vom Miniserver kommen (Verbindung
+  wird aufgebaut oder ist getrennt, simulierte Daten, Demo).
 - **Menü ☰** (oben links):
 
 | Menüpunkt | Wofür |
 |---|---|
 | Mit Miniserver verbinden | anmelden, Miniserver wechseln |
+| Loxone-UI-Anmeldung … | Benutzer und Kennwort der Loxone-Oberfläche speichern, damit sie nach dem Start der App nicht jedes Mal fragt (freiwillig; das Kennwort liegt dann verschlüsselt auf dem Gerät, siehe Hinweis im Dialog; nur bei verschlüsselter Verbindung) |
 | Ansichten bearbeiten … | von wo du schaust, welche Räume offen sind, was ausgeblendet ist |
 | Geräte / Seiten bearbeiten … | welche Seiten PC, Tablet oder Handy zeigen; pro Gerät auch Lichtquellen (realistisch oder einfach) und reduzierte Bildrate für langsamere Geräte; Export fürs Tablet |
 | Globale Einstellungen … | Sprache der App (sonst die des Geräts); Symbole für Heizung, Musik, … (rund tausend: zuerst Vorschläge, sonst nach Gruppe oder mit der Suche, z. B. „Lautsprecher“ oder „Waschmaschine“); ein Zustand lässt sich auch ganz ausblenden („Nicht anzeigen“, z. B. pausierte Musik) |
@@ -40,10 +42,14 @@ Menü → **Ansichten bearbeiten …**, dann:
 - **Kamera** – im Bild ziehen dreht, Mausrad zoomt, rechte Maustaste verschiebt.
 - **Angezeigte Elemente** – nur einzelne Stockwerke zeigen; bei Gruppen wie Dach oder Garten den
   Haken unter **Anzeigen** entfernen; einer Gruppe einen **Schalter** auf der Seite geben. Eine
-  Wand im Bild anklicken, um sie durchsichtig zu machen oder auszublenden.
-- **Werte und Beschriftungen** – Temperaturen und Symbole im Bild an ihren Platz ziehen.
-- **Kopie anlegen** – eine neue Ansicht aus dieser beginnen. **Speichern** (Strg+S); Strg+Z macht
-  rückgängig.
+  Wand im Bild anklicken, um sie durchsichtig zu machen oder auszublenden. Das **Dach** ist von
+  sich aus über den aktiven Räumen offen, soweit es dort ihre Decke bildet (Räume unter einem
+  niedrigen Dach, Kniestock); ein Klick aufs Dach macht es durchsichtig, verborgen oder ganz fest.
+- **Werte und Beschriftungen** – Temperaturen und Symbole im Bild an ihren Platz ziehen (auch ein
+  Symbol an einem eigenen Ort, etwa der Briefkasten an der Haustür; nur für diese Ansicht). Mit
+  Umschalt beim Ziehen hebt oder senkt man es; ein Doppelklick setzt es zurück.
+- **Kopie anlegen** – eine neue Ansicht aus dieser beginnen. Beim ersten **Speichern** (Strg+S)
+  fragt HouseVis, ob sie auf jedem Gerät eine eigene Seite bekommen soll. Strg+Z macht rückgängig.
 
 ## Seiten und Geräte
 
@@ -51,7 +57,10 @@ Menü → **Ansichten bearbeiten …**, dann:
 
 Menü → **Geräte / Seiten bearbeiten …**: jedes Gerät (PC, Tablet, Handy) hat seine Seiten. Füge eine
 **Seite mit Ansichten** hinzu und platziere eine oder mehrere Ansichten darauf (in der Vorschau
-ziehen), oder eine **Loxone-Seite** mit der Loxone-Oberfläche. Pro Seite: **Wetter als Himmel**. Pro
+ziehen; die Vorschau zeigt die Ansichten selbst), oder eine **Loxone-Seite** mit der Loxone-Oberfläche. Pro Seite: **Aktuelles Wetter anzeigen**, dazu **+ Uhr** und
+**+ Datum** (platziert und in der Größe geändert wie eine Ansicht, immer vorn; Uhrzeit und langes
+Datum mit Wochentag und Monat, so wie die Systemeinstellungen des Geräts sie schreiben, z. B. 12
+oder 24 Stunden). Pro
 Gerät: **Sleepmodus erlauben** (für Wandtablets aus) und **Automatische Präsenz-Erkennung** (dunkel,
 solange niemand im Raum ist; der Bildschirm bleibt dann ohnehin an).
 **Gerät exportieren …** schreibt die Datei fürs Android-Tablet

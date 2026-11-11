@@ -16,6 +16,11 @@
    **More info** → **Run anyway**.
 3. The installer installs HouseVis for your Windows user only; no administrator rights needed.
 
+**Updating from an older version:** just run the new installer. If the new version needs a newer
+format of the house model, it converts your `house.json` itself on its first start; the old file
+is kept beside it (e.g. `house.v6.json`). Export files from an older version can still be read in
+on the tablet.
+
 ## First start
 
 ![Start screen](../images/en/start.jpg)
@@ -42,8 +47,9 @@ Menu (☰ top left) → **Connect to Miniserver**:
   see **all rooms** – HouseVis only gets what this user may see.
 - **Encrypted connection (TLS)**: on for a Miniserver 2 (Gen. 2), off for the first generation.
 
-HouseVis never stores the password, only a token, encrypted for your Windows user. The badge top
-left tells you how the connection stands ("Live from the Miniserver").
+HouseVis never stores the password, only a token, encrypted for your Windows user. While the
+values come live from the Miniserver, nothing shows top left; a badge appears there only when they
+do not ("Connecting to the Miniserver …", "Miniserver disconnected", "Simulated data").
 
 ## Android tablet
 

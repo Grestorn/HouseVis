@@ -1,18 +1,26 @@
 # House model format (house.json)
 
-Format **version 5**. Steps A–F made format 2 (merged into `main` 2026-11-05); G (format 3)
+Format **version 7**. Steps A–F made format 2 (merged into `main` 2026-11-05); G (format 3)
 moved the label settings into the views; H (format 4) gave structures ids; I (format 5) gave
-indicators a kind instead of an emoji. This document later becomes
-the reference for the house-model skill.
+indicators a kind instead of an emoji; format 7 (2026-11-11) authors roof parts as plans dimension
+them (D). The reference for the house-model skill is `.claude/skills/house-model/reference/format.md`.
 
 ## Principles
 
-- **Versioned.** `"version": 6`. HouseVis reads only the current version and refuses any other with
-  a clear message (`src/model/version.ts`). Until the first public release there are **no
-  migrations**: only the owner's `config/` exists, so a breaking change converts it (and the test
-  fixtures) once and keeps no upgrade code. Formats 1→2 and 2→3 were converted by migrations that
-  were removed afterwards (2026-11-05; they are in the git history up to commit `254df24`). Once
-  other people have files of their own, migrations come back: plain JSON, one step per version.
+- **Versioned.** `"version": 7`. Since the first beta users have files of their own (0.9.0),
+  **older formats are converted**: `src/model/migrate.ts` holds one plain-JSON step per version
+  (from 6 on) and every load runs them in memory (`checkedHouse`, also Android and imported export
+  files). The Windows app and `--house-check` write the result back once and keep the old file
+  beside it as `house.v<n>.json` (`electron/houseUpgrade.ts`), so the editors, the house assistant
+  and the skill only ever see the current format. The new file is written first, the backup made
+  once that worked (an identical earlier one is reused), and a failure leaves the folder as it
+  was; a conversion that lacked something (the rooms, when the rest of the house is broken) is
+  only shown, never written. An export file from an older app is accepted and converted on
+  import (`bundleCheck.ts`). Versions before 6 and newer ones are refused
+  with a clear message (`src/model/version.ts`). A breaking change adds a step and keeps the old
+  ones; its test converts a frozen file of the old format (`src/testing/house-v6.json`) and checks
+  the result against the test house. (Formats 1→2 and 2→3 had migrations that were removed while
+  only the owner's files existed; they are in the git history up to commit `254df24`.)
 - **Bump the version only for breaking changes**, i.e. when an old file would be read wrongly or
   rejected. New optional fields and new `kind`s are additive and need no new version.
 - **Authored vs. internal.** `HouseFile` is what people (and the skill) write; `normalizeHouse()`
@@ -71,26 +79,43 @@ north, south, east or west. New:
 
 ## D — roof parts (done)
 
-Format 1 had one gable roof with its ridge north-south. Now `roofs` is a list of parts:
+Format 1 had one gable roof with its ridge north-south. Now `roofs` is a list of parts, each
+written as plans dimension it (format 7):
 
 ```json
 "roofs": [
   { "id": "main", "kind": "gable", "floor": "og",
-    "footprint": { "x0": -0.6, "x1": 11.6, "y0": -0.7, "y1": 10.2 },
-    "ridge": "north-south", "eaveHeight": 1.68, "ridgeHeight": 4.49 }
+    "outline": { "x0": 0, "x1": 11, "y0": 0, "y1": 9.5 },
+    "overhang": { "south": 0.8, "north": 0.3, "east": 0.6, "west": 0.6 },
+    "ridge": "east-west", "eaveHeight": 1.2, "ridgeHeight": 4.5 }
 ]
 ```
 
 | kind | extra fields | shape |
 |---|---|---|
-| `gable` | `ridge` (`north-south`/`east-west`), `eaveHeight`, `ridgeHeight` | two slopes, gable walls at the ends |
-| `hip` | like `gable` | four slopes with equal pitch; the ridge is shorter than the footprint by its width (so the footprint must be at least as long along the ridge as it is wide) |
-| `shed` | `low` (side), `eaveHeight` (low side), `ridgeHeight` (high side) | one slope |
+| `gable` | `ridge` (`north-south`/`east-west`), `eaveHeight` (one or per side), `ridgeHeight` or `pitch` (one or per side) | two slopes on the sides along the ridge, gable walls at the ends |
+| `hip` | like `gable` | a slope on every side; with `ridgeHeight` one pitch everywhere and the ridge shorter than the outline by its width |
+| `shed` | `low` (side), `eaveHeight` (at the low wall line), `ridgeHeight` (at the high one) or `pitch` | one slope |
 | `flat` | `height` | flat roof |
 
-- `footprint` includes the overhang. Optional `rotation` (degrees, counter-clockwise around the
-  footprint center) for houses that are not aligned with the axes; `ridge` and `low` refer to the
-  footprint before rotation. Heights are relative to the part's `floor`.
+- `outline` is the **wall line** under the part (outer wall faces); `overhang` reaches beyond it,
+  one value or per side (missing sides 0). `eaveHeight` is the height **at the wall line**, where
+  sections give it. Each slope is a plane through its side of the outline at its eave height,
+  rising at its pitch; the surface is the lowest of the planes, cut off at the outline plus the
+  overhangs (`roofFootprint`). With `ridgeHeight`, one pitch for every slope: the one at which
+  the two slopes across the ridge meet at that height (so different eave heights move the ridge
+  off the middle); `pitch` instead gives it per side.
+- Optional `rotation` (degrees, counter-clockwise around the outline's middle) for houses that are
+  not aligned with the axes; `ridge`, `low` and the overhang sides refer to the outline before
+  rotation. Heights are relative to the part's `floor`.
+- **Format 6** had `footprint` (the outline plus the overhangs), `eaveHeight` at its edge and the
+  ridge in its middle, so unequal overhangs could not be expressed (a user built them from two
+  sheds). The conversion (`migrate.ts`) takes the wall line from the outer wall faces of the rooms
+  under each part (walled areas only, not a terrace or balcony with `height` 0; clamped to the old
+  footprint; a part over no rooms keeps it as outline) and
+  raises each eave by its overhang times the rise; with the old one pitch and the old ridge
+  height, the planes stay exactly where they were (tested to the millimetre against the old
+  formulas).
 - Optional `color` (`"#rrggbb"`) for the roof covering seen from outside, per part (e.g.
   anthracite tiles on the house, a grey flat roof on the garage); default dark red. The seams are
   drawn 0.6× darker in sRGB, the underside keeps its light tone.
@@ -99,20 +124,36 @@ Format 1 had one gable roof with its ridge north-south. Now `roofs` is a list of
   *higher* part counts, so a wing running into the main roof forms the valleys by itself.
   `roofHeightAt(point, floor)` considers the parts of that floor (Infinity elsewhere); wall tops,
   divider tops, gable and attic walls and sloped ceilings all derive from it. Wall profiles bend
-  only on "crease" lines (planes meeting each other or the ceiling height, footprint outlines),
+  only on "crease" lines (planes meeting each other or the ceiling height, the edges of the roof),
   so they are exact at any wall angle.
 - Walls of a floor reach up to the roof instead of stopping under a slab only if the floor has a
   roof part and no floor above has rooms (a porch roof on the ground floor does not count).
-- Gable walls are closed on every footprint side that faces the camera, at the outermost wall line
+- Gable walls are closed on every side of the roof that faces the camera, at the outermost wall line
   of the rooms below the part; where the roof comes down below the rooms (eaves, hips) nothing
-  is drawn.
+  is drawn. Under a sloped part only walls on its wall line (`outline`, within 2 cm) close up to
+  the roof (`closesUpToRoof`); a gable side without a wall there is named by `house:check` (its
+  roof line) and the configuration warnings (`openGableSides`), since the gable would stay open.
+  Every other wall ends at its room's ceiling, since the attic above is not
+  modelled (walls standing in it showed through a see-through roof). Under a flat part the band
+  up to the roof stays closed. A gable fill under a part the view draws `transparent` is as
+  see-through as the roof.
+- **Views** set a part `solid`, `cutaway` (the default), `transparent` or `hidden`. `cutaway`
+  (`src/model/roofCutaway.ts`) is solid, except on the slopes facing the camera above the view's
+  cut-open rooms on the part's storey: there the slope is see-through (the view's glass opacity,
+  as the camera-side walls) where it is the room's ceiling, i.e. below the room's ceiling height:
+  over the room's own outline (the roof keeps covering the tops of the walls beside it, also
+  between two cut-open rooms) and in front of its downhill exterior walls over the wall and the
+  overhang through the eave, the roof's edge band cut there too, so no rim stands in front of the
+  room. The attic above the ceiling line, the back slope, the roof over other rooms and beside a
+  room that steps back stay. Without a cut-open room under it, `cutaway` is `solid`.
 - **Roof windows** refer to a part: `{ "id": …, "roof": "main", "center": [x, y], "width": 1.14,
   "depth": 1.42 }` — `width` along the eave, `depth` across it in the plan. The slope under
   `center` holds the window; the validation reports windows that reach into another slope. Shade
   `from`/`to` run along the width from the left edge seen from outside looking up the slope.
 - Known limits: overlapping parts are drawn completely (the hidden piece lies under the higher
-  roof); a wing whose footprint reaches beyond the rooms shows its open end.
-- Later, additive: polygon footprints, dormers, mansard roofs.
+  roof); a wing whose roof reaches beyond the rooms shows its open end.
+- Later, additive: polygon outlines, dormers, mansard roofs. The plane-per-side model takes them
+  without another format change: a polygon outline is more sides, a dormer a part of its own.
 
 ## F — exterior walls with thickness (done)
 
@@ -134,8 +175,8 @@ Rooms stay interior dimensions; the exterior walls lie outside them. Additive, s
   stay on the room edge. Openings get reveals through the wall; windows sit 12 cm behind the outer
   face. Gable walls close at the outer face; the terrain is cut out down to it.
 - **Consequence for authored coordinates**: everything placed against the house (terrace, gravel
-  strip, pits, conservatory, steps) must touch the outer face, not the room edge. Roof footprints
-  measure the overhang from the outer face.
+  strip, pits, conservatory, steps) must touch the outer face, not the room edge. A roof's `outline`
+  is the outer faces, its `overhang` is measured from them.
 - With thickness 0 the scene renders as before (pixel diff of `smoke:live`, only the terrain line
   in front of interior wall ends changed).
 
@@ -201,7 +242,7 @@ views"):
 ```
 
 - **Tags** group elements. Every element has the tags its kind implies; house.json adds more with
-  an optional `"tags": [...]` on areas, roof parts, structures, pavilions and lights:
+  an optional `"tags": [...]` on areas, roof parts, structures, pavilions, lights, pits and furniture:
 
   | Element | Implied tags |
   |---|---|
@@ -211,8 +252,10 @@ views"):
   | roof part | `roof`; over outbuildings only, their tags too (the garage roof goes with the garage) |
   | structure | `structure` |
   | pavilion | `pavilion`, `outside` |
-  | the terrain (`ground`, with its areas and pits) | `ground`, `outside` |
+  | the terrain (`ground`, with its areas) | `ground`, `outside` |
+  | pit (`ground.pits`) | `ground`, `outside` (a view hiding an added tag leaves the pit out and the terrain closes over it; a page's switch hides the pit but leaves its opening) |
   | light (section L) | `light`; the tags of the area it lies in; `outside` when outside the building |
+  | furniture (section O) | `furniture`; the tags of the area it stands in; `outside` when outside the building |
 
   Openings go with their area, roof windows and gables with their roof part. Implied tags are
   fixed English ids (the view editor translates them); added tags are names as the user calls them
@@ -280,8 +323,13 @@ on the facade, lit furniture inside, each with its own live light.
   change with the room): `position` (a strip: `from`, `to`). A `wallLight`'s point lies on the
   inner face of its wall (an edge of a room polygon, like an opening's ends), and `side`
   (`inside`/`outside`) says which face it hangs on; the outer face only of an exterior wall.
+- A pendant is a shade (`shape` `bell`, the default) or a slim closed tube (`shape` `tube`:
+  `size` its diameter, `length` its length, default 0.3; light only from its lower end in a
+  narrow beam). A tube's top (`height` + `length`) lies below the ceiling.
 - Heights above the storey's floor, like everywhere: a pendant's lower edge, a lantern's head (its
-  post reaches down to the terrain), a wall light's center, a strip's line. A ceiling spot sits in
+  post reaches down to the terrain), a wall light's center, a strip's line (`height` at `from`;
+  an optional `toHeight` at `to` makes it rise, e.g. under a sloped ceiling or along stairs, or
+  stand upright with `from` and `to` the same point). A ceiling spot sits in
   its area's ceiling; outside every area (under a canopy) it needs `height`. Validation keeps
   inside lights between the area's floor and ceiling (an outbuilding's `level` counts).
 - `data` with the room's light roles (`light`, `lightColor` also as a list, `lightLevel`; same value
@@ -332,9 +380,50 @@ so every paved area or the garage moved the edge, and the plot could not end at 
   is refused on Android; export the device again.
 - Slanted plot edges would need the terrain clipped against the outline; left for later.
 
+## O — furniture (additive, format 6)
+
+- `furniture`: boxes, drawn as lines with a faint fill, whose edges can carry light strips. Two
+  forms, both with `bottom` and `top` above the storey's floor:
+  - against a wall, also a slanted one: `from`, `to` (the back edge as plan points, `from` its
+    left end seen standing in front of the piece) and `depth` towards the front, which lies to
+    the right of `from`→`to`;
+  - along the plan axes: `x0`/`x1`/`y0`/`y1` and `front` (`north`/`south`/`east`/`west`).
+- **A front, so edges keep their names when the piece turns**: left and right are as seen from the
+  front, the same in both forms (`src/model/furniture.ts` brings both to one frame).
+- `color` (lines and fill) and `opacity` (0 lines only, 1 solid; default faint).
+- **Room**: from the middle of the footprint, as for lights; `room` overrides it. The piece shows
+  when a view opens that room. Validation keeps it between its area's floor and ceiling;
+  outside every area (a garden bench) no height applies.
+- Tags: implied `furniture` (one switch for all of it), the area's tags and `outside`, plus added
+  ones per piece.
+- **Strips on edges**: a `strip` with `"on": { "furniture": "<id>", "edge": "<edge>" }` instead of
+  `floor`, `from`, `to`, `height`, `toHeight` runs along that edge's whole length; loading fills
+  in its line from the piece (`normalize.ts`; a strip naming no piece is refused before), so it
+  moves with the piece. It goes with the piece's tags and is built only where the piece is.
+  Light falls down from a bottom edge, rises from a top edge and spreads outwards from an
+  upright one; the bar sits just off the edge.
+
+## P — indicators at a point (additive, format 6)
+
+- An indicator gives either `room` (it shows in that room's row, placed by each view) or
+  `position` (`floor`, `x`, `y`, `height` of the icon's middle, default 1.5): a point of its own
+  for an indicator that belongs to a place, e.g. the mailbox by the front door
+  (`src/model/indicators.ts`).
+- At a point it shows with the room of the area the point lies in, as lights and furniture do;
+  outside the building it is `outside`. Validation keeps it between a walled area's floor and
+  ceiling. Tags: the area's and `outside`, plus `tags` of its own (only at a point); no implied
+  tag, since the rooms' rows are no elements a tag could switch.
+- States stay rules of one indicator: the first matching rule applies and may change the kind;
+  a rule without `when` is the default.
+- A view can move it where it covers something: `"indicators": { "<id>": { "offset": [east,
+  north], "height": h } }` in the view file, the offset from the point, the height above the
+  storey's floor; the view editor writes it by dragging. The point itself is edited in
+  `house.json` only, and moving it moves it in every view.
+
 ## Later, additive (no version bump needed)
 
 - Polygon footprints for structures, ground areas, pits and pavilions (today rectangles
   `x0/x1/y0/y1`, which stay as shorthand).
 - Optional floor `elevation` for split levels (default: sum of the floor heights below).
-- Furniture/objects (`objects`, already in the schema), several light channels per room.
+- 3D models with variants (`objects`, already in the schema; simple furniture is section O),
+  several light channels per room.

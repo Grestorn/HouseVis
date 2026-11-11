@@ -39,7 +39,9 @@ the user calls them.
   disagree.
 - **Furniture is not building.** Things standing in front of a window or wall in a photo (stacked
   chairs, shelves, plants, a barbecue) are never a building part: no parapet, no fixed glazing,
-  no wall. When a photo seems to contradict the plan, ask instead of modelling it.
+  no wall. The same goes for tall things in a photo's foreground (a lamp post, a downpipe, a
+  tree trunk, a neighbour's fence post): they are not a pillar, post or wall of the house unless
+  a plan shows one there. When a photo seems to contradict the plan, ask instead of modelling it.
 - **Render faults are not always model faults.** If the format can express something correctly but
   the scene draws it wrong (white stripes on a coloured facade, missing faces), that is a HouseVis
   fault: in the HouseVis repository fix the scene (with a test, as a separate commit when the user
@@ -76,6 +78,17 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
+**First, once per session: check the versions.** This skill was built for HouseVis 0.9.1.
+Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
+the user before anything else, in their language:
+- **The app is newer:** this skill is out of date and may not know what the app reads now. Update
+  it in Claude Code with `/plugin marketplace update housevis`, then start a new session (or
+  run `/reload-plugins`).
+- **The app is older:** update HouseVis (https://github.com/Grestorn/HouseVis/releases); an
+  older app may refuse the model this skill writes.
+
+Then go on with the task, unless the user wants to update first. Same version: say nothing about it.
+
 The tools are the installed HouseVis app's command line. It is installed per user, by default
 as `%LOCALAPPDATA%\Programs\HouseVis\HouseVis.exe`; the commands below call it that way from the
 Bash tool. If that file does not exist, ask the user where HouseVis is installed (or to install it)
@@ -90,7 +103,7 @@ works in.
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder>            # validate, summary, plan-<floor>.png
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder> --views    # (re)write devices.json + 8 check views
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder> --walls    # also list the wall ids a view can set
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder>           # 3D renders, one per view
+"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder>           # 3D renders, one per page and per view
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --lit=lights --lux 1
                                                          # the same at night, lamps on, rooms dark
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles plans/<project>/<file> [--pages 2] [--rotate 270]
@@ -103,7 +116,10 @@ HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --
 
 All options, with their defaults: `house:check` takes `--out <folder>` (default
 `test-output/house-check/`), with `--render` also `--lit` (every room and lamp on), `--lit=lights`,
-`--lux <n>` and `--weather <code>`; `plans:tiles` takes `--pages 1-3,5`, `--dpi 50..600` (300),
+`--lux <n>`, `--weather <code>`, `--device <id>` (another device's pages) and `--page <n|id|title>`
+(only that page), or `--live` instead of the simulation options: the Miniserver's current values
+(the app's stored sign-in), e.g. for a picture of the finished house as it is right now; the
+check renders stay simulated, so they compare. `plans:tiles` takes `--pages 1-3,5`, `--dpi 50..600` (300),
 `--rotate 0|90|180|270`, `--tile <px>` (1400) and `--out <folder>` (default
 `test-output/plan-tiles/`). `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --help` prints the complete list. Exit codes:
 0 done, 1 failed (errors listed at the end), 2 wrong arguments. Do not try to discover options by
@@ -134,7 +150,11 @@ Open the PNGs it writes with the Read tool and compare them with the plans yours
    (photos, untitled sheets), which plans and photos are needed — and stop until the files are
    there.
 3. Read `plan-changes.*`, `room-names.*` and `notes.*` first if they exist, so every later step
-   knows what was built differently and what the rooms are called. Then inventory the folder. Multi-page PDFs (usually the architect's set, any file name): go through
+   knows what was built differently and what the rooms are called. Then inventory the folder
+   **completely**: list it in the shell (`ls -la`, `Get-ChildItem`), not with a search tool whose
+   result list may be cut off, state the number of files, and check at the end that every file
+   appears in the page index. A listing that says it was truncated is read on to its end; a
+   house's construction drawings were once overlooked that way. Multi-page PDFs (usually the architect's set, any file name): go through
    the pages (Read tool, `pages`, at most 20 per call) and identify each sheet by its title block
    ("Grundriss EG", "Schnitt A-A", "Ansicht Süd", scale, plan date/revision). Single files: by
    their name prefix, and check that the content matches. Write the result as a page index into
@@ -145,8 +165,10 @@ Open the PNGs it writes with the Read tool and compare them with the plans yours
    at least one section, and the north direction; ask for missing required material before
    starting, offer to continue with estimates for the rest.
 4. Plan sheets are far too large to read whole: the Read tool scales them down until the
-   dimension figures are illegible, and many architects' PDFs contain no text layer (dimensions
-   are drawn as vector outlines). Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles <file> --pages <n>` (PDF pages are
+   dimension figures are illegible. Many architects' PDFs contain no text layer (dimensions
+   are drawn as vector outlines); where a vector PDF does have one, its dimension figures can be
+   read as text, which is more reliable than reading them off tiles (one construction set gave
+   room areas to 0.05 m² that way); the tiles still show which figure belongs to which chain. Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles <file> --pages <n>` (PDF pages are
    rendered at 300 dpi) and read the tiles; the output lists each tile's pixel range. Check the
    `overview.png` first: drawings are often placed sideways on the sheet, then rerun with
    `--rotate 90` or `--rotate 270` until the title block reads upright. Note the page, rotation
@@ -181,9 +203,10 @@ update `model-notes.md`.
 3. **Openings.** Windows and exterior doors per wall with width, sill, top, type, sashes, side
    panels, shades (elevations and photos). Show: per storey the list from `house:check` and the
    plan image; mark estimated heights.
-4. **Roof.** Parts, footprint with overhangs, eave and ridge heights, pitch check, roof windows.
-   Show: the pitch printed by `house:check` against the section's value; the top storey's plan with
-   the roof faces.
+4. **Roof.** Parts with their wall line (`outline`), overhangs per side, eave heights at the wall
+   line, ridge height or pitch, roof windows — all as the plans print them, no conversions (see
+   *Roof* in [reference/format.md](reference/format.md)). Show: the pitch per side printed by
+   `house:check` against the section's value; the top storey's plan with the roof faces.
 5. **Surroundings.** Terrain level, terrace and gravel areas, pits and light wells, exterior stairs,
    steps and canopies, conservatory, garage as outbuilding. All of it against the outer faces.
    **A garage (or any closed outbuilding) is built complete:** its area (`outbuilding: true`, the
@@ -231,6 +254,11 @@ update `model-notes.md`.
    --lit=lights --lux 1` (lamps on, rooms dark, night) and show it; check that no wall light hangs
    in a window and that facade lights sit on the right facade. Lamps on the room's own output
    (spots on the room's dimmer) need no data: they follow the room.
+   **Lit furniture** (a strip under the wall cupboards, a cove on a wardrobe, a lit shelf) needs
+   the piece itself: add it to `furniture` (see *Furniture* in
+   [reference/format.md](reference/format.md); from the plans, photos or the user) and put the
+   strip on its edge (`"on"`) instead of giving it a line of its own. Check in the plan that each
+   piece's thick front edge faces into the room.
 9. **Weather station** (optional; offer it when Loxone has weather values, the user decides).
    Place `weatherStation` where the station really stands, see *Weather station* in
    [reference/format.md](reference/format.md): on the roof (a Loxone Weather Station Tree sits
@@ -240,7 +268,7 @@ update `model-notes.md`.
    weather panel above it (outside temperature, felt temperature, wind, humidity from block 7's
    `data`). Run `house:check` and render; show where it stands. Then tell the user: a page can
    show the current weather as its sky with rain or snow over it, switched on per page in the
-   device editor ("Wetter als Himmel"); the menu's "Wetter-Demo" shows every weather type.
+   device editor ("Aktuelles Wetter anzeigen"); the menu's "Wetter-Demo" shows every weather type.
 
 Views and devices (pages) for everyday use are not part of this skill: the user makes them in the
 Windows app (menus "Ansichten bearbeiten …" and "Geräte / Seiten bearbeiten …"); the check views are only
@@ -285,6 +313,10 @@ temperature instead of the station's".
 Light sources are changed only here (the app has no editor for them): "add a pendant over the
 dining table", "the lantern stands 50 cm further left", "the wall light also shines up",
 "remove the garage spot". Keep their ids, map new ones as in block 8, and render with `--lit=lights`.
+
+Furniture likewise: "add the kitchen row along the north wall", "the wall cupboard is 35 cm
+deep", "put a light strip under the wall cupboards", "the wardrobe has a cove light on top". A
+piece is moved by its own coordinates; strips on its edges move with it.
 
 New elements get their tags like in block 5. Requests about groups ("make a group Garten with the
 garden wall and the pergola", "move the pergola into Garten", "rename Garten", "the garden wall is

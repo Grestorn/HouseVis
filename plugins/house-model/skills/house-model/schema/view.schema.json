@@ -122,6 +122,12 @@
         }
       }
     },
+    "indicators": {
+      "description": "Per id of an indicator at a point (house.json \"position\"): where its icon sits in this view, relative to that point: \"offset\" [east, north] in meters from it, \"height\" above the storey's floor (default the point's). For a view in which the icon covers something; moving the point in house.json moves it in every view.",
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/labelPlace" }
+    },
     "appearance": {
       "description": "How this view draws see-through parts and outlines; what is missing keeps its default.",
       "type": "object",
@@ -160,9 +166,9 @@
       "additionalProperties": { "$ref": "#/$defs/visibility" }
     },
     "roofs": {
-      "description": "Per roof part id: how this view draws it (default solid). A hidden part takes its roof windows and gable walls with it.",
+      "description": "Per roof part id: how this view draws it (default cutaway, which is solid wherever the view cuts open no room under it). A hidden part takes its roof windows and gable walls with it.",
       "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/visibility" }
+      "additionalProperties": { "$ref": "#/$defs/roofVisibility" }
     }
   },
   "$defs": {
@@ -186,6 +192,10 @@
     "visibility": {
       "enum": ["solid", "transparent", "hidden"],
       "description": "solid: closed (from outside the facade); transparent: see-through glass; hidden: not drawn at all."
+    },
+    "roofVisibility": {
+      "enum": ["solid", "cutaway", "transparent", "hidden"],
+      "description": "As for walls, plus cutaway: solid, but on the slopes facing the camera see-through above the view's cut-open rooms, from the room down to the eave, so rooms under a low roof (knee wall) can be seen into while the rest of the roof keeps its shape."
     }
   }
 }

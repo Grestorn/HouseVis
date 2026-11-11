@@ -1362,10 +1362,15 @@
       "source": "miniserver",
       "label": "Fenster eltern-west-1",
       "loxone": {
-        "control": "1c0de047-0000-0000-ffffdec0de000000",
-        "state": "active"
+        "control": "1c0de069-0000-0000-ffffdec0de000000",
+        "state": "windowStates"
       },
-      "as": "boolean"
+      "as": {
+        "type": "windowMonitor",
+        "window": 0,
+        "state": "open",
+        "name": "Fenster eltern-west-1"
+      }
     },
     "beschattung.eltern-west-1.position": {
       "source": "miniserver",
@@ -1387,28 +1392,43 @@
       "source": "miniserver",
       "label": "Fenster bad-west-1",
       "loxone": {
-        "control": "1c0de04a-0000-0000-ffffdec0de000000",
-        "state": "active"
+        "control": "1c0de069-0000-0000-ffffdec0de000000",
+        "state": "windowStates"
       },
-      "as": "boolean"
+      "as": {
+        "type": "windowMonitor",
+        "window": 1,
+        "state": "open",
+        "name": "Fenster bad-west-1"
+      }
     },
     "fenster.bad-west-1.gekippt": {
       "source": "miniserver",
       "label": "Fenster bad-west-1 gekippt",
       "loxone": {
-        "control": "1c0de04b-0000-0000-ffffdec0de000000",
-        "state": "active"
+        "control": "1c0de069-0000-0000-ffffdec0de000000",
+        "state": "windowStates"
       },
-      "as": "boolean"
+      "as": {
+        "type": "windowMonitor",
+        "window": 1,
+        "state": "tilted",
+        "name": "Fenster bad-west-1"
+      }
     },
     "fenster.kind-2-east-1": {
       "source": "miniserver",
       "label": "Fenster kind-2-east-1",
       "loxone": {
-        "control": "1c0de04c-0000-0000-ffffdec0de000000",
-        "state": "active"
+        "control": "1c0de069-0000-0000-ffffdec0de000000",
+        "state": "windowStates"
       },
-      "as": "boolean"
+      "as": {
+        "type": "windowMonitor",
+        "window": 2,
+        "state": "open",
+        "name": "Fenster kind-2-east-1"
+      }
     },
     "beschattung.kind-2-east-1.position": {
       "source": "miniserver",
@@ -1422,10 +1442,15 @@
       "source": "miniserver",
       "label": "Fenster studio-east-1",
       "loxone": {
-        "control": "1c0de04e-0000-0000-ffffdec0de000000",
-        "state": "active"
+        "control": "1c0de069-0000-0000-ffffdec0de000000",
+        "state": "windowStates"
       },
-      "as": "boolean"
+      "as": {
+        "type": "windowMonitor",
+        "window": 3,
+        "state": "open",
+        "name": "Fenster studio-east-1"
+      }
     },
     "fenster.kind-1-roof-south": {
       "source": "miniserver",
@@ -1532,6 +1557,22 @@
         "state": "value"
       },
       "unit": "W"
+    },
+    "briefkasten.post": {
+      "source": "miniserver",
+      "label": "Briefkasten Post",
+      "loxone": {
+        "control": "1c0de068-0000-0000-ffffdec0de000000",
+        "state": "mailReceived"
+      }
+    },
+    "briefkasten.paket": {
+      "source": "miniserver",
+      "label": "Briefkasten Paket",
+      "loxone": {
+        "control": "1c0de068-0000-0000-ffffdec0de000000",
+        "state": "packetReceived"
+      }
     },
     "aussen.helligkeit": {
       "source": "miniserver",

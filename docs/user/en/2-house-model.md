@@ -74,14 +74,23 @@ hard cap, set a monthly spend limit in the Console.
 1. HouseVis must be connected to your Miniserver ([chapter 1](1-install.md)).
 2. Ask: *"Map the rooms, windows and lights to Loxone."* Claude reads the controls of your
    Miniserver (read only) and suggests which one belongs where; the live values show in the 3D
-   view before you save. Confirm or correct.
-3. On request Claude also places **lamps** (path lights, wall lights, a pendant over the table)
-   and your **weather station**.
+   view before you save. Confirm or correct. Windows may come from their own contacts or from one
+   **Fenster- und Türüberwachung** (window and door monitor) for all of them.
+3. On request Claude also places **lamps** (path lights, wall lights, a pendant over the table),
+   **furniture** as simple boxes (kitchen row, wall cupboards, wardrobe; light strips sit on their
+   edges, e.g. *"a light strip under the wall cupboards"*) and your **weather station**.
+4. **Indicators** show a state as an icon: music playing or paused, the washing machine running,
+   post in the mailbox. One device gets one indicator with an icon per state (*"show the mailbox:
+   a letter for post, a parcel for a parcel"*). Usually it sits in its room's row; one that
+   belongs to a place of its own floats there (*"show the mailbox at the front door"*).
 
 ### Later changes
 
 Open the house assistant and say what is wrong, e.g. *"The bathroom window is 20 cm too far
-right"* or *"The garage has a flat roof."* Claude changes only that.
+right"* or *"The garage has a flat roof."* Claude changes only that. Left of the assistant you
+see the house with every change: at the top choose one of your views or **Whole house** (every
+room open, new ones too); drag to turn, the wheel zooms, **Back to the view** resets the camera.
+Nothing of this is saved to the views.
 
 ## 3. Way B: Claude Code
 
@@ -111,6 +120,10 @@ on top.
    The first only tells Claude Code where the plugin is; the second installs it. Check with
    `/plugin` that **house-model** is listed as installed, then start a new session.
 
+   **Updates:** Claude Code does not update the plugin by itself. After installing a new HouseVis
+   version, also run `/plugin marketplace update housevis` and start a new session. If you forget,
+   Claude notices that the plugin and HouseVis have different versions and reminds you.
+
 ### Build the house
 
 1. Open Claude Code on the folder that holds `plans\` (e.g. `HouseVis-Projects`).
@@ -139,7 +152,8 @@ notes in `plans/my-house/model-notes.md`.
 ### Later changes
 
 Say what is wrong, e.g. *"The bathroom window in plans/my-house is 20 cm too far right."* Claude
-changes only that and shows you the result.
+changes only that and shows you the result. *"Show me the pages with the live values"* gives
+pictures of your pages as the app shows them right now.
 
 ## 4. After the model: views and pages
 

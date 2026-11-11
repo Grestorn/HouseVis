@@ -24,7 +24,8 @@ through the forum).
 ## User guide
 
 Installation, the house model, using the app, troubleshooting:
-**[Deutsch](docs/user/de/README.md)** · **[English](docs/user/en/README.md)**.
+**[Deutsch](docs/user/de/README.md)** · **[English](docs/user/en/README.md)**. What is new in each
+version: [Versionen](docs/user/de/versionen.md) · [Version history](docs/user/en/versions.md).
 
 ## Your house model
 

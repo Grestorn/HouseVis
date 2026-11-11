@@ -42,6 +42,7 @@ the convention of an existing datapoints.json of the user. `label` = the name in
 | room `light` | `LightControllerV2` → `activeMoods` | `{ "type": "boolean", "notEquals": "[778]" }` (778 = mood "Off") |
 | room `lightColor` | the light controller's **output** subcontrol `…/AIn` that has a `color` state | `"color"`; a list for several outputs |
 | opening `open` | window contact, often `InfoOnlyDigital` → `active` | `"boolean"`, with `"invert": true` if it reports 1 when closed |
+| opening `open` / `tilted` from a WindowMonitor | "Fenster- und Türüberwachung" (`WindowMonitor`) → `windowStates` | `{ "type": "windowMonitor", "window": <index>, "state": "open" }` (or `"tilted"`), with `"name"`: the window's name in the block |
 | opening/roof window `position` | `Window` → `position` (motorised windows), `Gate` → `position` (garage gates) | (number 0–1) |
 | shade `position` | `Jalousie` → `position` | (number 0–1) |
 | shade `slats` | `Jalousie` → `shadePosition` (blinds only) | (number 0–1) |
@@ -86,6 +87,14 @@ Quirks that matter here:
   takes one datapoint; ask, usually the valves are driven together and the first stands for all.
 - A control's `presence` state (e.g. on a sauna or audio control) may be wired from another
   room's detector: compare it live with the room's PresenceDetector before showing it.
+- Window contacts that appear only inside a "Fenster- und Türüberwachung" (`WindowMonitor`) and
+  not as controls of their own are common: map them through the block (row *opening `open` from a
+  WindowMonitor* above). The inventory lists the block's `windows` with `index`, `name`,
+  `installPlace` and room; match them to the openings by name and place, and always write `name`,
+  so a window added to the block later (which shifts the positions) is reported instead of
+  silently showing the wrong window. The block reports open and tilted itself; no `invert`. Contacts
+  that exist as controls of their own as well (`InfoOnlyDigital`) may be used instead; prefer the
+  block when only it has the tilt.
 - Sensors the user names but the inventory lacks (a motion detector "Decke") are not enabled for
   the user interface in Loxone Config, or the user lacks permission: record it, map it later.
 - `lightColor` alone decides whether a room is lit (black = off); `light` is then optional.
@@ -120,7 +129,8 @@ Quirks that matter here:
   get a second rule with `"kind": "music-paused"`; that kind is not shown by default, the user
   can give it an icon (menu "Globale Einstellungen …"), so say so. Any kind can be set to "Nicht
   anzeigen" there (`"hidden"` in global.json). Any other kind you invent gets a placeholder icon
-  until the user picks one, so say so too.
+  until the user picks one, so say so too. Other indicators (mailbox, washing machine): one
+  indicator per thing with a rule per state, see `format.md` *Indicators*.
 - **Areas with controls of their own** (a sauna with its control's `tempActual`/`tempTarget`/
   `power`, its own light output and audio zone) can become a room of their own even if Loxone
   files their controls under another room; suggest it.

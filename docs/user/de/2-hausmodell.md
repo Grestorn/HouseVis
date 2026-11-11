@@ -77,14 +77,25 @@ Ausgabenlimit.
 1. HouseVis muss mit deinem Miniserver verbunden sein ([Kapitel 1](1-installation.md)).
 2. Bitte: *„Ordne Räume, Fenster und Lichter Loxone zu."* Claude liest die Bausteine deines
    Miniservers (nur lesend) und schlägt vor, was wohin gehört; die Live-Werte erscheinen schon vor
-   dem Speichern in der 3D-Ansicht. Bestätige oder korrigiere.
+   dem Speichern in der 3D-Ansicht. Bestätige oder korrigiere. Fenster können eigene Kontakte
+   haben oder alle aus einer **Fenster- und Türüberwachung** kommen.
 3. Auf Wunsch setzt Claude auch **Leuchten** (Wegeleuchten, Wandleuchten, eine Pendelleuchte über
-   dem Esstisch) und deine **Wetterstation**.
+   dem Esstisch), **Möbel** als einfache Kästen (Küchenzeile, Oberschränke, Kleiderschrank;
+   Lichtleisten sitzen an ihren Kanten, z. B. *„eine Lichtleiste unter den Oberschränken"*) und deine
+   **Wetterstation**.
+4. **Anzeigen** zeigen einen Zustand als Symbol: Musik läuft oder pausiert, die Waschmaschine
+   läuft, Post im Briefkasten. Ein Gerät bekommt eine Anzeige mit einem Symbol je Zustand (*„zeig
+   den Briefkasten: ein Brief für Post, ein Paket für ein Paket"*). Meist sitzt sie in der Reihe
+   ihres Raums; eine, die zu einem eigenen Ort gehört, schwebt dort (*„zeig den Briefkasten an der
+   Haustür"*).
 
 ### Spätere Änderungen
 
 Öffne den Haus-Assistenten und sag, was falsch ist, z. B. *„Das Badfenster liegt 20 cm zu weit
-rechts"* oder *„Die Garage hat ein Flachdach."* Claude ändert nur das.
+rechts"* oder *„Die Garage hat ein Flachdach."* Claude ändert nur das. Links neben dem Assistenten
+siehst du das Haus mit jeder Änderung: oben wählst du eine deiner Ansichten oder **Ganzes Haus**
+(alle Räume offen, auch neue); ziehen dreht, das Mausrad zoomt, **Zurück zur Ansicht** stellt die
+Kamera zurück. Gespeichert wird dabei nichts an den Ansichten.
 
 ## 3. Weg B: Claude Code
 
@@ -115,6 +126,11 @@ willst.
    Der erste sagt Claude Code nur, wo das Plugin liegt; erst der zweite installiert es. Prüfe mit
    `/plugin`, dass **house-model** als installiert erscheint, und starte dann eine neue Sitzung.
 
+   **Updates:** Claude Code aktualisiert das Plugin nicht von selbst. Nach einer neuen
+   HouseVis-Version also auch `/plugin marketplace update housevis` ausführen und eine neue Sitzung
+   starten. Vergisst du es, merkt Claude, dass Plugin und HouseVis verschiedene Versionen haben, und
+   erinnert dich daran.
+
 ### Das Haus bauen
 
 1. Öffne Claude Code auf dem Ordner, in dem `plans\` liegt (z. B. `HouseVis-Projekte`).
@@ -144,7 +160,8 @@ führt seine Notizen in `plans/mein-haus/model-notes.md`.
 ### Spätere Änderungen
 
 Sag, was falsch ist, z. B. *„Das Badfenster in plans/mein-haus liegt 20 cm zu weit rechts."* Claude
-ändert nur das und zeigt dir das Ergebnis.
+ändert nur das und zeigt dir das Ergebnis. *„Zeig mir die Seiten mit den Live-Werten"* liefert
+Bilder deiner Seiten, wie die App sie gerade zeigt.
 
 ## 4. Nach dem Modell: Ansichten und Seiten
 

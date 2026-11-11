@@ -22,6 +22,7 @@
 | Problem | What to do |
 |---|---|
 | A window, wall or roof is in the wrong place | Tell Claude exactly what is wrong ("the kitchen window is 30 cm further left", "the roof ridge runs east–west") – in Claude Code or in the **House assistant**. |
+| A gable is open, you can see under the roof | The roof's wall line does not match the outer walls (the check reports "gable stays open"). Ask Claude to put the roof's outline on the outer walls. |
 | A window shows open when it is closed (or the other way round) | Loxone's contact reports the opposite: tell Claude ("window bathroom shows open when closed"). |
 | Something is drawn wrongly although the model is right (white stripes, missing faces) | That is a HouseVis fault: please [report it in the forum](https://forum.housevis.de/c/fehlerberichte) with a screenshot. |
 | HouseVis shows the wrong house or "No house model yet" | Menu → **Configuration folder …**: choose the folder that holds your `house.json`. |
