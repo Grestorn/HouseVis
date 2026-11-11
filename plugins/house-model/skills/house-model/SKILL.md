@@ -78,7 +78,7 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
-**First, once per session: check the versions.** This skill was built for HouseVis 0.9.1.
+**First, once per session: check the versions.** This skill was built for HouseVis 0.9.2.
 Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
 the user before anything else, in their language:
 - **The app is newer:** this skill is out of date and may not know what the app reads now. Update
@@ -109,7 +109,8 @@ works in.
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles plans/<project>/<file> [--pages 2] [--rotate 270]
                                                          # PDF page or scan → full-resolution tiles
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --config-folder                                    # the folder the app shows a house from
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory                                 # loxone-inventory.json (block 7)
+HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory
+                                                         # (re)write loxone-inventory.json (block 7)
 HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --values
                                                          # live value of every datapoint (block 7)
 ```
@@ -234,8 +235,10 @@ update `model-notes.md`.
    photo taken square-on to a facade can be measured: scale the pixels against a known length
    (e.g. the facade width) and compare window centres with the model (±5–10 cm is a match).
 7. **Loxone mapping.** As in [reference/loxone-mapping.md](reference/loxone-mapping.md): needs
-   `loxone-inventory.json` (the user runs `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory` after connecting HouseVis to
-   the Miniserver). Suggest, the user confirms. Include the house-wide `data` (see *Weather* in
+   `loxone-inventory.json`. **Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory` yourself** (with the stored sign-in
+   of the app, read only) whenever the file is missing, the user asks to refresh or reload it, or
+   the Loxone Config was changed since (renamed or new controls); only when it reports no stored
+   sign-in ask the user to connect HouseVis to the Miniserver once. Suggest, the user confirms. Include the house-wide `data` (see *Weather* in
    [reference/loxone-mapping.md](reference/loxone-mapping.md)): `outsideBrightness` (the scene's
    daylight follows it, so lit rooms and lamps stand out at night) and the weather values for the
    weather station's panel and a screen's sky (temperature, felt temperature, humidity, wind,
@@ -328,3 +331,10 @@ and tag them. Older models may also have a garage without walls, or with its wal
 `structures` boxes: offer to convert it into an outbuilding with `exteriorWall` (and `level`),
 shrinking its polygon to the inside, moving its gates onto the inner edge and removing the boxes
 (update views that set the boxes: their walls now have wall ids).
+
+Older models may also build **one gable from two sheds** back to back: format 6 could not give a
+gable's eaves different overhangs, so users split it at the ridge. It renders correctly, but offer
+to merge it into one part as format 7 writes it (*Two sheds that are one gable* in
+[reference/format.md](reference/format.md)), and look in `house.v6.json` and `model-notes.md` for
+other stand-ins built for the old limits (boxes or flat parts filling a gap under the roof):
+remove those only after showing them and asking.

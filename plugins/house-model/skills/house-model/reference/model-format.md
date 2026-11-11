@@ -131,8 +131,11 @@ written as plans dimension it (format 7):
 - Gable walls are closed on every side of the roof that faces the camera, at the outermost wall line
   of the rooms below the part; where the roof comes down below the rooms (eaves, hips) nothing
   is drawn. Under a sloped part only walls on its wall line (`outline`, within 2 cm) close up to
-  the roof (`closesUpToRoof`); a gable side without a wall there is named by `house:check` (its
-  roof line) and the configuration warnings (`openGableSides`), since the gable would stay open.
+  the roof (`closesUpToRoof`); the wall may stand on the edges of several parts together (a gable
+  built from two sheds, each outline ending at the ridge). A gable side without such a wall is
+  named by `house:check` (its roof line) and the configuration warnings (`openGableSides`), since
+  the gable would stay open; a side where the roof carries on at the same height as another part
+  (`roofContinuesBeyond`, the seam of two sheds) needs none.
   Every other wall ends at its room's ceiling, since the attic above is not
   modelled (walls standing in it showed through a see-through roof). Under a flat part the band
   up to the roof stays closed. A gable fill under a part the view draws `transparent` is as

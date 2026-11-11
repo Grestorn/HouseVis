@@ -5,6 +5,14 @@
 What changed for you in each version. Update the plugin together with the app (`/plugin marketplace update
 housevis`, [chapter 2](2-house-model.md)).
 
+## 0.9.2
+
+**House model**
+- **A gable roof built from two shed roofs** (the workaround for unequal overhangs before 0.9.1):
+  its gables are closed again and the "gable stays open" message is gone; the skill offers to
+  merge them into one gable roof. Where the message still appears, it says so: ask the skill to
+  merge the two.
+
 ## 0.9.1
 
 **House model**

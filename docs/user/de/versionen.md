@@ -5,6 +5,14 @@
 Was sich in jeder Version für dich geändert hat. Das Plugin mit der App zusammen aktualisieren
 (`/plugin marketplace update housevis`, [Kapitel 2](2-hausmodell.md)).
 
+## 0.9.2
+
+**Hausmodell**
+- **Satteldach aus zwei Pultdächern** (der Behelf für ungleiche Überstände vor 0.9.1): die Giebel
+  sind wieder geschlossen, die Meldung „gable stays open" kommt nicht mehr; der Skill bietet an,
+  sie zu einem Satteldach zusammenzufassen. Wo die Meldung noch erscheint, sagt sie das: den Skill
+  bitten, die beiden zusammenzufassen.
+
 ## 0.9.1
 
 **Hausmodell**

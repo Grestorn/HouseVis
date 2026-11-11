@@ -8,10 +8,18 @@ mapping needs are in *Datapoints* below.
 
 `loxone-inventory.json` in the working folder, written by `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory`. It lists
 the Loxone rooms with their controls: `uuid`, `name`, `type`, `category`, `states`, and
-`subControls` with their own UUIDs (`<uuid>/AI1`). If it is missing or old, run the command
-yourself: it uses the sign-in the app has stored (read only). If it reports that HouseVis is not
-connected, ask the user to connect it once in the app (menu → "Mit Miniserver verbinden"); you
-cannot sign in yourself, the password lives only in the app's dialog.
+`subControls` with their own UUIDs (`<uuid>/AI1`); `miniserver.lastModified` is the date of the
+Loxone program it was read from.
+
+**Refreshing it is your job, not the user's.** Run
+`HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory` yourself when the file is missing, when
+the user asks to refresh, reload or update the inventory, or when the Loxone Config changed since
+(controls renamed, added, moved to other rooms) — it simply overwrites the file. It uses the sign-in
+the app has stored (read only), and afterwards checks the model folder's `datapoints.json` against
+the fresh structure file: exit code 2 means the file was written but those datapoints no longer
+match (listed); fix them. If it reports that no sign-in is stored or the token cannot be read, ask
+the user to connect HouseVis once in the app (menu → "Mit Miniserver verbinden"); you cannot sign
+in yourself, the password lives only in the app's dialog.
 
 The structure file only contains what the signed-in user may see. Rooms without controls usually
 mean missing permissions, not missing hardware.

@@ -178,6 +178,25 @@ A part is written as the plans dimension it (format 7); nothing needs converting
 - Older files (format 6, `footprint` with the overhangs in it and the eaves at its edge) are
   converted when the app or house:check opens them; the old file stays beside it as
   `house.v6.json`. Never write `footprint` any more.
+- **Two sheds that are one gable** (a format 6 workaround for unequal overhangs): two `shed` parts
+  on the same `floor` with opposite `low` sides, outlines meeting at the ridge line (within 2 cm)
+  and spanning the same length along it, both reaching the same height there. house:check
+  accepts them (the seam needs no wall), but merge them into one `gable`:
+  - `outline`: both outlines together (along the ridge the same; across it from the one half's
+    low side to the other's). `ridge`: the seam's direction (a seam along x is `east-west`).
+  - `overhang`: each eave side from its own half; the verge sides from either half. If the halves'
+    verges differ, the gable cannot keep both: show the two values and ask which to keep.
+  - `eaveHeight` per side: each half's `eaveHeight` (both at the wall line since format 7).
+  - Pitch: equal eaves and equal half widths give `ridgeHeight` (the halves' height at the seam).
+    Otherwise write `pitch` per side, each half's `atan((ridgeHeight − eaveHeight) / width)` in
+    degrees, width = the half's depth across the ridge: the planes then stay exactly where they
+    were and meet at the old seam.
+  - Halves at different heights at the seam (a step in the ridge) are not one gable: leave them.
+  - Keep the id the views and roof windows use most, re-point every `roofWindows[].roof` and every
+    view's `roofs` entry of the other id to it, merge `tags`, keep `color`.
+  - Check: house:check prints the same pitch per side as before and no `GABLE OPEN`; render
+    before and after and compare (the roof should look unchanged, apart from a verge that had to
+    give up one value).
 - **Roof windows** (`roofWindows`): `roof` = part id, `center` in plan coordinates, `width` along
   the eave, `depth` = extent across the eave **in the plan**, i.e. window length × cos(pitch).
   Typical sizes (width × length): 0.78 × 0.98, 0.78 × 1.18, 0.78 × 1.40, 1.14 × 1.18, 1.14 × 1.40,
