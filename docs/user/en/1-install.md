@@ -58,11 +58,19 @@ The tablet shows what you set up on the PC; it has no editors.
 1. Install the APK from the [Releases page](https://github.com/Grestorn/HouseVis/releases) (Android asks to allow installing from this source).
 2. On the PC: menu → **Edit devices / pages …**, choose the device (e.g. "Tablet"),
    **Export device …**. This writes one `.housevis` file with the model and its pages; no
-   sign-in data.
+   sign-in data. The next export offers the same folder again.
 3. Get the file onto the tablet (e-mail, cloud, USB) and open it with HouseVis, share it to
-   HouseVis, or use the menu → **Read in configuration …**.
+   HouseVis, or use the menu → **Load configuration …**. Until the pages are there, the app
+   shows "Loading the configuration …"; on a tablet that takes a few seconds.
 4. On the tablet: menu → **Connect to Miniserver**.
 
 After changes on the PC, export and read in again.
+
+**Distributing automatically:** a file chosen through **Load configuration …** is watched: when
+it changes, the app reads it in again by itself (checked every 30 seconds and when you return to
+the app). If the file lies in a folder that a sync app
+such as QFile Pro keeps in step with the PC or a NAS, exporting there on the PC is all it takes. A
+file that cannot be read in (e.g. still half copied) changes nothing; the app tries again at its
+next change. Files shared to HouseVis or opened with it are not watched.
 
 Next: [2 – Creating the house model](2-house-model.md)

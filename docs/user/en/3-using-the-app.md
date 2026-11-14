@@ -17,14 +17,16 @@
 | Menu item | What for |
 |---|---|
 | Connect to Miniserver | sign in, change the Miniserver |
-| Loxone UI sign-in … | store the Loxone interface's user and password, so it does not ask after every start of the app (optional; the password then lies encrypted on the device, see the note in the dialog; only with an encrypted connection) |
+| Loxone UI sign-in … | store the Loxone interface's user and password, so it does not ask after every start of the app (optional; the password then lies encrypted on the device, see the note in the dialog; only with an encrypted connection). After storing, the app shows the Loxone page and signs in at once; if Loxone refuses, the dialog opens again with a note |
+| AI assistant … | change the model with Claude ([chapter 2](2-house-model.md)) and more: create playbacks, check the mapping to Loxone |
 | Edit views … | from where you look, which rooms are open, what is left out |
 | Edit devices / pages … | which pages a PC, tablet or phone shows; per device also the light sources (realistic or simple) and a reduced frame rate for slower devices; export for the tablet |
-| Global settings … | the app's language (otherwise the device's); icons for heating, music, … (about a thousand: suggestions first, otherwise by group or with the search, e.g. "speaker" or "washing machine"); a state can also be hidden altogether ("Do not show", e.g. paused music) |
-| House assistant … | change the model with Claude ([chapter 2](2-house-model.md)) |
+| Global settings … | two pages, chosen on the left. **Options**: the app's language (otherwise the device's); size of the Loxone page (smaller fits more in, e.g. for the Loxone app's Ambient mode; default 90 %). **Symbols**: icons for heating, music, … from three sets: **Fluent Emoji** (colour), **Fluent Emoji (High Contrast)** (the same in one colour) and **Lucide** (plain lines); suggestions first, otherwise by group or with the search, e.g. "speaker" or "washing machine". One-colour icons take a **color** (default, one from the palette or "Custom …"; pick the color, then the icon). A state can also be hidden altogether ("Do not show", e.g. paused music) |
 | Configuration folder … | which house model the app shows |
+| Load configuration … | tablet only: load an exported file ([chapter 1](1-install.md)) |
+| Settings … | tablet only: the app's language and the size of the Loxone page for this device, apart from the global settings |
 | Device: … | test how another device's pages look |
-| Demo, Weather demo, Showcase | the made-up demo house; every weather type in turn; a whole day in two minutes with changing weather, the pages turning by themselves (for a video or a screen left running) |
+| Playbacks … | what the app shows by itself. **Demo house**: look around the made-up house; every weather type in turn (weather demo); a whole day in two minutes, the pages turning by themselves (showcase, for a screen left running); and short clips with camera moves (fly-around, lights in the evening, …). **Your house**: your own playbacks, made for you by the house assistant, e.g. “Make a playback like ‘A day in two minutes’ for my house”, with made-up values or the current ones. Esc or a click ends a playback; “Continuous loop” keeps it running. |
 | **Forum: help and feedback (German)** | opens [forum.housevis.de](https://forum.housevis.de) in the browser: questions, bug reports, ideas (Windows only) |
 
 ## Views: what you see
@@ -46,7 +48,9 @@ Menu → **Edit views …**, then:
   or fully solid.
 - **Values and labels** – drag temperatures and icons in the picture to their place (also an
   icon at a place of its own, like the mailbox at the front door; for this view only). Shift
-  while dragging lifts or lowers it; a double-click puts it back.
+  while dragging lifts or lowers it; a double-click puts it back. A room's name can be dragged
+  onto another wall of the room or onto its floor, which suits a view looking down on a storey;
+  such views put names on the floor by themselves where no wall shows them well.
 - **Create copy** – start a new view from this one. On its first **Save** (Ctrl+S) HouseVis asks
   whether every device should get a page with it. Ctrl+Z undoes.
 
@@ -56,11 +60,16 @@ Menu → **Edit views …**, then:
 
 Menu → **Edit devices / pages …**: every device (PC, tablet, phone) has its pages. Add a
 **Page with views** and place one or several views on it (drag in the preview, which shows the views themselves), or a **Loxone
-page** with the Loxone interface. Per page: **Show the current weather**, and **+ Clock** and
+page** with the Loxone interface. Per page: its **icon** in the page bar (from the same sets as the indicators, one-colour ones with a color, or "Show no icon"), **Show the current weather**, and **+ Clock** and
 **+ Date** (placed and sized like a view, always in front; the time and the long date with weekday
-and month as the device's system settings format them, e.g. 12 or 24 hours). Per device: **Allow sleep
+and month as the device's system settings format them, e.g. 12 or 24 hours). Per view on the page:
+**With frame and title**, **Hide temperatures and indicators** (the house alone, e.g. for a small
+second view) and **Size of temperatures and indicators** (30 to 150 %; double-click the slider for
+100 %). Per device: **Allow sleep
 mode** (off for wall tablets) and **Automatic presence detection** (dark while nobody is in the
-room; the screen then stays on anyway). **Export device …** writes the file
+room; the screen then stays on anyway). Right-click a page to copy it to another device, or a
+device to copy all its pages; where the target already has a page of the same name, it is
+replaced after asking. **Export device …** writes the file
 for the Android tablet ([chapter 1](1-install.md#android-tablet)).
 
 ## Ideas: ways to use HouseVis

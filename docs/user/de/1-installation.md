@@ -59,11 +59,20 @@ Das Tablet zeigt, was du am PC eingerichtet hast; Editoren hat es nicht.
    erlaubt sind).
 2. Am PC: Menü → **Geräte / Seiten bearbeiten …**, das Gerät wählen (z. B. „Tablet"),
    **Gerät exportieren …**. Das schreibt eine `.housevis`-Datei mit Modell und Seiten, ohne
-   Anmeldedaten.
+   Anmeldedaten. Beim nächsten Export schlägt die App wieder denselben Ordner vor.
 3. Die Datei aufs Tablet bringen (E-Mail, Cloud, USB) und mit HouseVis öffnen, an HouseVis
-   teilen oder über Menü → **Konfiguration einlesen …**.
+   teilen oder über Menü → **Konfiguration laden …**. Bis die Seiten da sind, zeigt die App
+   „Konfiguration wird geladen …“; auf dem Tablet dauert das einige Sekunden.
 4. Am Tablet: Menü → **Mit Miniserver verbinden**.
 
 Nach Änderungen am PC erneut exportieren und einlesen.
+
+**Automatisch verteilen:** Eine über **Konfiguration laden …** gewählte Datei beobachtet die App:
+Ändert sie sich, liest sie sie von selbst neu ein (geprüft alle 30 Sekunden und beim Zurückkehren
+in die App). Liegt die Datei in einem Ordner, den ein
+Sync-Programm wie QFile Pro mit dem PC oder NAS abgleicht, genügt am PC das Exportieren dorthin.
+Eine Datei, die sich nicht einlesen lässt (z. B. noch halb übertragen), ändert nichts; die App
+versucht es bei der nächsten Änderung wieder. Geteilte oder mit HouseVis geöffnete Dateien werden
+nicht beobachtet.
 
 Weiter: [2 – Das Hausmodell erstellen](2-hausmodell.md)

@@ -1,0 +1,42 @@
+{
+  "title": {
+    "de": "Ein Tag in zwei Minuten",
+    "en": "A day in two minutes"
+  },
+  "window": {
+    "width": 1920,
+    "height": 1080
+  },
+  "language": "de",
+  "lightMode": "real",
+  "chrome": "none",
+  "seed": 1,
+  "scenario": "show",
+  "start": {
+    "obs": true
+  },
+  "end": {
+    "hold": 2,
+    "quit": true
+  },
+  "view": "suedwest",
+  "weather": true,
+  "camera": [
+    {
+      "t": 0,
+      "azimuth": 200,
+      "elevation": 7
+    },
+    {
+      "t": 60,
+      "azimuth": 380,
+      "elevation": 11
+    },
+    {
+      "t": 120,
+      "azimuth": 560,
+      "elevation": 7
+    }
+  ],
+  "duration": 120
+}

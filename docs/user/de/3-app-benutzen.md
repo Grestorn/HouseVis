@@ -17,14 +17,16 @@
 | Menüpunkt | Wofür |
 |---|---|
 | Mit Miniserver verbinden | anmelden, Miniserver wechseln |
-| Loxone-UI-Anmeldung … | Benutzer und Kennwort der Loxone-Oberfläche speichern, damit sie nach dem Start der App nicht jedes Mal fragt (freiwillig; das Kennwort liegt dann verschlüsselt auf dem Gerät, siehe Hinweis im Dialog; nur bei verschlüsselter Verbindung) |
+| Loxone-UI-Anmeldung … | Benutzer und Kennwort der Loxone-Oberfläche speichern, damit sie nach dem Start der App nicht jedes Mal fragt (freiwillig; das Kennwort liegt dann verschlüsselt auf dem Gerät, siehe Hinweis im Dialog; nur bei verschlüsselter Verbindung). Nach dem Speichern zeigt die App die Loxone-Seite und meldet sich gleich an; lehnt Loxone ab, öffnet sich der Dialog wieder mit einem Hinweis |
+| KI-Assistent … | das Modell mit Claude ändern ([Kapitel 2](2-hausmodell.md)) und mehr: Vorführungen anlegen, Zuordnungen zu Loxone prüfen |
 | Ansichten bearbeiten … | von wo du schaust, welche Räume offen sind, was ausgeblendet ist |
 | Geräte / Seiten bearbeiten … | welche Seiten PC, Tablet oder Handy zeigen; pro Gerät auch Lichtquellen (realistisch oder einfach) und reduzierte Bildrate für langsamere Geräte; Export fürs Tablet |
-| Globale Einstellungen … | Sprache der App (sonst die des Geräts); Symbole für Heizung, Musik, … (rund tausend: zuerst Vorschläge, sonst nach Gruppe oder mit der Suche, z. B. „Lautsprecher“ oder „Waschmaschine“); ein Zustand lässt sich auch ganz ausblenden („Nicht anzeigen“, z. B. pausierte Musik) |
-| Haus-Assistent … | das Modell mit Claude ändern ([Kapitel 2](2-hausmodell.md)) |
+| Globale Einstellungen … | zwei Seiten, links gewählt. **Optionen**: Sprache der App (sonst die des Geräts); Größe der Loxone-Seite (kleiner passt mehr hinein, z. B. für den Ambient-Modus der Loxone-App; Standard 90 %). **Symbole**: das Symbol für Heizung, Musik, … aus drei Sätzen: **Fluent Emoji** (farbig), **Fluent Emoji (High Contrast)** (dieselben einfarbig) und **Lucide** (schlichte Linien); zuerst Vorschläge, sonst nach Gruppe oder mit der Suche, z. B. „Lautsprecher“ oder „Waschmaschine“. Einfarbige Symbole bekommen eine **Farbe** (Standard, eine aus der Palette oder „Eigene …“; Farbe wählen, dann das Symbol). Ein Zustand lässt sich auch ganz ausblenden („Nicht anzeigen“, z. B. pausierte Musik) |
 | Konfigurationsordner … | welches Hausmodell die App zeigt |
+| Konfiguration laden … | nur Tablet: eine exportierte Datei laden ([Kapitel 1](1-installation.md)) |
+| Einstellungen … | nur Tablet: Sprache der App und Größe der Loxone-Seite für dieses Gerät, abweichend von den Globalen Einstellungen |
 | Gerät: … | ausprobieren, wie die Seiten eines anderen Geräts aussehen |
-| Demo, Wetter-Demo, Vorführung | das ausgedachte Demo-Haus; alle Wettertypen nacheinander; ein ganzer Tag in zwei Minuten mit wechselndem Wetter, die Seiten wechseln von selbst (für ein Video oder einen Bildschirm, der einfach läuft) |
+| Vorführungen … | was die App von selbst zeigt. **Demo-Haus**: das ausgedachte Haus ansehen; alle Wettertypen nacheinander (Wetter-Demo); ein ganzer Tag in zwei Minuten, die Seiten wechseln von selbst (Vorführung, für einen Bildschirm, der einfach läuft); dazu kurze Filme mit Kamerafahrt (Rundflug, Licht am Abend, …). **Dein Haus**: deine eigenen Vorführungen, die der Haus-Assistent dir anlegt, z. B. „Mach eine Vorführung wie ‚Ein Tag in zwei Minuten‘ für mein Haus“, mit ausgedachten oder mit den aktuellen Werten. Esc oder ein Klick beendet eine Vorführung; „Dauerschleife“ lässt sie endlos laufen. |
 | **Forum: Hilfe und Feedback** | öffnet [forum.housevis.de](https://forum.housevis.de) im Browser: Fragen, Fehler melden, Ideen (nur Windows) |
 
 ## Ansichten: was du siehst
@@ -47,7 +49,10 @@ Menü → **Ansichten bearbeiten …**, dann:
   niedrigen Dach, Kniestock); ein Klick aufs Dach macht es durchsichtig, verborgen oder ganz fest.
 - **Werte und Beschriftungen** – Temperaturen und Symbole im Bild an ihren Platz ziehen (auch ein
   Symbol an einem eigenen Ort, etwa der Briefkasten an der Haustür; nur für diese Ansicht). Mit
-  Umschalt beim Ziehen hebt oder senkt man es; ein Doppelklick setzt es zurück.
+  Umschalt beim Ziehen hebt oder senkt man es; ein Doppelklick setzt es zurück. Den Raumnamen
+  zieht man auf eine andere Wand des Raums oder auf seinen Boden – passend für eine Ansicht, die
+  von oben auf ein Stockwerk schaut; solche Ansichten legen Namen von selbst auf den Boden, wo
+  keine Wand sie gut zeigt.
 - **Kopie anlegen** – eine neue Ansicht aus dieser beginnen. Beim ersten **Speichern** (Strg+S)
   fragt HouseVis, ob sie auf jedem Gerät eine eigene Seite bekommen soll. Strg+Z macht rückgängig.
 
@@ -57,12 +62,17 @@ Menü → **Ansichten bearbeiten …**, dann:
 
 Menü → **Geräte / Seiten bearbeiten …**: jedes Gerät (PC, Tablet, Handy) hat seine Seiten. Füge eine
 **Seite mit Ansichten** hinzu und platziere eine oder mehrere Ansichten darauf (in der Vorschau
-ziehen; die Vorschau zeigt die Ansichten selbst), oder eine **Loxone-Seite** mit der Loxone-Oberfläche. Pro Seite: **Aktuelles Wetter anzeigen**, dazu **+ Uhr** und
+ziehen; die Vorschau zeigt die Ansichten selbst), oder eine **Loxone-Seite** mit der Loxone-Oberfläche. Pro Seite: ihr **Symbol** in der Seitenleiste (aus denselben Sätzen wie die Anzeigen, einfarbige mit Farbe, oder „Kein Symbol zeigen“), **Aktuelles Wetter anzeigen**, dazu **+ Uhr** und
 **+ Datum** (platziert und in der Größe geändert wie eine Ansicht, immer vorn; Uhrzeit und langes
 Datum mit Wochentag und Monat, so wie die Systemeinstellungen des Geräts sie schreiben, z. B. 12
-oder 24 Stunden). Pro
+oder 24 Stunden). Pro Ansicht auf der Seite: **Mit Rahmen und Titel**, **Temperaturen und Anzeigen
+ausblenden** (nur das Haus, z. B. für eine kleine Nebenansicht) und **Größe der Temperaturen und
+Anzeigen** (30 bis 150 %, Doppelklick auf den Regler: 100 %). Pro
 Gerät: **Sleepmodus erlauben** (für Wandtablets aus) und **Automatische Präsenz-Erkennung** (dunkel,
 solange niemand im Raum ist; der Bildschirm bleibt dann ohnehin an).
+Ein Rechtsklick auf eine Seite kopiert sie auf ein anderes Gerät, ein Rechtsklick auf ein Gerät
+alle seine Seiten; hat das Ziel schon eine Seite gleichen Namens, wird nach einer Rückfrage diese
+ersetzt.
 **Gerät exportieren …** schreibt die Datei fürs Android-Tablet
 ([Kapitel 1](1-installation.md#android-tablet)).
 

@@ -5,6 +5,47 @@
 What changed for you in each version. Update the plugin together with the app (`/plugin marketplace update
 housevis`, [chapter 2](2-house-model.md)).
 
+## 0.9.3
+
+**Important for the tablet:** a configuration using the new icons (from another set, with a
+colour, or a page without an icon) does not load in an app from before 0.9.3. Update the Android
+app together with the Windows app before you export such a configuration. Unchanged
+configurations keep loading in older apps too.
+
+**Viewing the house**
+- **Playbacks …** (menu): the demo house's clips from the forum play in the app, plus your house's
+  own, made by the AI assistant, with made-up or the current values; "Continuous loop" keeps one
+  running. Replaces Demo, Weather demo and Showcase in the menu.
+- **Room names on the floor:** views looking down on a storey put names on the floor by
+  themselves where no wall shows them well; in the view editor a name can be dragged onto the
+  floor and back.
+- **Sloped ceilings** appear only where they are seen from inside; from above the slope no longer
+  jumps from one side to the other.
+- Windows and doors in solid exterior walls no longer get a shifted second frame.
+- Windows and shades move equally fast at any frame rate (they were too slow on the tablet).
+
+**Pages and settings**
+- **Icons from three sets** for pages and indicators: Fluent Emoji in colour or one-colour,
+  Lucide; one-colour ones in a colour of your choice; a page can do without an icon. One picker
+  with groups and search for both.
+- Device editor: **copy pages to another device** (right click on a page, or on a device for all
+  its pages); per view on a page **hide temperatures and indicators** or change their **size**
+  (30–150 %); the preview also fits portrait pages.
+- **Global settings** in two pages (Options, Symbols); new: the **size of the Loxone page**
+  (default 90 %), so that e.g. the Loxone app's Ambient mode has room.
+- Menu in groups; "House assistant …" is now **AI assistant …**.
+- **Export device …** suggests the last export's folder.
+
+**Android tablet**
+- **Full screen:** status bar and navigation buttons are hidden (a swipe from the edge shows them
+  for a moment).
+- **The loaded configuration file is watched:** when it changes (e.g. through a sync tool such as
+  QFile Pro), the app reads it in again by itself.
+  "Loading the configuration …" covers the loading.
+- **Settings …** (menu): language and size of the Loxone page for this tablet only.
+- Loxone UI sign-in: after saving, the Loxone page signs in at once; the password can be shown
+  before it is sent.
+
 ## 0.9.2
 
 **House model**

@@ -1,7 +1,7 @@
 {
   "name": "house-model",
   "displayName": "HouseVis house model",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Builds a HouseVis 3D house model (house.json) from floor plans, sections and photos and maps it to the Loxone Miniserver. Needs the HouseVis Windows app.",
   "author": {
     "name": "Martin Korndörfer"

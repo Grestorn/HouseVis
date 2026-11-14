@@ -16,10 +16,33 @@
       "description": "The app's language on every device showing this house. Without it each device uses its system language (German for every German variant, otherwise English)."
     },
     "indicators": {
-      "description": "Icon per indicator kind: \"heating\" and \"cooling\" for the rooms, and the kinds of the indicators in house.json (e.g. \"music\"). Icons are names from the app's list (src/model/indicatorIcons.ts, Fluent Emoji), e.g. \"fire\"; \"hidden\" instead of an icon: that kind is not shown (the default for \"music-paused\").",
+      "description": "Icon per indicator kind: \"heating\" and \"cooling\" for the rooms, and the kinds of the indicators in house.json (e.g. \"music\"). An icon is a Fluent Emoji name from the app's list (src/model/indicatorIcons.ts), e.g. \"fire\"; \"set:name\" for another set (\"lucide:flame\"); { \"icon\": \"lucide:flame\", \"color\": \"#ff6b5b\" } for a colour; \"hidden\" instead of an icon: that kind is not shown (the default for \"music-paused\").",
       "type": "object",
       "propertyNames": { "pattern": "^[a-z][a-z0-9-]{0,39}$" },
-      "additionalProperties": { "type": "string", "pattern": "^[a-z0-9-]{1,40}$" }
+      "additionalProperties": { "$ref": "#/$defs/icon" }
+    },
+    "loxoneScale": {
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 150,
+      "description": "Scale of the Loxone page (the Miniserver's web interface) in percent. Below 100 it lays itself out in more room than the page has and is drawn smaller, so it shows more (e.g. the Loxone app's Ambient mode, which needs a large screen). Without it: 90."
+    }
+  },
+  "$defs": {
+    "icon": {
+      "description": "An icon: \"set:name\" (sets in src/model/iconSets.ts, e.g. \"lucide:sofa\", \"fluent:fire\") or a bare name of the place's own set; with a colour (one-colour sets only, e.g. Lucide) an object.",
+      "oneOf": [
+        { "type": "string", "pattern": "^([a-z][a-z0-9-]*:)?[a-z0-9]+(-[a-z0-9]+)*$" },
+        {
+          "type": "object",
+          "required": ["icon", "color"],
+          "additionalProperties": false,
+          "properties": {
+            "icon": { "type": "string", "pattern": "^([a-z][a-z0-9-]*:)?[a-z0-9]+(-[a-z0-9]+)*$" },
+            "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "#rrggbb" }
+          }
+        }
+      ]
     }
   }
 }

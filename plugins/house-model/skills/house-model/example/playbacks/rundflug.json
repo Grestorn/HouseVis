@@ -1,0 +1,69 @@
+{
+  "title": {
+    "de": "Rundflug",
+    "en": "Fly-around"
+  },
+  "window": {
+    "width": 1920,
+    "height": 1080
+  },
+  "language": "de",
+  "lightMode": "real",
+  "chrome": "none",
+  "seed": 1,
+  "scenario": "static",
+  "start": {
+    "obs": true
+  },
+  "end": {
+    "hold": 2,
+    "quit": true
+  },
+  "view": "suedwest",
+  "weather": true,
+  "initial": {
+    "aussen.wettertyp": 1,
+    "aussen.helligkeit": 0.3,
+    "aussen.sonne": 0,
+    "aussen.regen": 0,
+    "aussen.windwarnung": 0,
+    "aussen.wind": 6,
+    "aussen.windrichtung": 250,
+    "aussen.temperatur": 9,
+    "aussen.gefuehlt": 8,
+    "aussen.feuchte": 64,
+    "light.wohnen.decke": "temp(85,2700)",
+    "light.wohnen.essen": "hsv(32,70,90)",
+    "light.hobbyraum": "hsv(200,60,80)",
+    "light.diele": "temp(70,3000)",
+    "light.gaestezimmer": "temp(60,2700)",
+    "light.arbeitszimmer": "temp(100,4000)",
+    "light.eltern": "hsv(20,55,60)",
+    "light.bad": "temp(90,4000)",
+    "light.kind-1": "hsv(280,50,80)",
+    "light.kind-2": "hsv(140,45,75)",
+    "light.pavillon": "hsv(45,80,70)",
+    "light.aussen.weg": "temp(80,2700)",
+    "light.aussen.eingang": "temp(100,3000)"
+  },
+  "camera": [
+    {
+      "t": 0,
+      "azimuth": 200,
+      "elevation": 7,
+      "zoom": 1
+    },
+    {
+      "t": 10,
+      "azimuth": 380,
+      "elevation": 13,
+      "zoom": 0.92
+    },
+    {
+      "t": 20,
+      "azimuth": 560,
+      "elevation": 7,
+      "zoom": 1
+    }
+  ]
+}

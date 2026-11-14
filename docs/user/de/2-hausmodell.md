@@ -55,7 +55,7 @@ Leg alles in einen Ordner pro Haus, z. B. `C:\Users\<du>\HouseVis-Projekte\plans
 1. Erstelle einen API-Schlüssel auf [platform.claude.com](https://platform.claude.com)
    (**API Keys**; vorher unter **Billing** ein Zahlungsmittel hinterlegen). Er beginnt mit
    `sk-ant-`.
-2. HouseVis: Menü → **Haus-Assistent …**, Schlüssel einfügen. Er wird nur auf diesem PC
+2. HouseVis: Menü → **KI-Assistent …**, Schlüssel einfügen. Er wird nur auf diesem PC
    verschlüsselt gespeichert.
 
 ### Das Haus bauen

@@ -23,6 +23,21 @@
     }
   },
   "$defs": {
+    "icon": {
+      "description": "An icon: \"set:name\" (sets in src/model/iconSets.ts, e.g. \"lucide:sofa\", \"fluent:fire\") or a bare name of the place's own set; with a colour (one-colour sets only, e.g. Lucide) an object.",
+      "oneOf": [
+        { "type": "string", "pattern": "^([a-z][a-z0-9-]*:)?[a-z0-9]+(-[a-z0-9]+)*$" },
+        {
+          "type": "object",
+          "required": ["icon", "color"],
+          "additionalProperties": false,
+          "properties": {
+            "icon": { "type": "string", "pattern": "^([a-z][a-z0-9-]*:)?[a-z0-9]+(-[a-z0-9]+)*$" },
+            "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "#rrggbb" }
+          }
+        }
+      ]
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]{0,39}$",
@@ -89,9 +104,8 @@
         "id": { "$ref": "#/$defs/id" },
         "title": { "type": "string", "minLength": 1, "maxLength": 30, "description": "Short text in the navigation bar." },
         "icon": {
-          "type": "string",
-          "pattern": "^[a-z0-9-]+$",
-          "description": "Name of a Lucide icon from the app's list (src/model/pageIcons.ts)."
+          "$ref": "#/$defs/icon",
+          "description": "The page's icon in the navigation bar: a Lucide name from the app's list (src/model/pageIcons.ts, e.g. \"sofa\"), \"set:name\" for another set (\"fluent:fire\"), { \"icon\": \"lucide:sofa\", \"color\": \"#7aa2ff\" } for a colour, or \"none\" for the title alone."
         },
         "components": {
           "type": "array",
@@ -136,7 +150,17 @@
         "type": { "const": "view" },
         "view": { "$ref": "#/$defs/id", "description": "Id of a view in views/." },
         "area": { "$ref": "#/$defs/area" },
-        "frame": { "type": "boolean", "description": "Drawn with a frame and its title." }
+        "frame": { "type": "boolean", "description": "Drawn with a frame and its title." },
+        "hideLabels": {
+          "type": "boolean",
+          "description": "The view shows no temperatures, indicators or weather panel, only the house. Default false."
+        },
+        "labelScale": {
+          "type": "number",
+          "minimum": 30,
+          "maximum": 150,
+          "description": "Size of the view's temperatures, indicators and weather panel in percent of their usual size. Default 100."
+        }
       }
     },
     "widgetComponent": {

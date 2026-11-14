@@ -37,7 +37,7 @@ unter Windows und auf Android-Tablets.
 3. Festlegen, wie du das Haus sehen willst (Ansichten), und die Ansichten auf Seiten für PC und
    Tablet verteilen.
 
-Erst mal schauen? Startbildschirm und Menü bieten **Demo**: ein ausgedachtes Haus mit Live-Werten,
+Erst mal schauen? Der Startbildschirm bietet das **Demo-Haus**, das Menü unter **Vorführungen …** auch kurze Filme davon: ein ausgedachtes Haus mit Live-Werten,
 ganz ohne Miniserver.
 
 HouseVis liest nur aus dem Miniserver. Geschaltet wird in der Loxone-Oberfläche, die eine Seite

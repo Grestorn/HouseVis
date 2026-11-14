@@ -37,7 +37,7 @@ Windows and on Android tablets.
 3. Choose how you want to see the house (views), and put the views on pages for your PC and
    your tablet.
 
-Not sure yet? The start screen and the menu offer **Demo**: a made-up house with live values,
+Not sure yet? The start screen offers the **demo house**, the menu under **Playbacks …** also short clips of it: a made-up house with live values,
 no Miniserver needed.
 
 HouseVis only reads from your Miniserver. Switching is done in the Loxone interface, which a

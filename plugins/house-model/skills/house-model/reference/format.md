@@ -382,7 +382,11 @@ main roof's ridge). At most one.
 Icons that appear while a datapoint is in some state: music playing, mail in the mailbox, the
 washing machine done. Mapping the datapoints: `loxone-mapping.md` (audio zones there). The
 icon per kind is the user's choice (menu "Globale Einstellungen …"); a kind you invent gets a
-placeholder until they pick one, so say so.
+placeholder until they pick one, so say so. If they ask you to set one, `global.json`
+`indicators` takes per kind a Fluent Emoji name (`"fire"`), another set's icon as `"set:name"`
+(`"lucide:flame"`, a one-colour outline icon), the latter with a colour as
+`{ "icon": "lucide:flame", "color": "#ff6b5b" }`, or `"hidden"`; only names the app carries load
+(the check names a wrong one).
 
 - **One thing is one indicator; its states are rules.** The rules are checked in order, the first
   matching one applies, and it may name another `kind` (another icon) for its state. A rule

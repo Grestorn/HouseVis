@@ -204,6 +204,11 @@ view keeps its own in `labels`, keyed by area id:
   positions. A label without offset still floats over the visible floor. A pinned room name's
   `shift` runs along its wall (in the order of the wall id's end points), not to the right in the
   image.
+- A room name can lie on the floor (2026-11-13): `"name": { "floor": true, "offset": [east, north] }`,
+  the offset from the area's centroid like the temperature's (without one: the middle of the
+  visible floor). It runs along the room edge closest to left-right in the image and reads left
+  to right. Without a name setting, views looking down at least about 20° put the name on the
+  floor where the camera sees the floor more squarely than the wall it would take.
 - The conversion copied each area's settings into every view that cuts the area open, exactly where
   they took effect before; the picture stayed pixel-identical.
 
@@ -222,8 +227,10 @@ An indicator names its **kind** (`"kind": "music"`, `^[a-z][a-z0-9-]{0,39}$`) in
 icon per kind is a global setting (`config/global.json`, `${CLAUDE_PLUGIN_ROOT}/skills/house-model/schema/global.schema.json`, dialog
 "Globale Einstellungen …"), chosen from about a thousand Fluent Emoji (colour) that look the same
 on every platform (`src/model/indicatorIcons.ts` with the hand-picked suggestions, the full list
-generated into `src/model/generated/indicatorIconNames.ts`, files in `src/ui/indicatorIcons/`; the
-picker searches their Unicode CLDR names in German and English, `tools/indicator-icons.mjs`). The rule's
+generated into `src/model/generated/indicatorIconNames.ts`, files in `src/ui/icons/fluent/`; the
+picker searches their Unicode CLDR names in German and English, `tools/indicator-icons.mjs`); since
+2026-11-12 also from the other sets, as `"set:name"`, with a colour for one-colour ones
+(a bare name stays Fluent). The rule's
 `color` is gone: it tinted a text emoji and does nothing on an image. "heating", "cooling" and the
 heat controller's modes ("comfort", "eco", "paused", "protection") are kinds of the rooms' own.
 The owner's `config/`, `plans/<project>/config` and the test fixture were converted once

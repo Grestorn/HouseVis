@@ -1,0 +1,364 @@
+{
+  "title": {
+    "de": "Wetter im Zeitraffer",
+    "en": "Weather time-lapse"
+  },
+  "window": {
+    "width": 1920,
+    "height": 1080
+  },
+  "language": "de",
+  "lightMode": "real",
+  "chrome": "none",
+  "seed": 1,
+  "scenario": "static",
+  "start": {
+    "obs": true
+  },
+  "end": {
+    "hold": 2,
+    "quit": true
+  },
+  "view": "suedwest",
+  "weather": true,
+  "initial": {
+    "aussen.wettertyp": 1,
+    "aussen.helligkeit": 0.3,
+    "aussen.sonne": 0,
+    "aussen.regen": 0,
+    "aussen.windwarnung": 0,
+    "aussen.wind": 4,
+    "aussen.windrichtung": 250,
+    "aussen.temperatur": 6,
+    "aussen.gefuehlt": 5,
+    "aussen.feuchte": 80,
+    "light.wohnen.decke": "temp(85,2700)",
+    "light.wohnen.essen": "hsv(32,70,90)",
+    "light.diele": "temp(70,3000)",
+    "light.kind-1": "hsv(280,50,80)",
+    "light.aussen.weg": "temp(80,2700)",
+    "light.aussen.eingang": "temp(100,3000)"
+  },
+  "camera": [
+    {
+      "t": 0,
+      "azimuth": 205,
+      "elevation": 8
+    },
+    {
+      "t": 47,
+      "azimuth": 255,
+      "elevation": 8
+    }
+  ],
+  "events": [
+    {
+      "t": 2,
+      "set": {
+        "aussen.helligkeit": 30000
+      },
+      "ramp": 5,
+      "curve": "log"
+    },
+    {
+      "t": 2,
+      "set": {
+        "aussen.temperatur": 15,
+        "aussen.gefuehlt": 15,
+        "aussen.feuchte": 60,
+        "aussen.wind": 6
+      },
+      "ramp": 5
+    },
+    {
+      "t": 5,
+      "set": {
+        "light.wohnen.decke": "temp(0,2700)",
+        "light.wohnen.essen": "hsv(32,70,0)",
+        "light.diele": "temp(0,3000)",
+        "light.kind-1": "hsv(280,50,0)"
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 5.5,
+      "set": {
+        "light.aussen.weg": "temp(0,2700)",
+        "light.aussen.eingang": "temp(0,3000)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 6.5,
+      "set": {
+        "aussen.sonne": 1
+      }
+    },
+    {
+      "t": 8,
+      "set": {
+        "aussen.wettertyp": 3
+      }
+    },
+    {
+      "t": 8,
+      "set": {
+        "aussen.helligkeit": 22000
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 8,
+      "set": {
+        "aussen.wind": 12,
+        "aussen.gefuehlt": 14
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 11,
+      "set": {
+        "aussen.wettertyp": 5,
+        "aussen.sonne": 0
+      }
+    },
+    {
+      "t": 11,
+      "set": {
+        "aussen.helligkeit": 8000
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 11,
+      "set": {
+        "aussen.wind": 14,
+        "aussen.temperatur": 14,
+        "aussen.gefuehlt": 12,
+        "aussen.feuchte": 70
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 14,
+      "set": {
+        "aussen.wettertyp": 11,
+        "aussen.regen": 1
+      }
+    },
+    {
+      "t": 14,
+      "set": {
+        "aussen.helligkeit": 5000
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 14,
+      "set": {
+        "aussen.wind": 22,
+        "aussen.temperatur": 12,
+        "aussen.gefuehlt": 9,
+        "aussen.feuchte": 92
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 17,
+      "set": {
+        "aussen.wettertyp": 18,
+        "aussen.windwarnung": 1
+      }
+    },
+    {
+      "t": 17,
+      "set": {
+        "aussen.helligkeit": 1500
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 17,
+      "set": {
+        "aussen.wind": 64,
+        "aussen.gefuehlt": 6
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 20,
+      "set": {
+        "aussen.wettertyp": 21,
+        "aussen.regen": 0,
+        "aussen.windwarnung": 0
+      }
+    },
+    {
+      "t": 20,
+      "set": {
+        "aussen.helligkeit": 4000
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 20,
+      "set": {
+        "aussen.wind": 14,
+        "aussen.temperatur": -2,
+        "aussen.gefuehlt": -5,
+        "aussen.feuchte": 90
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 23,
+      "set": {
+        "aussen.wettertyp": 26,
+        "aussen.regen": 1
+      }
+    },
+    {
+      "t": 23,
+      "set": {
+        "aussen.temperatur": 1,
+        "aussen.gefuehlt": -2
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 26,
+      "set": {
+        "aussen.wettertyp": 6,
+        "aussen.regen": 0
+      }
+    },
+    {
+      "t": 26,
+      "set": {
+        "aussen.helligkeit": 2500
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 26,
+      "set": {
+        "aussen.wind": 3,
+        "aussen.temperatur": 4,
+        "aussen.gefuehlt": 4,
+        "aussen.feuchte": 98
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 29,
+      "set": {
+        "aussen.wettertyp": 2,
+        "aussen.sonne": 1
+      }
+    },
+    {
+      "t": 29,
+      "set": {
+        "aussen.helligkeit": 26000
+      },
+      "ramp": 1.5,
+      "curve": "log"
+    },
+    {
+      "t": 29,
+      "set": {
+        "aussen.wind": 8,
+        "aussen.temperatur": 15,
+        "aussen.gefuehlt": 15,
+        "aussen.feuchte": 60
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 32,
+      "set": {
+        "aussen.helligkeit": 0.3
+      },
+      "ramp": 6,
+      "curve": "log"
+    },
+    {
+      "t": 32,
+      "set": {
+        "aussen.temperatur": 8,
+        "aussen.gefuehlt": 7,
+        "aussen.feuchte": 75,
+        "aussen.wind": 4
+      },
+      "ramp": 6
+    },
+    {
+      "t": 34,
+      "set": {
+        "aussen.sonne": 0
+      }
+    },
+    {
+      "t": 35,
+      "set": {
+        "aussen.wettertyp": 1
+      }
+    },
+    {
+      "t": 35,
+      "set": {
+        "light.wohnen.decke": "temp(85,2700)",
+        "light.wohnen.essen": "hsv(32,70,90)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 36,
+      "set": {
+        "light.diele": "temp(70,3000)",
+        "light.kind-1": "hsv(280,50,80)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 37,
+      "set": {
+        "light.eltern": "hsv(20,55,60)",
+        "light.bad": "temp(90,4000)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 37.5,
+      "set": {
+        "light.aussen.weg": "temp(80,2700)",
+        "light.aussen.eingang": "temp(100,3000)",
+        "light.pavillon": "hsv(45,80,70)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 41,
+      "set": {
+        "aussen.wettertyp": 21
+      }
+    },
+    {
+      "t": 41,
+      "set": {
+        "aussen.temperatur": -1,
+        "aussen.gefuehlt": -3,
+        "aussen.feuchte": 90,
+        "aussen.wind": 10
+      },
+      "ramp": 1.5
+    }
+  ],
+  "duration": 47
+}

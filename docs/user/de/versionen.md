@@ -5,6 +5,48 @@
 Was sich in jeder Version für dich geändert hat. Das Plugin mit der App zusammen aktualisieren
 (`/plugin marketplace update housevis`, [Kapitel 2](2-hausmodell.md)).
 
+## 0.9.3
+
+**Wichtig fürs Tablet:** Eine Konfiguration mit den neuen Symbolen (aus einem anderen Satz, mit
+Farbe, oder eine Seite ohne Symbol) lädt nicht in einer App vor 0.9.3. Die Android-App zusammen mit
+der Windows-App aktualisieren, bevor du so eine Konfiguration exportierst. Unveränderte
+Konfigurationen laden weiter auch in älteren Apps.
+
+**Das Haus ansehen**
+- **Vorführungen …** (Menü): die Filme des Demo-Hauses aus dem Forum laufen in der App, dazu
+  eigene für dein Haus, die der KI-Assistent anlegt, mit ausgedachten oder den aktuellen Werten;
+  „Dauerschleife" lässt sie endlos laufen. Ersetzt Demo, Wetter-Demo und Vorführung im Menü.
+- **Raumnamen auf dem Boden:** Ansichten, die von oben auf ein Stockwerk schauen, legen Namen von
+  selbst auf den Boden, wo keine Wand sie gut zeigt; im Ansichten-Editor lässt sich ein Name auf
+  den Boden ziehen und zurück.
+- **Dachschrägen** erscheinen nur noch, wo man sie von innen sieht; von oben springt die Schräge
+  nicht mehr von einer Seite auf die andere.
+- Fenster und Türen in massiven Außenwänden haben keinen verschobenen zweiten Rahmen mehr.
+- Fenster und Rollläden bewegen sich bei jeder Bildrate gleich schnell (auf dem Tablet waren sie
+  zu langsam).
+
+**Seiten und Einstellungen**
+- **Symbole aus drei Sätzen** für Seiten und Anzeigen: Fluent Emoji farbig oder einfarbig, Lucide;
+  einfarbige in einer Farbe deiner Wahl; eine Seite kann ohne Symbol auskommen. Ein Auswahlfenster
+  mit Gruppen und Suche für beides.
+- Geräte-Editor: **Seiten auf ein anderes Gerät kopieren** (Rechtsklick auf eine Seite, oder auf
+  ein Gerät für alle seine Seiten); je Ansicht auf einer Seite **Temperaturen und Anzeigen
+  ausblenden** oder ihre **Größe** (30–150 %) ändern; die Vorschau passt auch für Hochformat-Seiten.
+- **Globale Einstellungen** in zwei Seiten (Optionen, Symbole); neu: die **Größe der
+  Loxone-Seite** (Standard 90 %), damit z. B. der Ambient-Modus der Loxone-App Platz hat.
+- Menü in Gruppen; „Haus-Assistent …" heißt jetzt **KI-Assistent …**.
+- **Gerät exportieren …** schlägt den Ordner des letzten Exports vor.
+
+**Android-Tablet**
+- **Vollbild:** Statusleiste und Navigationstasten sind ausgeblendet (ein Wisch vom Rand zeigt sie
+  kurz).
+- **Die geladene Konfigurationsdatei wird beobachtet:** ändert sie sich (z. B. durch ein
+  Sync-Programm wie QFile Pro), liest die App sie von selbst neu ein. „Konfiguration wird
+  geladen …" deckt das Laden ab.
+- **Einstellungen …** (Menü): Sprache und Größe der Loxone-Seite nur für dieses Tablet.
+- Loxone-UI-Anmeldung: nach dem Speichern meldet sich die Loxone-Seite gleich an; das Kennwort
+  lässt sich vor dem Senden anzeigen.
+
 ## 0.9.2
 
 **Hausmodell**

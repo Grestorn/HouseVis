@@ -97,7 +97,7 @@
         "additionalProperties": false,
         "properties": {
           "name": {
-            "description": "\"hidden\" for no name on the wall (e.g. when one name is enough for several floors), or where it sits: \"wall\" (id of one of the area's walls facing away from the camera; default the automatic choice), \"shift\" in meters along it (with \"wall\" from the wall's middle towards the end of its id, so it stays put when the camera changes; without, from the automatic spot to the right in the image), \"height\" of the text center above the floor (default just above it).",
+            "description": "\"hidden\" for no name (e.g. when one name is enough for several floors), or where it sits. On a wall: \"wall\" (id of one of the area's walls facing away from the camera; default the automatic choice), \"shift\" in meters along it (with \"wall\" from the wall's middle towards the end of its id, so it stays put when the camera changes; without, from the automatic spot to the right in the image), \"height\" of the text center above the floor (default just above it). Or lying on the floor, reading left to right in the image: \"floor\": true, with \"offset\" [east, north] in meters from the area's centroid (default the middle of the visible floor). Without a setting the name takes the automatic wall, or the floor in views looking down steeply enough to see it better than that wall.",
             "oneOf": [
               { "const": "hidden" },
               {
@@ -107,6 +107,15 @@
                   "wall": { "type": "string" },
                   "shift": { "type": "number" },
                   "height": { "type": "number", "minimum": 0 }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["floor"],
+                "additionalProperties": false,
+                "properties": {
+                  "floor": { "const": true },
+                  "offset": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
                 }
               }
             ]

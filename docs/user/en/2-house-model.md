@@ -54,7 +54,7 @@ Put everything into one folder per house, e.g. `C:\Users\<you>\HouseVis-Projects
 
 1. Create an API key at [platform.claude.com](https://platform.claude.com) (**API Keys**; add
    a payment method under **Billing** first). It starts with `sk-ant-`.
-2. HouseVis: menu → **House assistant …**, paste the key. It is stored encrypted on this PC only.
+2. HouseVis: menu → **AI assistant …**, paste the key. It is stored encrypted on this PC only.
 
 ### Build the house
 

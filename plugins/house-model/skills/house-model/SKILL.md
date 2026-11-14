@@ -69,6 +69,7 @@ the user calls them.
 | `<model folder>/house.json` | skill | the model; the folder is chosen in step 0 |
 | `<model folder>/datapoints.json` | skill | Loxone mapping (block 7) |
 | `<model folder>/devices.json`, `views/` | `house:check --views` | eight check views |
+| `<model folder>/playbacks/<id>.json` | skill (block 10) | playbacks for the app's "Vorführungen …" panel |
 | `test-output/house-check/` | `house:check` | plan drawings and renders for comparison |
 | `test-output/plan-tiles/<file>[-p<page>]/` | `plans:tiles` | full-resolution tiles of plan sheets and scans |
 
@@ -78,7 +79,7 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
-**First, once per session: check the versions.** This skill was built for HouseVis 0.9.2.
+**First, once per session: check the versions.** This skill was built for HouseVis 0.9.3.
 Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
 the user before anything else, in their language:
 - **The app is newer:** this skill is out of date and may not know what the app reads now. Update
@@ -106,6 +107,8 @@ works in.
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder>           # 3D renders, one per page and per view
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --lit=lights --lux 1
                                                          # the same at night, lamps on, rooms dark
+"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --playback <id> --at 0,30,60
+                                                         # moments of a playback (block 10)
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles plans/<project>/<file> [--pages 2] [--rotate 270]
                                                          # PDF page or scan → full-resolution tiles
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --config-folder                                    # the folder the app shows a house from
@@ -272,6 +275,14 @@ update `model-notes.md`.
    `data`). Run `house:check` and render; show where it stands. Then tell the user: a page can
    show the current weather as its sky with rain or snow over it, switched on per page in the
    device editor ("Aktuelles Wetter anzeigen"); the menu's "Wetter-Demo" shows every weather type.
+
+10. **Playbacks** (optional; offer them once the house is mapped, and whenever the user asks for
+   one: "mach eine Vorführung wie ‚Ein Tag in zwei Minuten' für mein Haus"). Clips the app plays
+   from its menu **Vorführungen …**: made up ("a day in my life", every shown value set by the
+   script) or over the live values ("my house as it is now", usually only a camera tour). Ask which
+   one, then write `playbacks/<id>.json` in the `<model folder>` as in
+   [reference/playbacks.md](reference/playbacks.md), check it with `house:check` and look at
+   `house:render -- … --playback <id> --at …`.
 
 Views and devices (pages) for everyday use are not part of this skill: the user makes them in the
 Windows app (menus "Ansichten bearbeiten …" and "Geräte / Seiten bearbeiten …"); the check views are only
