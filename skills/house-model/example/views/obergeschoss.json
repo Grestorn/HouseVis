@@ -1,0 +1,14 @@
+{
+  "title": "Obergeschoss",
+  "camera": { "azimuth": 160, "elevation": 40 },
+  "fill": 0.95,
+  "rooms": ["eltern", "bad", "flur-og", "kind-1", "kind-2", "studio"],
+  "roofs": { "main": "hidden" },
+  "labels": {
+    "studio": { "temperature": { "offset": [0.38, 0.42] } },
+    "kind-2": { "temperature": { "offset": [0.25, -0.2] } },
+    "kind-1": { "temperature": { "offset": [0.05, -0.77] }, "indicators": { "offset": [-0.02, 0.89] } },
+    "eltern": { "temperature": { "offset": [0.18, -0.63] } },
+    "bad": { "temperature": { "height": 1.52, "offset": [-0.83, 0.26] }, "indicators": { "height": 2.1, "offset": [0.67, -0.1] } }
+  }
+}

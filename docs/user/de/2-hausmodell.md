@@ -58,6 +58,12 @@ Leg alles in einen Ordner pro Haus, z. B. `C:\Users\<du>\HouseVis-Projekte\plans
 2. HouseVis: Menü → **KI-Assistent …**, Schlüssel einfügen. Er wird nur auf diesem PC
    verschlüsselt gespeichert.
 
+**Ein anderer Dienst statt Anthropic (z. B. DeepSeek):** Hake im selben Formular **Anderer Dienst
+mit Anthropics API** an und trag Adresse, Modell und Schlüssel ein; für DeepSeek
+`https://api.deepseek.com/anthropic` und `deepseek-flash` (sein Modell, das Pläne sehen kann).
+Von uns nicht getestet; die App zeigt dann keine Kosten, und dein Hausmodell, deine Nachrichten,
+Pläne und Fotos gehen an diesen Dienst, zu dessen Bedingungen (DeepSeek verarbeitet sie in China).
+
 ### Das Haus bauen
 
 1. **Anhängen …** für Pläne, Fotos und Notizen (z. B. `plan-changes.txt`), oder sie auf das
@@ -162,6 +168,30 @@ führt seine Notizen in `plans/mein-haus/model-notes.md`.
 Sag, was falsch ist, z. B. *„Das Badfenster in plans/mein-haus liegt 20 cm zu weit rechts."* Claude
 ändert nur das und zeigt dir das Ergebnis. *„Zeig mir die Seiten mit den Live-Werten"* liefert
 Bilder deiner Seiten, wie die App sie gerade zeigt.
+
+### Andere KI-Agenten (Codex, Gemini CLI, Mistral Vibe)
+
+Denselben Skill gibt es auch als einfachen Skill-Ordner für Agenten, die Skills (`SKILL.md`)
+lesen: **OpenAI Codex**, **Gemini CLI**, **Mistral Vibe**. **Von uns nicht getestet:** Der Skill
+ist mit Claude gebaut und gemessen; wie gut ein anderes Modell Baupläne liest, hängt von diesem
+Modell ab. Es muss Bilder ansehen können; kann es das nicht, sagt es das.
+
+1. Installiere HouseVis auf demselben PC ([Kapitel 1](1-installation.md)).
+2. Lade [dieses Repository](https://github.com/Grestorn/HouseVis) herunter (**Code → Download
+   ZIP**) und kopiere seinen Ordner `skills\house-model` in den Skill-Ordner deines Agenten:
+
+   | Agent | Skill-Ordner |
+   |---|---|
+   | OpenAI Codex | `%USERPROFILE%\.codex\skills\` |
+   | Gemini CLI | `%USERPROFILE%\.gemini\skills\` |
+   | Mistral Vibe | `%USERPROFILE%\.vibe\skills\` |
+
+3. Starte den Agenten in dem Ordner, in dem `plans\` liegt, und mach weiter wie oben unter
+   [Das Haus bauen](#das-haus-bauen-1).
+
+**Updates:** Nach einer neuen HouseVis-Version kopierst du den Ordner neu. Der Skill merkt eine
+andere Version und sagt es dir. **Datenschutz:** Deine Pläne und Fotos gehen dann an den Anbieter
+dieses Agenten, zu dessen Bedingungen.
 
 ## 4. Nach dem Modell: Ansichten und Seiten
 

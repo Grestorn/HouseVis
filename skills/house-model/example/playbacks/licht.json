@@ -1,0 +1,189 @@
+{
+  "title": {
+    "de": "Licht am Abend",
+    "en": "Lights in the evening"
+  },
+  "window": {
+    "width": 1920,
+    "height": 1080
+  },
+  "language": "de",
+  "lightMode": "real",
+  "chrome": "none",
+  "seed": 1,
+  "scenario": "static",
+  "start": {
+    "obs": true
+  },
+  "end": {
+    "hold": 2,
+    "quit": true
+  },
+  "view": "suedwest",
+  "weather": true,
+  "initial": {
+    "aussen.wettertyp": 1,
+    "aussen.helligkeit": 9000,
+    "aussen.sonne": 1,
+    "aussen.regen": 0,
+    "aussen.windwarnung": 0,
+    "aussen.wind": 5,
+    "aussen.windrichtung": 250,
+    "aussen.temperatur": 14,
+    "aussen.gefuehlt": 14,
+    "aussen.feuchte": 60
+  },
+  "camera": [
+    {
+      "t": 0,
+      "azimuth": 215,
+      "elevation": 8,
+      "zoom": 1,
+      "target": [
+        3.4,
+        4.75,
+        4.9
+      ]
+    },
+    {
+      "t": 10,
+      "azimuth": 208,
+      "elevation": 8,
+      "zoom": 1,
+      "target": [
+        3.4,
+        4.75,
+        4.9
+      ]
+    },
+    {
+      "t": 15,
+      "azimuth": 202,
+      "elevation": 12,
+      "zoom": 0.5,
+      "target": "room:wohnen",
+      "ease": "inOut"
+    },
+    {
+      "t": 24,
+      "azimuth": 198,
+      "elevation": 12,
+      "zoom": 0.5,
+      "target": "room:wohnen"
+    },
+    {
+      "t": 30,
+      "azimuth": 190,
+      "elevation": 8,
+      "zoom": 1,
+      "target": [
+        3.4,
+        4.75,
+        4.9
+      ],
+      "ease": "inOut"
+    }
+  ],
+  "events": [
+    {
+      "t": 1,
+      "set": {
+        "aussen.helligkeit": 0.3
+      },
+      "ramp": 8,
+      "curve": "log"
+    },
+    {
+      "t": 1,
+      "set": {
+        "aussen.temperatur": 9,
+        "aussen.gefuehlt": 8,
+        "aussen.feuchte": 70
+      },
+      "ramp": 8
+    },
+    {
+      "t": 5,
+      "set": {
+        "aussen.sonne": 0
+      }
+    },
+    {
+      "t": 6,
+      "set": {
+        "light.wohnen.decke": "temp(85,2700)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 6.8,
+      "set": {
+        "light.wohnen.essen": "hsv(32,70,90)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 7.6,
+      "set": {
+        "light.diele": "temp(70,3000)",
+        "light.hobbyraum": "hsv(200,60,80)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 8.4,
+      "set": {
+        "light.kind-1": "hsv(280,50,80)",
+        "light.eltern": "hsv(20,55,60)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 9.2,
+      "set": {
+        "light.bad": "temp(90,4000)",
+        "light.arbeitszimmer": "temp(100,4000)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 10,
+      "set": {
+        "light.aussen.weg": "temp(80,2700)",
+        "light.aussen.eingang": "temp(100,3000)",
+        "light.pavillon": "hsv(45,80,70)"
+      },
+      "ramp": 1
+    },
+    {
+      "t": 16,
+      "set": {
+        "light.wohnen.decke": "temp(15,2700)"
+      },
+      "ramp": 2.5
+    },
+    {
+      "t": 19,
+      "set": {
+        "light.wohnen.essen": "hsv(280,80,100)"
+      },
+      "ramp": 2
+    },
+    {
+      "t": 21.5,
+      "set": {
+        "light.wohnen.essen": "hsv(200,80,100)"
+      },
+      "ramp": 1.5
+    },
+    {
+      "t": 23,
+      "set": {
+        "light.wohnen.decke": "temp(85,2700)",
+        "light.wohnen.essen": "hsv(32,70,90)"
+      },
+      "ramp": 1.5
+    }
+  ],
+  "duration": 30
+}

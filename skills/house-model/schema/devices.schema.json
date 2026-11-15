@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://housevis.local/schema/devices.schema.json",
+  "title": "HouseVis: devices",
+  "description": "The devices that show the house. Each device has, per orientation, a sequence of pages; a page shows views from the views/ folder placed on it, or the Loxone web interface alone. Which device the Windows app shows is chosen in its menu and stored; without a choice, \"default\" applies. See docs/devices.md.",
+  "type": "object",
+  "required": ["default", "devices"],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^(\\$schema|_.*)$": {
+      "description": "Reference to the schema or a comment; ignored."
+    }
+  },
+  "properties": {
+    "default": {
+      "$ref": "#/$defs/id",
+      "description": "Id of the device the Windows app shows without a choice of its own."
+    },
+    "devices": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/device" }
+    }
+  },
+  "$defs": {
+    "icon": {
+      "description": "An icon: \"set:name\" (sets in src/model/iconSets.ts, e.g. \"lucide:sofa\", \"fluent:fire\") or a bare name of the place's own set; with a colour (one-colour sets only, e.g. Lucide) an object.",
+      "oneOf": [
+        { "type": "string", "pattern": "^([a-z][a-z0-9-]*:)?[a-z0-9]+(-[a-z0-9]+)*$" },
+        {
+          "type": "object",
+          "required": ["icon", "color"],
+          "additionalProperties": false,
+          "properties": {
+            "icon": { "type": "string", "pattern": "^([a-z][a-z0-9-]*:)?[a-z0-9]+(-[a-z0-9]+)*$" },
+            "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "#rrggbb" }
+          }
+        }
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,39}$",
+      "description": "Lower-case letters, digits and hyphens, at most 40 characters (also UUIDs)."
+    },
+    "device": {
+      "type": "object",
+      "required": ["id", "name", "platform"],
+      "anyOf": [{ "required": ["landscape"] }, { "required": ["portrait"] }],
+      "additionalProperties": false,
+      "patternProperties": { "^_.*$": { "description": "Comment; ignored." } },
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "platform": {
+          "enum": ["desktop", "android", "ios"],
+          "description": "desktop: Windows, macOS and Linux (they behave the same); android; ios."
+        },
+        "aspect": {
+          "type": "object",
+          "description": "Screen shape in landscape as a ratio, e.g. 16:10; portrait swaps it. Only for the editor's preview.",
+          "required": ["width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+            "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+          }
+        },
+        "keepAwake": {
+          "type": "boolean",
+          "description": "While the app is on screen, the display neither dims nor sleeps (e.g. a wall tablet). Default false."
+        },
+        "presenceRoom": {
+          "$ref": "#/$defs/id",
+          "description": "A room of house.json with a presence datapoint: while it reports nobody there, the screen turns black (Android: lowest backlight) and the app keeps running; presence brings it back at once, and a tap wakes it for a minute. The screen then never sleeps, as with keepAwake."
+        },
+        "lightMode": {
+          "enum": ["real", "simple"],
+          "description": "How light sources are drawn on this device: real with three.js lights, simple with glowing bodies and painted pools of light, for weaker devices (docs/lights.md). Default: simple on android, real otherwise."
+        },
+        "reducedFrameRate": {
+          "type": "boolean",
+          "description": "Every animation (presence glow, anemometer, moving windows, clouds, rain, snow) steps 10 times a second instead of 30, for weak devices. Default false."
+        },
+        "landscape": { "$ref": "#/$defs/orientation" },
+        "portrait": { "$ref": "#/$defs/orientation", "description": "If missing, the landscape pages apply (and vice versa)." }
+      }
+    },
+    "orientation": {
+      "type": "object",
+      "required": ["pages"],
+      "additionalProperties": false,
+      "properties": {
+        "pages": { "type": "array", "items": { "$ref": "#/$defs/page" } }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": ["id", "title", "icon"],
+      "oneOf": [{ "required": ["components"] }, { "required": ["loxone"] }],
+      "additionalProperties": false,
+      "patternProperties": { "^_.*$": { "description": "Comment; ignored." } },
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 30, "description": "Short text in the navigation bar." },
+        "icon": {
+          "$ref": "#/$defs/icon",
+          "description": "The page's icon in the navigation bar: a Lucide name from the app's list (src/model/pageIcons.ts, e.g. \"sofa\"), \"set:name\" for another set (\"fluent:fire\"), { \"icon\": \"lucide:sofa\", \"color\": \"#7aa2ff\" } for a colour, or \"none\" for the title alone."
+        },
+        "components": {
+          "type": "array",
+          "description": "What the page shows, each placed in percent of the page: views, and optionally a clock and a date.",
+          "items": { "$ref": "#/$defs/component" }
+        },
+        "weather": {
+          "type": "boolean",
+          "description": "Only with components: the current weather as the page's sky behind all its views, rain or snow lightly over them (docs/weather.md). Needs the weather roles in house.json (\"data\"); drawn once however many views the page holds."
+        },
+        "loxone": {
+          "type": "object",
+          "description": "The Loxone web interface, alone and filling the page, wherever the user left it (it cannot be steered from outside). No settings yet.",
+          "additionalProperties": false,
+          "properties": {}
+        }
+      }
+    },
+    "area": {
+      "type": "object",
+      "description": "Position and size in percent of the page.",
+      "required": ["x", "y", "width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 100 },
+        "y": { "type": "number", "minimum": 0, "maximum": 100 },
+        "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": ["type"],
+      "properties": { "type": { "enum": ["view", "clock", "date"] } },
+      "oneOf": [{ "$ref": "#/$defs/viewComponent" }, { "$ref": "#/$defs/widgetComponent" }]
+    },
+    "viewComponent": {
+      "type": "object",
+      "required": ["type", "view", "area"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "view" },
+        "view": { "$ref": "#/$defs/id", "description": "Id of a view in views/." },
+        "area": { "$ref": "#/$defs/area" },
+        "frame": { "type": "boolean", "description": "Drawn with a frame and its title." },
+        "hideLabels": {
+          "type": "boolean",
+          "description": "The view shows no temperatures, indicators or weather panel, only the house. Default false."
+        },
+        "labelScale": {
+          "type": "number",
+          "minimum": 30,
+          "maximum": 150,
+          "description": "Size of the view's temperatures, indicators and weather panel in percent of their usual size. Default 100."
+        }
+      }
+    },
+    "widgetComponent": {
+      "type": "object",
+      "description": "clock: the current time; date: today's date in its long form with weekday and month. Both as the device's system settings format them (language and region, 12 or 24 hours), the text filling the area; drawn over the page's views. Each at most once per page.",
+      "required": ["type", "area"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["clock", "date"] },
+        "area": { "$ref": "#/$defs/area" }
+      }
+    }
+  }
+}

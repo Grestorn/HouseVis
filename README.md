@@ -43,7 +43,10 @@ your architect's plans and photos:
   /plugin install house-model@housevis
   ```
 
-Details on both ways, costs and what happens with your data: chapter 2 of the guide
+- **Other AI agents** (OpenAI Codex, Gemini CLI, Mistral Vibe): the same skill as a plain skill
+  folder, [`skills/house-model`](skills/house-model/SKILL.md); not tested by us.
+
+Details on these ways, costs and what happens with your data: chapter 2 of the guide
 ([Deutsch](docs/user/de/2-hausmodell.md) · [English](docs/user/en/2-house-model.md)).
 
 ## Licence

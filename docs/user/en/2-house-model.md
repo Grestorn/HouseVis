@@ -56,6 +56,12 @@ Put everything into one folder per house, e.g. `C:\Users\<you>\HouseVis-Projects
    a payment method under **Billing** first). It starts with `sk-ant-`.
 2. HouseVis: menu → **AI assistant …**, paste the key. It is stored encrypted on this PC only.
 
+**Another service instead of Anthropic (e.g. DeepSeek):** tick **Another service with
+Anthropic's API** in the same form and enter its address, model and key; for DeepSeek
+`https://api.deepseek.com/anthropic` and `deepseek-flash` (its model that can see plans). Not
+tested by us; the app shows no cost then, and your house model, messages, plans and photos go to
+that service, under its terms (DeepSeek processes them in China).
+
 ### Build the house
 
 1. **Attach …** your plans, photos and notes (e.g. `plan-changes.txt`), or drop them onto the
@@ -154,6 +160,30 @@ notes in `plans/my-house/model-notes.md`.
 Say what is wrong, e.g. *"The bathroom window in plans/my-house is 20 cm too far right."* Claude
 changes only that and shows you the result. *"Show me the pages with the live values"* gives
 pictures of your pages as the app shows them right now.
+
+### Other AI agents (Codex, Gemini CLI, Mistral Vibe)
+
+The same skill is also there as a plain skill folder for agents that read skills
+(`SKILL.md`): **OpenAI Codex**, **Gemini CLI**, **Mistral Vibe**. **Not tested by us:** the skill
+was built and measured with Claude, and how well another model reads building plans is up to
+that model. It must be able to look at pictures; if it cannot, it says so.
+
+1. Install HouseVis on the same PC ([chapter 1](1-install.md)).
+2. Download [this repository](https://github.com/Grestorn/HouseVis) (**Code → Download ZIP**) and
+   copy its folder `skills\house-model` into the skills folder of your agent:
+
+   | Agent | Skills folder |
+   |---|---|
+   | OpenAI Codex | `%USERPROFILE%\.codex\skills\` |
+   | Gemini CLI | `%USERPROFILE%\.gemini\skills\` |
+   | Mistral Vibe | `%USERPROFILE%\.vibe\skills\` |
+
+3. Start the agent in the folder that holds `plans\` and go on as under
+   [Build the house](#build-the-house-1) above.
+
+**Updates:** after a new HouseVis version, copy the folder again. The skill notices a different
+version and tells you. **Privacy:** your plans and photos then go to that agent's provider, under
+its terms.
 
 ## 4. After the model: views and pages
 
