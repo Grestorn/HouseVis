@@ -44,7 +44,10 @@ your architect's plans and photos:
   ```
 
 - **Other AI agents** (OpenAI Codex, Gemini CLI, Mistral Vibe): the same skill as a plain skill
-  folder, [`skills/house-model`](skills/house-model/SKILL.md); not tested by us.
+  folder, [`skills/house-model`](skills/house-model/SKILL.md); not tested by us. Install HouseVis,
+  copy that folder into your agent's skills folder (`%USERPROFILE%\.codex\skills\`,
+  `%USERPROFILE%\.gemini\skills\` or `%USERPROFILE%\.vibe\skills\`) and start the agent in the
+  folder that holds your `plans\`; no need to clone this repository.
 
 Details on these ways, costs and what happens with your data: chapter 2 of the guide
 ([Deutsch](docs/user/de/2-hausmodell.md) · [English](docs/user/en/2-house-model.md)).

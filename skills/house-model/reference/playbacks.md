@@ -112,10 +112,10 @@ For a live playback, "as it is right now": `base` `live`, one view or page, a ca
 
 ## Check
 
-- `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder>` checks every playback against the house and lists what
+- `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check <model folder>` checks every playback against the house and lists what
   is wrong as `playbacks/<id>.json: …` (an unknown datapoint, page or view, a value that does not
   fit). A broken playback is not offered in the app.
-- `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --playback <id> --at 0,30,60,90,120` renders those
+- `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --render <model folder> --playback <id> --at '0,30,60,90,120'` renders those
   moments (`playback-<id>-<t>s.png`; a `live` playback shows only its own values there, add `--live`
   for the Miniserver's underneath). Look at them:
   is it dark when it should be, are the right lights on, does the camera show what it should.

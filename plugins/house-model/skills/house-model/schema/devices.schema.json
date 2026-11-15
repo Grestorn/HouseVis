@@ -109,7 +109,7 @@
         },
         "components": {
           "type": "array",
-          "description": "What the page shows, each placed in percent of the page: views, and optionally a clock and a date.",
+          "description": "What the page shows, each placed in percent of the page: views, and optionally a clock, a date and data panels.",
           "items": { "$ref": "#/$defs/component" }
         },
         "weather": {
@@ -139,8 +139,58 @@
     "component": {
       "type": "object",
       "required": ["type"],
-      "properties": { "type": { "enum": ["view", "clock", "date"] } },
-      "oneOf": [{ "$ref": "#/$defs/viewComponent" }, { "$ref": "#/$defs/widgetComponent" }]
+      "properties": { "type": { "enum": ["view", "clock", "date", "panel"] } },
+      "oneOf": [{ "$ref": "#/$defs/viewComponent" }, { "$ref": "#/$defs/widgetComponent" }, { "$ref": "#/$defs/panelComponent" }]
+    },
+    "panelComponent": {
+      "type": "object",
+      "description": "A data panel: Loxone values side by side, each with an optional icon and name and the value in its format; drawn over the page's views like the clock (docs/values.md). A page may hold several.",
+      "required": ["type", "id", "area", "entries"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "panel" },
+        "id": { "$ref": "#/$defs/id", "description": "Unique among the page's panels." },
+        "area": { "$ref": "#/$defs/area" },
+        "direction": {
+          "enum": ["horizontal", "vertical"],
+          "description": "The entries next to each other (horizontal, the default) or one below the other."
+        },
+        "frame": { "type": "boolean", "description": "Drawn on a dark plate with a border." },
+        "entries": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/panelEntry" } }
+      }
+    },
+    "panelEntry": {
+      "type": "object",
+      "description": "One value of a data panel. More fields may come (e.g. icons depending on the value).",
+      "required": ["id", "loxone"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id", "description": "Unique within the panel." },
+        "loxone": { "$ref": "#/$defs/loxoneAddress" },
+        "name": { "type": "string", "maxLength": 60, "description": "Shown with the value; absent or empty: no name." },
+        "icon": {
+          "$ref": "#/$defs/icon",
+          "description": "\"set:name\" (a bare name is Fluent), or with a colour an object; absent: no icon."
+        },
+        "format": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Loxone's format of the value, copied from the structure file, e.g. \"%.1f kWh\" or \"%.0f%%\". Absent: the number as it is."
+        }
+      }
+    },
+    "loxoneAddress": {
+      "description": "A state of a Loxone control, as in datapoints.json: the control's UUID (uuidAction, a subcontrol with a suffix such as \"/AI1\") and the name of the state.",
+      "type": "object",
+      "required": ["control", "state"],
+      "additionalProperties": false,
+      "properties": {
+        "control": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{16}(/[A-Za-z0-9]+)?$"
+        },
+        "state": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]{0,63}$" }
+      }
     },
     "viewComponent": {
       "type": "object",

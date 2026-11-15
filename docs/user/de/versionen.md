@@ -5,6 +5,50 @@
 Was sich in jeder Version für dich geändert hat. Das Plugin mit der App zusammen aktualisieren
 (`/plugin marketplace update housevis`, [Kapitel 2](2-hausmodell.md)).
 
+## 0.9.4
+
+**Wichtig fürs Tablet:** Eine Konfiguration mit einem Datenpanel oder einem Bodeneinbaustrahler
+lädt nicht in einer App vor 0.9.4. Die Android-App zusammen mit der Windows-App aktualisieren,
+bevor du so eine Konfiguration exportierst.
+
+**Seiten und Geräte**
+- **Datenpanels:** beliebige Werte aus Loxone auf einer Seite (PV-Leistung, Netzbezug, Batterie
+  …), je Wert mit Symbol, Name und dem Format, das Loxone angibt; im Geräte-Editor aus der Liste
+  der Werte des Miniservers gewählt, nach Raum und Kategorie gefiltert und durchsuchbar
+  ([Kapitel 3](3-app-benutzen.md#datenpanels)).
+- **Geräte-Editor aufgeräumt:** Geräte, Seiten und Panele in drei Spalten; das **+** öffnet eine
+  Auswahl (HouseVis- oder Loxone-Seite; Ansicht, Uhr, Datum oder Datenpanel); Panele klappen auf
+  und zu; die Panel-Liste ist die Reihenfolge von vorn nach hinten, Pfeile schieben eins nach vorn
+  oder hinten. **Quer/Hoch getrennt** ist jetzt eine Einstellung des Geräts.
+
+**Hausmodell mit anderen KI-Modellen**
+- **KI-Assistent mit DeepSeek:** Neben einem Anthropic-Schlüssel nimmt der Assistent auch einen
+  anderen Dienst mit Anthropics API, z. B. DeepSeek (`deepseek-flash`, sein Modell, das Pläne sehen
+  kann): im Schlüssel-Formular das Häkchen setzen, Adresse, Modell und Schlüssel eintragen. Von uns
+  nicht getestet; Kosten werden dann nicht angezeigt.
+- **Der Skill für Codex, Gemini CLI und Mistral Vibe:** Den Hausmodell-Skill gibt es auch als
+  einfachen Skill-Ordner für diese Agenten ([Kapitel 2](2-hausmodell.md#andere-ki-agenten-codex-gemini-cli-mistral-vibe));
+  von uns nicht getestet.
+- Seine Befehle stehen in PowerShell-Schreibweise, der Shell dieser Agenten unter Windows; ein
+  Ordner `plans\` in einer Kopie dieses Repositorys bleibt aus Git heraus.
+
+**Aus den ersten Rückmeldungen**
+- **Bodeneinbaustrahler** als eigene Leuchtenart: in Boden oder Terrasse eingelassen, strahlt nach
+  oben (Fassade, Säule, Baum).
+- **Räume ohne Datenpunkte** nennt die Prüfung des Modells; ist der Assistent mit dem Miniserver
+  verbunden (oder liegt beim Skill die `loxone-inventory.json` dabei), warnt sie bei jedem, dessen
+  Loxone-Raum Licht, Raumregler oder Präsenz hat: ein Raum, der dunkel bleibt, weil seine
+  Verknüpfung verloren ging, fällt so sofort auf.
+- **KI-Assistent:** Fehlermeldungen sagen, wie es richtig geht (z. B. die kleingeschriebene Id,
+  `lightColor` als Liste für mehrere Lichtsteuerungen eines Raums); eine Änderung, die Datenpunkte
+  entfernt, meldet das sofort. Die Testbilder brechen beim Start nicht mehr so leicht ab
+  („Starting the capture window did not finish"): mehr Zeit und ein zweiter Versuch.
+- Der Skill fragt bei Fotos ohne Seitenangabe gleich nach Seite und Standort, prüft nach einer
+  abgelehnten Änderung, ob alles angekommen ist, und nimmt mehrere Lichtsteuerungen eines Raums
+  zusammen.
+- **Mähroboter, Saugroboter und Kameras** bietet der Skill als Symbol an ihrem Platz an (Ladestation,
+  Tor), mit ihrem Zustand: mäht, lädt, Störung, Klingel.
+
 ## 0.9.3
 
 **Wichtig fürs Tablet:** Eine Konfiguration mit den neuen Symbolen (aus einem anderen Satz, mit

@@ -20,7 +20,7 @@
 | Loxone UI sign-in … | store the Loxone interface's user and password, so it does not ask after every start of the app (optional; the password then lies encrypted on the device, see the note in the dialog; only with an encrypted connection). After storing, the app shows the Loxone page and signs in at once; if Loxone refuses, the dialog opens again with a note |
 | AI assistant … | change the model with Claude ([chapter 2](2-house-model.md)) and more: create playbacks, check the mapping to Loxone |
 | Edit views … | from where you look, which rooms are open, what is left out |
-| Edit devices / pages … | which pages a PC, tablet or phone shows; per device also the light sources (realistic or simple) and a reduced frame rate for slower devices; export for the tablet |
+| Edit devices / pages … | which pages a PC, tablet or phone shows; per device also simple lighting and a reduced frame rate for slower devices; export for the tablet |
 | Global settings … | two pages, chosen on the left. **Options**: the app's language (otherwise the device's); size of the Loxone page (smaller fits more in, e.g. for the Loxone app's Ambient mode; default 90 %). **Symbols**: icons for heating, music, … from three sets: **Fluent Emoji** (colour), **Fluent Emoji (High Contrast)** (the same in one colour) and **Lucide** (plain lines); suggestions first, otherwise by group or with the search, e.g. "speaker" or "washing machine". One-colour icons take a **color** (default, one from the palette or "Custom …"; pick the color, then the icon). A state can also be hidden altogether ("Do not show", e.g. paused music) |
 | Configuration folder … | which house model the app shows |
 | Load configuration … | tablet only: load an exported file ([chapter 1](1-install.md)) |
@@ -58,19 +58,59 @@ Menu → **Edit views …**, then:
 
 ![Device editor](../images/en/device-editor.jpg)
 
-Menu → **Edit devices / pages …**: every device (PC, tablet, phone) has its pages. Add a
-**Page with views** and place one or several views on it (drag in the preview, which shows the views themselves), or a **Loxone
-page** with the Loxone interface. Per page: its **icon** in the page bar (from the same sets as the indicators, one-colour ones with a color, or "Show no icon"), **Show the current weather**, and **+ Clock** and
-**+ Date** (placed and sized like a view, always in front; the time and the long date with weekday
-and month as the device's system settings format them, e.g. 12 or 24 hours). Per view on the page:
+Menu → **Edit devices / pages …**: every device (PC, tablet, phone) has its pages. The **+** beside
+**Pages** adds a **HouseVis page** (views, clock, date and data panels, placed in the preview,
+which shows the views themselves) or a **Loxone UI** page with the Loxone interface. Per page: the
+**Title**, with its icon in the page bar in front of it (a click chooses it from the same sets as
+the indicators, one-colour ones with a color, or "Show no icon"), and **Show the current
+weather**. The **+** beside **Panels** adds what lies on the page: a **View** (beside it the views
+not on the page yet), **Clock**, **Date** (the time and the long date with weekday and month as the
+device's system settings format them, e.g. 12 or 24 hours) and **Data panel**. Only the chosen
+panel is open and marked in the preview; a click on its name opens or closes it. The list is also
+the order from front to back: what is higher lies in front and covers everything below it; the
+arrows at the top right of each panel move it one layer forward or back, the trash can removes it.
+
+![Adding to the page](../images/en/device-add-menu.jpg)
+
+Per view on the page:
 **With frame and title**, **Hide temperatures and indicators** (the house alone, e.g. for a small
 second view) and **Size of temperatures and indicators** (30 to 150 %; double-click the slider for
-100 %). Per device: **Allow sleep
-mode** (off for wall tablets) and **Automatic presence detection** (dark while nobody is in the
-room; the screen then stays on anyway). Right-click a page to copy it to another device, or a
-device to copy all its pages; where the target already has a page of the same name, it is
-replaced after asking. **Export device …** writes the file
+100 %).
+
+Per device (the **+** beside **Devices** adds one, the icons in its line duplicate or delete it):
+**Name**, **Platform** and **Aspect ratio**. **Separate orientations** gives the device pages of
+their own for landscape and portrait (otherwise the same in both); two small icons beside
+**Pages** then choose which list you edit, and beside **Preview** you see the page in either
+shape. Under **Settings**: **Allow sleep mode** (off for wall tablets), **Automatic presence
+detection** (dark while nobody is in the room; the screen then stays on anyway), **Simple
+lighting** and **Reduced frame rate** (both for weaker devices). Right-click a device to make it
+the **default** (the device the PC shows without a choice of its own) or to copy all its pages to
+another device; right-click a page to copy it. Where the target already has a page of the same
+name, it is replaced after asking.
+
+![Right-click on a device](../images/en/device-menu.jpg)
+ **Export device …** writes the file
 for the Android tablet ([chapter 1](1-install.md#android-tablet)).
+
+### Data panels
+
+![A data panel in the device editor](../images/en/data-panel.jpg)
+
+A **data panel** shows any values from Loxone on a page, e.g. the power of the PV system, the power
+drawn from the grid or the battery's charge: for each value an icon, a name and the number in the
+format Loxone gives for it (e.g. “%.2f kW”). **+** → **Data panel** adds one (in front of everything); it is placed and sized like
+the clock, and a page can hold several. Per panel: **Arrangement** (side by side or one below the
+other; every value gets the same space, the text as large as fits) and **With background**.
+**+ Data point** opens the list of every value of the connected Miniserver, filtered by **Room**
+and **Category** and searchable by name, each with its current value:
+
+![Choose a data point](../images/en/value-picker.jpg)
+
+A click takes the value with the block's name, its format and a fitting icon. Everything can be
+changed afterwards: the **icon** (or “Show no icon”), the **name** (empty: icon and value alone) and
+the **format** (`%.1f` one decimal, `%d` none, `%%` a percent sign, the unit after it; **From
+Loxone** fetches it again). The list needs a connection to the Miniserver; it shows only what the
+signed-in user may see in Loxone.
 
 ## Ideas: ways to use HouseVis
 

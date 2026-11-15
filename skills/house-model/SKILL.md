@@ -69,7 +69,7 @@ the user calls them.
 | `<model folder>/house.json` | skill | the model; the folder is chosen in step 0 |
 | `<model folder>/datapoints.json` | skill | Loxone mapping (block 7) |
 | `<model folder>/devices.json`, `views/` | `house:check --views` | eight check views |
-| `<model folder>/playbacks/<id>.json` | skill (block 10) | playbacks for the app's "Vorführungen …" panel |
+| `<model folder>/playbacks/<id>.json` | skill (block 11) | playbacks for the app's "Vorführungen …" panel |
 | `test-output/house-check/` | `house:check` | plan drawings and renders for comparison |
 | `test-output/plan-tiles/<file>[-p<page>]/` | `plans:tiles` | full-resolution tiles of plan sheets and scans |
 
@@ -79,8 +79,8 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
-**First, once per session: check the versions.** This skill was built for HouseVis 0.9.3.
-Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
+**First, once per session: check the versions.** This skill was built for HouseVis 0.9.4.
+Run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
 the user before anything else, in their language:
 - **The app is newer:** this skill is out of date and may not know what the app reads now. Install
   it again from https://github.com/Grestorn/HouseVis (folder `skills/house-model`), the same way
@@ -91,12 +91,13 @@ the user before anything else, in their language:
 Then go on with the task, unless the user wants to update first. Same version: say nothing about it.
 
 The tools are the installed HouseVis app's command line. It is installed per user, by default
-as `%LOCALAPPDATA%\Programs\HouseVis\HouseVis.exe`. The commands below are written for a Bash-like
-shell, `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" …`; use the form of the shell you run
-commands in:
-- PowerShell: `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check …`
-  (a variable set before a command, `HOUSEVIS_CONFIG=<folder> …`, becomes
-  `$env:HOUSEVIS_CONFIG = '<folder>'; …`)
+as `%LOCALAPPDATA%\Programs\HouseVis\HouseVis.exe`. The commands below are written for
+PowerShell, `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" …`. In PowerShell, quote a list with commas
+(`--pages '1-3,5'`, `--at '0,30,60'`), or it arrives as separate arguments; and
+`$env:HOUSEVIS_CONFIG = '<folder>'` stays set for later commands in the same session
+(`Remove-Item Env:HOUSEVIS_CONFIG` clears it). If you run commands in another shell, use its form:
+- Bash: `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check …` (the variable is set
+  in front of the command: `HOUSEVIS_CONFIG=<folder> "$LOCALAPPDATA/…/HouseVis.exe" --values`)
 - cmd: `"%LOCALAPPDATA%\Programs\HouseVis\HouseVis.exe" --house-check …`
 
 If that file does not exist, ask the user where HouseVis is installed (or to install it) and use
@@ -112,20 +113,20 @@ tell the user that this setup cannot build or check a model from plans, and do o
 no pictures (e.g. the Loxone mapping).
 
 ```
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder>            # validate, summary, plan-<floor>.png
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder> --views    # (re)write devices.json + 8 check views
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder> --walls    # also list the wall ids a view can set
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder>           # 3D renders, one per page and per view
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --lit=lights --lux 1
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check <model folder>            # validate, summary, plan-<floor>.png
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check <model folder> --views    # (re)write devices.json + 8 check views
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check <model folder> --walls    # also list the wall ids a view can set
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --render <model folder>           # 3D renders, one per page and per view
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --render <model folder> --lit=lights --lux 1
                                                          # the same at night, lamps on, rooms dark
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --playback <id> --at 0,30,60
-                                                         # moments of a playback (block 10)
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles plans/<project>/<file> [--pages 2] [--rotate 270]
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --render <model folder> --playback <id> --at '0,30,60'
+                                                         # moments of a playback (block 11)
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --plan-tiles plans/<project>/<file> [--pages 2] [--rotate 270]
                                                          # PDF page or scan → full-resolution tiles
-"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --config-folder                                    # the folder the app shows a house from
-HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory
+& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --config-folder                                    # the folder the app shows a house from
+$env:HOUSEVIS_CONFIG = '<model folder>'; & "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --inventory
                                                          # (re)write loxone-inventory.json (block 7)
-HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --values
+$env:HOUSEVIS_CONFIG = '<model folder>'; & "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --values
                                                          # live value of every datapoint (block 7)
 ```
 
@@ -134,9 +135,9 @@ All options, with their defaults: `house:check` takes `--out <folder>` (default
 `--lux <n>`, `--weather <code>`, `--device <id>` (another device's pages) and `--page <n|id|title>`
 (only that page), or `--live` instead of the simulation options: the Miniserver's current values
 (the app's stored sign-in), e.g. for a picture of the finished house as it is right now; the
-check renders stay simulated, so they compare. `plans:tiles` takes `--pages 1-3,5`, `--dpi 50..600` (300),
+check renders stay simulated, so they compare. `plans:tiles` takes `--pages '1-3,5'`, `--dpi 50..600` (300),
 `--rotate 0|90|180|270`, `--tile <px>` (1400) and `--out <folder>` (default
-`test-output/plan-tiles/`). `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --help` prints the complete list. Exit codes:
+`test-output/plan-tiles/`). `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --help` prints the complete list. Exit codes:
 0 done, 1 failed (errors listed at the end), 2 wrong arguments. Do not try to discover options by
 starting the tools with guessed arguments: an argument the app does not know starts the app
 itself.
@@ -148,7 +149,7 @@ Open the PNGs it writes with your tool for reading files and compare them with t
 
 1. Ask for the project name if it is not clear (lower-case, digits, hyphens), e.g. `plans/korn-haus`.
    **Where the model goes** (the `<model folder>` of every command below; ask before writing
-   anything into it): run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --config-folder`, which prints the folder HouseVis shows its
+   anything into it): run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --config-folder`, which prints the folder HouseVis shows its
    house from and whether a house model is in it.
    - No house model there: suggest that folder, so the app shows the new house right away; the
      user confirms it or names another.
@@ -170,12 +171,17 @@ Open the PNGs it writes with your tool for reading files and compare them with t
    result list may be cut off, state the number of files, and check at the end that every file
    appears in the page index. A listing that says it was truncated is read on to its end; a
    house's construction drawings were once overlooked that way. Multi-page PDFs (usually the architect's set, any file name): go through
-   the pages (read the PDF if your tools can; else render the pages with `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles <file> --pages <n>`
+   the pages (read the PDF if your tools can; else render the pages with `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --plan-tiles <file> --pages <n>`
 and look at each page's `overview.png`) and identify each sheet by its title block
    ("Grundriss EG", "Schnitt A-A", "Ansicht Süd", scale, plan date/revision). Single files: by
    their name prefix, and check that the content matches. Write the result as a page index into
    `model-notes.md` (*Sources*: file, page, what, scale, date) so later blocks open the right page
    directly. If two sheets show the same thing with different dates, ask which one is current.
+   **Photos whose name does not say the side** (`DJI_0042.jpg`, `IMG_…`, drone shots): list them
+   and ask, all at once and before using any, which side of the house each one shows and from
+   where (ground or drone, which corner). Do not work out the side from the picture yourself: a
+   wrong guess mirrors windows and roof parts and costs rounds later. Write the answers into the
+   page index (or offer to rename the files as in [reference/intake.md](reference/intake.md)).
    Report to the user: what is there, what is missing, what is unreadable, and what that means
    (e.g. "no elevations: window heights will be estimated"). Required are a floor plan per storey,
    at least one section, and the north direction; ask for missing required material before
@@ -184,7 +190,7 @@ and look at each page's `overview.png`) and identify each sheet by its title blo
    dimension figures are illegible. Many architects' PDFs contain no text layer (dimensions
    are drawn as vector outlines); where a vector PDF does have one, its dimension figures can be
    read as text, which is more reliable than reading them off tiles (one construction set gave
-   room areas to 0.05 m² that way); the tiles still show which figure belongs to which chain. Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles <file> --pages <n>` (PDF pages are
+   room areas to 0.05 m² that way); the tiles still show which figure belongs to which chain. Run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --plan-tiles <file> --pages <n>` (PDF pages are
    rendered at 300 dpi) and read the tiles; the output lists each tile's pixel range. Check the
    `overview.png` first: drawings are often placed sideways on the sheet, then rerun with
    `--rotate 90` or `--rotate 270` until the title block reads upright. Note the page, rotation
@@ -203,9 +209,17 @@ and look at each page's `overview.png`) and identify each sheet by its title blo
 
 ## The blocks
 
-Each block: extract → write → `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check` → compare the output with the source yourself
+Each block: extract → write → `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check` → compare the output with the source yourself
 → show the user (summary table in their language + the relevant images) → wait for confirmation →
 update `model-notes.md`.
+
+**After a refused or failed change** (errors from `house:check`, or in the app's assistant a
+change that was not applied): when you split or rewrite it, read the file again afterwards and
+check that every part you meant arrived and that nothing else went missing. A rewritten change
+once dropped a room's whole `data`, and the room simply stayed dark. `house:check` lists the rooms
+without datapoints; with `loxone-inventory.json` beside the model (or in the folder above) it
+warns about each one whose Loxone room has lights, a room controller or a presence detector.
+Treat such a warning as a lost mapping until the user says the room stays without.
 
 1. **Frame.** Storeys (ids such as `ug`, `eg`, `og`, `dg`; names as the user calls them), floor
    heights and exterior wall thickness per storey from the section, origin (outer south-west corner
@@ -236,7 +250,7 @@ update `model-notes.md`.
    **Tag** what the kind cannot tell (see *Tags* in [reference/format.md](reference/format.md)):
    `outside` on freestanding parts (garden wall, carport roof and posts), group names for parts
    that belong together ("Carport", "Garage"). Show the tag list from `house:check`.
-6. **Visual comparison.** `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check … --views`, then `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render …`.
+6. **Visual comparison.** `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check … --views`, then `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --render …`.
    Put each `view-<direction>.png` next to the matching facade photo (`photo-<side>` and
    `view-<side>` both mean the house seen from that side; if a photo plainly shows another
    facade than its name says, ask instead of trusting the name) and list the differences
@@ -246,11 +260,11 @@ update `model-notes.md`.
    rest anthracite), the door's hinge side (the handle sits on the opposite side, often next to
    the sidelight), roof and flat-roof colours, which part of a lift-and-slide door moves.
    Your tool for reading files shows photos scaled down; for details, cut the photo into full-resolution tiles
-   with `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles <photo> --tile 800` and read the tile you need. A
+   with `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --plan-tiles <photo> --tile 800` and read the tile you need. A
    photo taken square-on to a facade can be measured: scale the pixels against a known length
    (e.g. the facade width) and compare window centres with the model (±5–10 cm is a match).
 7. **Loxone mapping.** As in [reference/loxone-mapping.md](reference/loxone-mapping.md): needs
-   `loxone-inventory.json`. **Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory` yourself** (with the stored sign-in
+   `loxone-inventory.json`. **Run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --inventory` yourself** (with the stored sign-in
    of the app, read only) whenever the file is missing, the user asks to refresh or reload it, or
    the Loxone Config was changed since (renamed or new controls); only when it reports no stored
    sign-in ask the user to connect HouseVis to the Miniserver once. Suggest, the user confirms. Include the house-wide `data` (see *Weather* in
@@ -259,16 +273,28 @@ update `model-notes.md`.
    weather station's panel and a screen's sky (temperature, felt temperature, humidity, wind,
    wind warning, rain, sunshine, weather type). Ask which family each comes from when Loxone has
    several (weather station, weather service, System).
+   **A room with several light controllers or outputs** (kitchen/living, bedroom, bathroom): put
+   every output in the room's `lightColor` list, whichever controller it belongs to; the list is
+   mixed, so the room is lit when any of them is on. `light` takes one datapoint only.
+   **Say early what the inventory lacks:** door contacts, motion detectors or other inputs the
+   user expects but the inventory does not list are not enabled for the user interface in Loxone
+   Config (often they are wired straight into a light controller, and a "Fenster- und
+   Türüberwachung" may be empty). Tell the user at the start of this block, so they can enable
+   them in Loxone Config, then refresh the inventory and map them in the same session.
 8. **Light sources** (optional; offer it, the user decides). Lamps besides the room light,
    see *Light sources* in [reference/format.md](reference/format.md). Start from what exists:
    the light outputs in the inventory (outside ones usually sit in an "Außen…" room: wall
    spots, ground-cable lights, path lights; inside ones as extra outputs of a room's light
    controller, e.g. "Essplatz", "Vitrine"), the luminaire symbols of an electrical plan, facade
-   photos, the user's description ("two bollards along the path to the door"). List them as a
+   photos, the user's description ("two bollards along the path to the door"). Spots set into the
+   ground or a terrace that shine up are `groundSpot`, not small bollards. **From a drone photo**,
+   measure a light's place against things on the ground (path and terrace edges, the foot of the
+   wall), never against roof edges or gutters: seen from above at an angle, a high edge appears
+   shifted outwards, away from the camera, so lamps placed under it land too far out. List them as a
    table (Loxone output → kind → where → height → source) and ask for what is unclear: where
    exactly, which lamps one output switches, wall light up, down or both. Then write them with
    their `data` (block 7's datapoints), tag outside groups ("Garten") and run `house:check`
-   (each light's line, amber markers in the plans). Render with `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render …
+   (each light's line, amber markers in the plans). Render with `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check --render …
    --lit=lights --lux 1` (lamps on, rooms dark, night) and show it; check that no wall light hangs
    in a window and that facade lights sit on the right facade. Lamps on the room's own output
    (spots on the room's dimmer) need no data: they follow the room.
@@ -288,7 +314,29 @@ update `model-notes.md`.
    show the current weather as its sky with rain or snow over it, switched on per page in the
    device editor ("Aktuelles Wetter anzeigen"); the menu's "Wetter-Demo" shows every weather type.
 
-10. **Playbacks** (optional; offer them once the house is mapped, and whenever the user asks for
+10. **Devices at a place** (optional; offer it when the inventory or the user names a robot
+   mower, a vacuum robot, a camera or an intercom). The app has no element of its own for them,
+   and needs none: an **indicator at a point** (*Indicators* in
+   [reference/format.md](reference/format.md)) shows their state where they are. One indicator
+   per device, its states as rules, most important first:
+   - **Robot mower**: at its charging station (or the middle of the lawn); kinds such as
+     `mower` (mowing), `mower-charging`, `mower-error`, nothing while parked. Loxone does not
+     know where the mower is, so the icon stays at that point; say so. Its values come from an
+     integration block, a plugin (e.g. via LoxBerry) or virtual inputs: search the inventory
+     (`mäh`, `mower`, `rasen`, `robot`) and look at the live values to learn the state codes or
+     texts (`"as": "text"` for a status text; `equals` compares it).
+   - **Vacuum robot**: at its dock, or in a room's row (`room`) while it cleans that room if the
+     integration reports the room.
+   - **Camera / intercom**: at its place on the facade or the gate; a rule for the doorbell or
+     motion (an `Intercom` control's bell state, a motion input), otherwise a plain marker with
+     one rule without `when`. The camera picture cannot be shown yet.
+   Suggest kinds and say that they get a placeholder icon until the user picks one (menu
+   "Globale Einstellungen …"); if asked to set them: Fluent `robot`, `video-camera`, `bell`,
+   `warning`, `low-battery`, or `lucide:bot`, `lucide:cctv`, `lucide:camera`,
+   `lucide:bell-ring`, `lucide:siren`, `lucide:battery-charging`. Run `house:check` and render;
+   show where they stand.
+
+11. **Playbacks** (optional; offer them once the house is mapped, and whenever the user asks for
    one: "mach eine Vorführung wie ‚Ein Tag in zwei Minuten' für mein Haus"). Clips the app plays
    from its menu **Vorführungen …**: made up ("a day in my life", every shown value set by the
    script) or over the live values ("my house as it is now", usually only a camera tour). Ask which
@@ -298,15 +346,17 @@ update `model-notes.md`.
 
 Views and devices (pages) for everyday use are not part of this skill: the user makes them in the
 Windows app (menus "Ansichten bearbeiten …" and "Geräte / Seiten bearbeiten …"); the check views are only
-for comparison. Mention that the user's own views must list the room ids
+for comparison. So are data panels (any Loxone value with icon and unit on a page, e.g. PV power or
+energy: "+ Datenpanel" in the device editor, which lists the Miniserver's values; they live in
+`devices.json`, not in `datapoints.json`). Mention that the user's own views must list the room ids
 of the new model. Exception: on request a view may get `floors` (only some storeys) and `hide`
 (leave out tags such as `outside` or `roof`), see *Views that leave storeys or tags out* in
 [reference/format.md](reference/format.md).
 
 ## Finishing
 
-- Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder>` a last time: no errors.
-- Unless the `<model folder>` is the app's folder (`"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --config-folder`): tell the user to open
+- Run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check <model folder>` a last time: no errors.
+- Unless the `<model folder>` is the app's folder (`& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --config-folder`): tell the user to open
   it in HouseVis, menu **Konfigurationsordner …** (the app restarts with it and keeps that folder).
   Copying the model over a house the app already shows is a separate step only the user asks for
   (back up the existing files first, keep their `views/` and `devices.json` if wanted).
@@ -327,6 +377,13 @@ of the new model. Exception: on request a view may get `floors` (only some store
 
 ## Updating an existing model
 
+**A room stays dark or shows no values although Loxone shows them**: check the mapping first,
+before suspecting the drawing. Is the room's `data` in `house.json` still there, does
+`house:check` list the room among those without datapoints, and does
+`$env:HOUSEVIS_CONFIG = '<model folder>'; & "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --values` (filtered for the room's datapoints) show
+the expected values? Only when the data is there and the values arrive, look at the view (active
+rooms, hidden storeys or tags).
+
 For "the bathroom window is wrong", "add the garage", "the walls are thicker": read
 `model-notes.md` and the model, change only what is affected, keep ids stable (views and
 datapoints refer to them), run `house:check`, show the affected plan or render, and add the
@@ -339,6 +396,9 @@ temperature instead of the station's".
 Light sources are changed only here (the app has no editor for them): "add a pendant over the
 dining table", "the lantern stands 50 cm further left", "the wall light also shines up",
 "remove the garage spot". Keep their ids, map new ones as in block 8, and render with `--lit=lights`.
+
+Devices at a place likewise (block 10): "show the mower at its station", "a camera marker at
+the gate", "the vacuum shows an error icon when it is stuck".
 
 Furniture likewise: "add the kitchen row along the north wall", "the wall cupboard is 35 cm
 deep", "put a light strip under the wall cupboards", "the wardrobe has a cove light on top". A

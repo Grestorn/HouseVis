@@ -119,13 +119,13 @@ questions and marks those details as estimated.
 - Photograph the whole sheet straight from above, flat, evenly lit; include the title block (scale,
   storey).
 - Large sheets (A1/A0): the dimension figures must stay legible. Either a high-resolution photo
-  (the skill cuts it into tiles with `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles`) or several close-ups of the same sheet
+  (the skill cuts it into tiles with `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --plan-tiles`) or several close-ups of the same sheet
   named `floor-2-ground-part-1.jpg`, `floor-2-ground-part-2.jpg`, ….
 - Hand-written changes on the plans are welcome; list them in `plan-changes.txt` too.
 
 ## Also useful later (Loxone mapping)
 
 HouseVis must be connected to the Miniserver once (menu → connect); the skill then reads all
-rooms and controls the signed-in user may see itself (`"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory` writes
+rooms and controls the signed-in user may see itself (`& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --inventory` writes
 `loxone-inventory.json`). The skill uses it in the last block to connect rooms, window contacts, shades and
 lights. The user should sign in with a user that has permissions for all rooms.

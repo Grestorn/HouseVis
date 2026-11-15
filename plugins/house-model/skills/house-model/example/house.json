@@ -256,7 +256,8 @@
     { "id": "eingang-vordach", "kind": "ceilingSpot", "floor": "eg", "position": [5.6, 10.1], "height": 2.5, "data": { "lightColor": "light.aussen.eingang" } },
     { "id": "weg-1", "kind": "lantern", "floor": "eg", "position": [9, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] },
     { "id": "weg-2", "kind": "lantern", "floor": "eg", "position": [10.3, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] },
-    { "id": "weg-3", "kind": "lantern", "floor": "eg", "position": [11.6, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] }
+    { "id": "weg-3", "kind": "lantern", "floor": "eg", "position": [11.6, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] },
+    { "id": "fassade-strahler", "kind": "groundSpot", "floor": "eg", "position": [10.3, -0.35], "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] }
   ],
   "furniture": [
     { "id": "kuechenzeile", "name": "Küchenzeile", "floor": "eg", "x0": 3.48, "x1": 4.08, "y0": 6.5, "y1": 8.7, "front": "west", "bottom": 0, "top": 0.9 },

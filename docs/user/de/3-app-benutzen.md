@@ -20,7 +20,7 @@
 | Loxone-UI-Anmeldung … | Benutzer und Kennwort der Loxone-Oberfläche speichern, damit sie nach dem Start der App nicht jedes Mal fragt (freiwillig; das Kennwort liegt dann verschlüsselt auf dem Gerät, siehe Hinweis im Dialog; nur bei verschlüsselter Verbindung). Nach dem Speichern zeigt die App die Loxone-Seite und meldet sich gleich an; lehnt Loxone ab, öffnet sich der Dialog wieder mit einem Hinweis |
 | KI-Assistent … | das Modell mit Claude ändern ([Kapitel 2](2-hausmodell.md)) und mehr: Vorführungen anlegen, Zuordnungen zu Loxone prüfen |
 | Ansichten bearbeiten … | von wo du schaust, welche Räume offen sind, was ausgeblendet ist |
-| Geräte / Seiten bearbeiten … | welche Seiten PC, Tablet oder Handy zeigen; pro Gerät auch Lichtquellen (realistisch oder einfach) und reduzierte Bildrate für langsamere Geräte; Export fürs Tablet |
+| Geräte / Seiten bearbeiten … | welche Seiten PC, Tablet oder Handy zeigen; pro Gerät auch einfache Beleuchtung und reduzierte Bildrate für langsamere Geräte; Export fürs Tablet |
 | Globale Einstellungen … | zwei Seiten, links gewählt. **Optionen**: Sprache der App (sonst die des Geräts); Größe der Loxone-Seite (kleiner passt mehr hinein, z. B. für den Ambient-Modus der Loxone-App; Standard 90 %). **Symbole**: das Symbol für Heizung, Musik, … aus drei Sätzen: **Fluent Emoji** (farbig), **Fluent Emoji (High Contrast)** (dieselben einfarbig) und **Lucide** (schlichte Linien); zuerst Vorschläge, sonst nach Gruppe oder mit der Suche, z. B. „Lautsprecher“ oder „Waschmaschine“. Einfarbige Symbole bekommen eine **Farbe** (Standard, eine aus der Palette oder „Eigene …“; Farbe wählen, dann das Symbol). Ein Zustand lässt sich auch ganz ausblenden („Nicht anzeigen“, z. B. pausierte Musik) |
 | Konfigurationsordner … | welches Hausmodell die App zeigt |
 | Konfiguration laden … | nur Tablet: eine exportierte Datei laden ([Kapitel 1](1-installation.md)) |
@@ -60,21 +60,62 @@ Menü → **Ansichten bearbeiten …**, dann:
 
 ![Geräte und Seiten](../images/de/device-editor.jpg)
 
-Menü → **Geräte / Seiten bearbeiten …**: jedes Gerät (PC, Tablet, Handy) hat seine Seiten. Füge eine
-**Seite mit Ansichten** hinzu und platziere eine oder mehrere Ansichten darauf (in der Vorschau
-ziehen; die Vorschau zeigt die Ansichten selbst), oder eine **Loxone-Seite** mit der Loxone-Oberfläche. Pro Seite: ihr **Symbol** in der Seitenleiste (aus denselben Sätzen wie die Anzeigen, einfarbige mit Farbe, oder „Kein Symbol zeigen“), **Aktuelles Wetter anzeigen**, dazu **+ Uhr** und
-**+ Datum** (platziert und in der Größe geändert wie eine Ansicht, immer vorn; Uhrzeit und langes
-Datum mit Wochentag und Monat, so wie die Systemeinstellungen des Geräts sie schreiben, z. B. 12
-oder 24 Stunden). Pro Ansicht auf der Seite: **Mit Rahmen und Titel**, **Temperaturen und Anzeigen
+Menü → **Geräte / Seiten bearbeiten …**: jedes Gerät (PC, Tablet, Handy) hat seine Seiten. Das
+**+** neben **Seiten** fügt eine **HouseVis-Seite** hinzu (Ansichten, Uhr, Datum und Datenpanels,
+in der Vorschau platziert; die Vorschau zeigt die Ansichten selbst) oder eine **Loxone-UI**-Seite
+mit der Loxone-Oberfläche. Pro Seite: der **Titel**, davor ihr Symbol in der Seitenleiste (ein
+Klick darauf wählt es aus denselben Sätzen wie die Anzeigen, einfarbige mit Farbe, oder „Kein
+Symbol zeigen“), und **Aktuelles Wetter anzeigen**. Das **+** neben **Panele** fügt hinzu, was auf
+der Seite liegt: eine **Ansicht** (daneben die Ansichten, die noch nicht auf der Seite sind),
+**Uhr**, **Datum** (Uhrzeit und langes Datum mit Wochentag und Monat, so wie die
+Systemeinstellungen des Geräts sie schreiben, z. B. 12 oder 24 Stunden) und **Datenpanel**. Nur das
+gewählte Panel ist aufgeklappt und in der Vorschau markiert; ein Klick auf seinen Namen klappt es
+auf oder zu. Die Liste ist auch die Reihenfolge von vorn nach hinten: was oben steht, liegt vorn
+und verdeckt alles darunter; die Pfeile rechts oben an jedem Panel schieben es eine Ebene nach vorn
+oder hinten, der Papierkorb entfernt es.
+
+![Hinzufügen auf der Seite](../images/de/device-add-menu.jpg)
+
+Pro Ansicht auf der Seite: **Mit Rahmen und Titel**, **Temperaturen und Anzeigen
 ausblenden** (nur das Haus, z. B. für eine kleine Nebenansicht) und **Größe der Temperaturen und
-Anzeigen** (30 bis 150 %, Doppelklick auf den Regler: 100 %). Pro
-Gerät: **Sleepmodus erlauben** (für Wandtablets aus) und **Automatische Präsenz-Erkennung** (dunkel,
-solange niemand im Raum ist; der Bildschirm bleibt dann ohnehin an).
-Ein Rechtsklick auf eine Seite kopiert sie auf ein anderes Gerät, ein Rechtsklick auf ein Gerät
-alle seine Seiten; hat das Ziel schon eine Seite gleichen Namens, wird nach einer Rückfrage diese
-ersetzt.
+Anzeigen** (30 bis 150 %, Doppelklick auf den Regler: 100 %).
+
+Pro Gerät (das **+** neben **Geräte** legt eins an, die Symbole in seiner Zeile duplizieren oder
+löschen es): **Name**, **Plattform** und **Seitenverhältnis**. **Quer/Hoch getrennt** gibt dem
+Gerät eigene Seiten für Quer- und Hochformat (sonst dieselben in beiden); dann wählen zwei kleine
+Symbole neben **Seiten**, welche Liste du bearbeitest, und neben **Vorschau** siehst du die Seite
+in beiden Formen. Unter **Einstellungen**: **Sleepmodus erlauben** (für Wandtablets aus),
+**Automatische Präsenz-Erkennung** (dunkel, solange niemand im Raum ist; der Bildschirm bleibt dann
+ohnehin an), **Einfache Beleuchtung** und **Reduzierte Bildrate** (beide für schwächere Geräte).
+Ein Rechtsklick auf ein Gerät macht es zum **Standard** (das Gerät, das der PC ohne eigene Wahl
+zeigt) oder kopiert alle seine Seiten auf ein anderes Gerät; ein Rechtsklick auf eine Seite kopiert
+sie. Hat das Ziel schon eine Seite gleichen Namens, wird nach einer Rückfrage diese ersetzt.
+
+![Rechtsklick auf ein Gerät](../images/de/device-menu.jpg)
+
 **Gerät exportieren …** schreibt die Datei fürs Android-Tablet
 ([Kapitel 1](1-installation.md#android-tablet)).
+
+### Datenpanels
+
+![Ein Datenpanel im Geräte-Editor](../images/de/data-panel.jpg)
+
+Ein **Datenpanel** zeigt beliebige Werte aus Loxone auf einer Seite, z. B. die Leistung der
+PV-Anlage, den Netzbezug oder den Ladestand der Batterie: je Wert ein Symbol, ein Name und die Zahl
+im Format, das Loxone für sie angibt (z. B. „%.2f kW“). **+** → **Datenpanel** legt eins an (ganz vorn); es wird
+platziert und in der Größe geändert wie die Uhr, eine Seite kann mehrere haben. Pro Panel:
+**Anordnung** (nebeneinander oder untereinander; jeder Wert bekommt gleich viel Platz, die Schrift
+wird so groß, wie es passt) und **Mit Hintergrund**. **+ Datenpunkt** öffnet die Liste aller Werte
+des verbundenen Miniservers, nach **Raum** und **Kategorie** gefiltert und nach Namen durchsuchbar,
+jeder mit seinem aktuellen Wert:
+
+![Datenpunkt wählen](../images/de/value-picker.jpg)
+
+Ein Klick nimmt den Wert mit dem Namen des Bausteins, seinem Format und einem passenden Symbol.
+Danach lässt sich alles ändern: das **Symbol** (oder „Kein Symbol zeigen“), der **Name** (leer: nur
+Symbol und Wert) und das **Format** (`%.1f` eine Nachkommastelle, `%d` keine, `%%` ein
+Prozentzeichen, dahinter die Einheit; **Aus Loxone** holt es neu). Die Liste braucht eine Verbindung
+zum Miniserver; sie zeigt nur, was der angemeldete Benutzer in Loxone sehen darf.
 
 ## Ideen: so kannst du HouseVis nutzen
 

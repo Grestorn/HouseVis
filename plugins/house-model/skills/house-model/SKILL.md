@@ -69,7 +69,7 @@ the user calls them.
 | `<model folder>/house.json` | skill | the model; the folder is chosen in step 0 |
 | `<model folder>/datapoints.json` | skill | Loxone mapping (block 7) |
 | `<model folder>/devices.json`, `views/` | `house:check --views` | eight check views |
-| `<model folder>/playbacks/<id>.json` | skill (block 10) | playbacks for the app's "Vorführungen …" panel |
+| `<model folder>/playbacks/<id>.json` | skill (block 11) | playbacks for the app's "Vorführungen …" panel |
 | `test-output/house-check/` | `house:check` | plan drawings and renders for comparison |
 | `test-output/plan-tiles/<file>[-p<page>]/` | `plans:tiles` | full-resolution tiles of plan sheets and scans |
 
@@ -79,7 +79,7 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
-**First, once per session: check the versions.** This skill was built for HouseVis 0.9.3.
+**First, once per session: check the versions.** This skill was built for HouseVis 0.9.4.
 Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
 the user before anything else, in their language:
 - **The app is newer:** this skill is out of date and may not know what the app reads now. Update
@@ -108,7 +108,7 @@ works in.
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --lit=lights --lux 1
                                                          # the same at night, lamps on, rooms dark
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --playback <id> --at 0,30,60
-                                                         # moments of a playback (block 10)
+                                                         # moments of a playback (block 11)
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --plan-tiles plans/<project>/<file> [--pages 2] [--rotate 270]
                                                          # PDF page or scan → full-resolution tiles
 "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --config-folder                                    # the folder the app shows a house from
@@ -164,6 +164,11 @@ Open the PNGs it writes with the Read tool and compare them with the plans yours
    their name prefix, and check that the content matches. Write the result as a page index into
    `model-notes.md` (*Sources*: file, page, what, scale, date) so later blocks open the right page
    directly. If two sheets show the same thing with different dates, ask which one is current.
+   **Photos whose name does not say the side** (`DJI_0042.jpg`, `IMG_…`, drone shots): list them
+   and ask, all at once and before using any, which side of the house each one shows and from
+   where (ground or drone, which corner). Do not work out the side from the picture yourself: a
+   wrong guess mirrors windows and roof parts and costs rounds later. Write the answers into the
+   page index (or offer to rename the files as in [reference/intake.md](reference/intake.md)).
    Report to the user: what is there, what is missing, what is unreadable, and what that means
    (e.g. "no elevations: window heights will be estimated"). Required are a floor plan per storey,
    at least one section, and the north direction; ask for missing required material before
@@ -194,6 +199,14 @@ Open the PNGs it writes with the Read tool and compare them with the plans yours
 Each block: extract → write → `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check` → compare the output with the source yourself
 → show the user (summary table in their language + the relevant images) → wait for confirmation →
 update `model-notes.md`.
+
+**After a refused or failed change** (errors from `house:check`, or in the app's assistant a
+change that was not applied): when you split or rewrite it, read the file again afterwards and
+check that every part you meant arrived and that nothing else went missing. A rewritten change
+once dropped a room's whole `data`, and the room simply stayed dark. `house:check` lists the rooms
+without datapoints; with `loxone-inventory.json` beside the model (or in the folder above) it
+warns about each one whose Loxone room has lights, a room controller or a presence detector.
+Treat such a warning as a lost mapping until the user says the room stays without.
 
 1. **Frame.** Storeys (ids such as `ug`, `eg`, `og`, `dg`; names as the user calls them), floor
    heights and exterior wall thickness per storey from the section, origin (outer south-west corner
@@ -247,12 +260,24 @@ update `model-notes.md`.
    weather station's panel and a screen's sky (temperature, felt temperature, humidity, wind,
    wind warning, rain, sunshine, weather type). Ask which family each comes from when Loxone has
    several (weather station, weather service, System).
+   **A room with several light controllers or outputs** (kitchen/living, bedroom, bathroom): put
+   every output in the room's `lightColor` list, whichever controller it belongs to; the list is
+   mixed, so the room is lit when any of them is on. `light` takes one datapoint only.
+   **Say early what the inventory lacks:** door contacts, motion detectors or other inputs the
+   user expects but the inventory does not list are not enabled for the user interface in Loxone
+   Config (often they are wired straight into a light controller, and a "Fenster- und
+   Türüberwachung" may be empty). Tell the user at the start of this block, so they can enable
+   them in Loxone Config, then refresh the inventory and map them in the same session.
 8. **Light sources** (optional; offer it, the user decides). Lamps besides the room light,
    see *Light sources* in [reference/format.md](reference/format.md). Start from what exists:
    the light outputs in the inventory (outside ones usually sit in an "Außen…" room: wall
    spots, ground-cable lights, path lights; inside ones as extra outputs of a room's light
    controller, e.g. "Essplatz", "Vitrine"), the luminaire symbols of an electrical plan, facade
-   photos, the user's description ("two bollards along the path to the door"). List them as a
+   photos, the user's description ("two bollards along the path to the door"). Spots set into the
+   ground or a terrace that shine up are `groundSpot`, not small bollards. **From a drone photo**,
+   measure a light's place against things on the ground (path and terrace edges, the foot of the
+   wall), never against roof edges or gutters: seen from above at an angle, a high edge appears
+   shifted outwards, away from the camera, so lamps placed under it land too far out. List them as a
    table (Loxone output → kind → where → height → source) and ask for what is unclear: where
    exactly, which lamps one output switches, wall light up, down or both. Then write them with
    their `data` (block 7's datapoints), tag outside groups ("Garten") and run `house:check`
@@ -276,7 +301,29 @@ update `model-notes.md`.
    show the current weather as its sky with rain or snow over it, switched on per page in the
    device editor ("Aktuelles Wetter anzeigen"); the menu's "Wetter-Demo" shows every weather type.
 
-10. **Playbacks** (optional; offer them once the house is mapped, and whenever the user asks for
+10. **Devices at a place** (optional; offer it when the inventory or the user names a robot
+   mower, a vacuum robot, a camera or an intercom). The app has no element of its own for them,
+   and needs none: an **indicator at a point** (*Indicators* in
+   [reference/format.md](reference/format.md)) shows their state where they are. One indicator
+   per device, its states as rules, most important first:
+   - **Robot mower**: at its charging station (or the middle of the lawn); kinds such as
+     `mower` (mowing), `mower-charging`, `mower-error`, nothing while parked. Loxone does not
+     know where the mower is, so the icon stays at that point; say so. Its values come from an
+     integration block, a plugin (e.g. via LoxBerry) or virtual inputs: search the inventory
+     (`mäh`, `mower`, `rasen`, `robot`) and look at the live values to learn the state codes or
+     texts (`"as": "text"` for a status text; `equals` compares it).
+   - **Vacuum robot**: at its dock, or in a room's row (`room`) while it cleans that room if the
+     integration reports the room.
+   - **Camera / intercom**: at its place on the facade or the gate; a rule for the doorbell or
+     motion (an `Intercom` control's bell state, a motion input), otherwise a plain marker with
+     one rule without `when`. The camera picture cannot be shown yet.
+   Suggest kinds and say that they get a placeholder icon until the user picks one (menu
+   "Globale Einstellungen …"); if asked to set them: Fluent `robot`, `video-camera`, `bell`,
+   `warning`, `low-battery`, or `lucide:bot`, `lucide:cctv`, `lucide:camera`,
+   `lucide:bell-ring`, `lucide:siren`, `lucide:battery-charging`. Run `house:check` and render;
+   show where they stand.
+
+11. **Playbacks** (optional; offer them once the house is mapped, and whenever the user asks for
    one: "mach eine Vorführung wie ‚Ein Tag in zwei Minuten' für mein Haus"). Clips the app plays
    from its menu **Vorführungen …**: made up ("a day in my life", every shown value set by the
    script) or over the live values ("my house as it is now", usually only a camera tour). Ask which
@@ -286,7 +333,9 @@ update `model-notes.md`.
 
 Views and devices (pages) for everyday use are not part of this skill: the user makes them in the
 Windows app (menus "Ansichten bearbeiten …" and "Geräte / Seiten bearbeiten …"); the check views are only
-for comparison. Mention that the user's own views must list the room ids
+for comparison. So are data panels (any Loxone value with icon and unit on a page, e.g. PV power or
+energy: "+ Datenpanel" in the device editor, which lists the Miniserver's values; they live in
+`devices.json`, not in `datapoints.json`). Mention that the user's own views must list the room ids
 of the new model. Exception: on request a view may get `floors` (only some storeys) and `hide`
 (leave out tags such as `outside` or `roof`), see *Views that leave storeys or tags out* in
 [reference/format.md](reference/format.md).
@@ -315,6 +364,13 @@ of the new model. Exception: on request a view may get `floors` (only some store
 
 ## Updating an existing model
 
+**A room stays dark or shows no values although Loxone shows them**: check the mapping first,
+before suspecting the drawing. Is the room's `data` in `house.json` still there, does
+`house:check` list the room among those without datapoints, and does
+`HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --values` (filtered for the room's datapoints) show
+the expected values? Only when the data is there and the values arrive, look at the view (active
+rooms, hidden storeys or tags).
+
 For "the bathroom window is wrong", "add the garage", "the walls are thicker": read
 `model-notes.md` and the model, change only what is affected, keep ids stable (views and
 datapoints refer to them), run `house:check`, show the affected plan or render, and add the
@@ -327,6 +383,9 @@ temperature instead of the station's".
 Light sources are changed only here (the app has no editor for them): "add a pendant over the
 dining table", "the lantern stands 50 cm further left", "the wall light also shines up",
 "remove the garage spot". Keep their ids, map new ones as in block 8, and render with `--lit=lights`.
+
+Devices at a place likewise (block 10): "show the mower at its station", "a camera marker at
+the gate", "the vacuum shows an error icon when it is stuck".
 
 Furniture likewise: "add the kitchen row along the north wall", "the wall cupboard is 35 cm
 deep", "put a light strip under the wall cupboards", "the wardrobe has a cove light on top". A

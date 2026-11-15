@@ -39,7 +39,7 @@
 
 | Problem | What to do |
 |---|---|
-| Slow or jerky, especially on a tablet | On the PC, under **Edit devices / pages …**, set the device's **Light sources: Simple** and **Reduced frame rate**, then export and read it in again. Fewer views per page helps too. |
+| Slow or jerky, especially on a tablet | On the PC, under **Edit devices / pages …**, turn on the device's **Simple lighting** and **Reduced frame rate**, then export and read it in again. Fewer views per page helps too. |
 | The screen goes dark | **Automatic presence detection** is on for this device, or **Allow sleep mode** (menu → **Edit devices / pages …**). |
 
 ## Creating the model with Claude

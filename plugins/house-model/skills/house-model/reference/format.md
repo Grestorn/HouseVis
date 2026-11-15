@@ -10,7 +10,7 @@ plans**. Read both schema and this file before block 1.
 
 ```json
 {
-  "version": 6,
+  "version": 7,
   "_comment": "Built by the house-model skill from plans/<project>/; sources and estimates in model-notes.md.",
   "floors": [{ "id": "eg", "name": "Erdgeschoss", "height": 2.9, "exteriorWall": 0.365 }],
   "rooms": [], "spaces": [], "openings": [], "roofWindows": [], "roofs": []
@@ -278,6 +278,7 @@ in `${CLAUDE_PLUGIN_ROOT}/skills/house-model/example/house.json`.
 | `pendant` | lamp hanging from the ceiling: a shade (default) or a slim tube (`"shape": "tube"`, `size` the diameter, default 0.06; `length`, default 0.3; narrow beam) | `position` under the lamp | lower edge of the lamp (over a table about 1.45–1.6; several tubes often at staggered heights) |
 | `ceilingSpot` | recessed spot | `position` | none inside (the area's ceiling); outside every area the ceiling it sits in, e.g. the bottom of a canopy (`structures`) |
 | `lantern` | bollard or lamp post | `position` where it stands | the lamp head (a 0.8 m bollard on terrain at -0.3 has 0.5) |
+| `groundSpot` | spot set flush into the ground, a terrace or path, shining up (at the facade, a pillar, a tree) | `position` where it lies | none: it sits in the floor of the area there (an outdoor area), otherwise in the terrain (`ground.level`) |
 | `wallLight` | wall lamp, inside or on the facade | `position` on the wall's **inner face** (an edge of a room polygon, like an opening's ends), `side` `inside`/`outside` | the lamp's center (outside typically 1.8–2.2, beside a door about door height) |
 | `strip` | line of light under a cupboard, in a shelf, a cove; also rising (under a sloped ceiling, along stairs) or upright (in a shelf's side, a door frame) | `from`, `to` | the `from` end (under wall cupboards about 1.4); `toHeight` for the `to` end when it rises; upright: `from` and `to` the same point, `height` the bottom, `toHeight` the top |
 
@@ -407,7 +408,8 @@ placeholder until they pick one, so say so. If they ask you to set one, `global.
 - **In a room's row** (`room`): the usual case, for what concerns the room (music, a window
   contact summary). Every indicator of a room shares its row; the views place the row.
 - **At a point** (`position` instead of `room`) for an indicator that belongs to a place of its own:
-  the mailbox by the front door, the washing machine in a cellar corner, the garage gate.
+  the mailbox by the front door, the washing machine in a cellar corner, the garage gate, a robot
+  mower's station, a camera (SKILL.md block 10).
   `{ "floor": "eg", "x": 6.1, "y": -0.4, "height": 1.2 }`, `height` the icon's middle above the
   storey's floor (default 1.5; inside a room it must stay below the ceiling). It shows with the
   room its point lies in; outside the building with `outside`. `tags` (only here) for a group of

@@ -1096,6 +1096,92 @@
           },
           {
             "type": "object",
+            "description": "Set flush into the terrain or an area's floor (terrace, path), shining up: an uplight at the facade, a pillar or a tree.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "position"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"esstisch\" or \"weg-1\"."
+              },
+              "kind": {
+                "const": "groundSpot"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Storey the light belongs to; its heights are above that storey's floor, like everywhere in house.json."
+              },
+              "room": {
+                "$ref": "#/$defs/id",
+                "description": "Room from rooms whose light it follows when it has no \"data\". Default: the room of the area it lies in; give it only where the point cannot tell."
+              },
+              "data": {
+                "description": "Datapoints from datapoints.json per role, as for rooms: light true/false, lightColor color (a list mixes several channels), lightLevel number 0–100. Without any the light follows its room's light. Typically one output (LCx, subcontrol AIx, state \"color\") of a light controller, or a switch.",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "light": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Light on (true/false)."
+                  },
+                  "lightColor": {
+                    "description": "Light color (color); a list mixes the colors of several channels.",
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/datapointRef"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "#/$defs/datapointRef"
+                        }
+                      }
+                    ]
+                  },
+                  "lightLevel": {
+                    "$ref": "#/$defs/datapointRef",
+                    "description": "Brightness in percent (number, 0–100), only for a light without brightness in its color, e.g. a dimmer."
+                  }
+                }
+              },
+              "color": {
+                "$ref": "#/$defs/color",
+                "description": "Color of the lamp body while it is off; default per kind."
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Main dimension of the lamp body in meters (shade diameter, lantern head, width of a wall light); default per kind. Not for strips: their length is from–to."
+              },
+              "range": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "How far the light reaches, in meters; default per kind."
+              },
+              "beamAngle": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 180,
+                "description": "Opening angle of the light cone in degrees, for lights shining in one direction; default per kind."
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "position": {
+                "$ref": "#/$defs/point",
+                "description": "Point in the floor plan where it lies. It sits in the floor of the area there (a terrace, an outdoor area), otherwise in the terrain (ground.level)."
+              }
+            }
+          },
+          {
+            "type": "object",
             "description": "On a wall, inside or on the facade.",
             "required": [
               "id",

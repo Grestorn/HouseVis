@@ -39,7 +39,7 @@
 
 | Problem | Was tun |
 |---|---|
-| Langsam oder ruckelig, besonders auf dem Tablet | Am PC unter **Geräte / Seiten bearbeiten …** beim Gerät **Lichtquellen: Einfach** und **Reduzierte Bildrate** wählen, dann neu exportieren und einlesen. Weniger Ansichten pro Seite helfen auch. |
+| Langsam oder ruckelig, besonders auf dem Tablet | Am PC unter **Geräte / Seiten bearbeiten …** beim Gerät **Einfache Beleuchtung** und **Reduzierte Bildrate** einschalten, dann neu exportieren und einlesen. Weniger Ansichten pro Seite helfen auch. |
 | Der Bildschirm wird dunkel | **Automatische Präsenz-Erkennung** ist für dieses Gerät an, oder **Sleepmodus erlauben** (Menü → **Geräte / Seiten bearbeiten …**). |
 
 ## Das Modell mit Claude erstellen

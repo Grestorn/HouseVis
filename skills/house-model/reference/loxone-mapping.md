@@ -6,13 +6,13 @@ mapping needs are in *Datapoints* below.
 
 ## Input
 
-`loxone-inventory.json` in the working folder, written by `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory`. It lists
+`loxone-inventory.json` in the working folder, written by `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --inventory`. It lists
 the Loxone rooms with their controls: `uuid`, `name`, `type`, `category`, `states`, and
 `subControls` with their own UUIDs (`<uuid>/AI1`); `miniserver.lastModified` is the date of the
 Loxone program it was read from.
 
 **Refreshing it is your job, not the user's.** Run
-`HOUSEVIS_CONFIG=<model folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --inventory` yourself when the file is missing, when
+`$env:HOUSEVIS_CONFIG = '<model folder>'; & "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --inventory` yourself when the file is missing, when
 the user asks to refresh, reload or update the inventory, or when the Loxone Config changed since
 (controls renamed, added, moved to other rooms) — it simply overwrites the file. It uses the sign-in
 the app has stored (read only), and afterwards checks the model folder's `datapoints.json` against
@@ -36,7 +36,10 @@ mean missing permissions, not missing hardware.
 ```
 
 Ids: `<roomId>.<role>` for rooms, `window.<openingId>`, `shade.<openingId>.position` — or follow
-the convention of an existing datapoints.json of the user. `label` = the name in Loxone Config.
+the convention of an existing datapoints.json of the user. Datapoint ids allow only lower-case
+letters, digits, `.` and `-` (`^[a-z0-9][a-z0-9.-]{0,79}$`): no capitals, underscores, spaces or
+umlauts, so a Loxone name is converted (`Licht_Decke` → `licht-decke`, `Küche` → `kueche`).
+`label` = the name in Loxone Config.
 
 | HouseVis role | Typical Loxone control → state | `as` |
 |---|---|---|
@@ -106,6 +109,12 @@ Quirks that matter here:
 - Sensors the user names but the inventory lacks (a motion detector "Decke") are not enabled for
   the user interface in Loxone Config, or the user lacks permission: record it, map it later.
 - `lightColor` alone decides whether a room is lit (black = off); `light` is then optional.
+- **Several light controllers in one room** (kitchen and living room, bedroom, bathroom with a
+  mirror light): the room's `lightColor` list takes outputs of any controller, mixed into one
+  colour, so the room is lit when any of them is on. Put every output there; never pick one.
+  `light` and the other roles take one datapoint only. Two controllers with the same name in
+  different rooms (an old copy left in another room) are worth mentioning to the user: one is
+  often stale.
 - `CentralJalousie`, `CentralWindow`, `CentralLightController` are group controls: not per
   opening, skip them.
 
@@ -137,8 +146,9 @@ Quirks that matter here:
   get a second rule with `"kind": "music-paused"`; that kind is not shown by default, the user
   can give it an icon (menu "Globale Einstellungen …"), so say so. Any kind can be set to "Nicht
   anzeigen" there (`"hidden"` in global.json). Any other kind you invent gets a placeholder icon
-  until the user picks one, so say so too. Other indicators (mailbox, washing machine): one
-  indicator per thing with a rule per state, see `format.md` *Indicators*.
+  until the user picks one, so say so too. Other indicators (mailbox, washing machine, robot
+  mower, vacuum, camera; SKILL.md block 10): one indicator per thing with a rule per state, see
+  `format.md` *Indicators*. Status texts map with `"as": "text"` and compare with `equals`.
 - **Areas with controls of their own** (a sauna with its control's `tempActual`/`tempTarget`/
   `power`, its own light output and audio zone) can become a room of their own even if Loxone
   files their controls under another room; suggest it.
@@ -152,10 +162,10 @@ Quirks that matter here:
 2. Per room propose the datapoints of the table above; per opening the contact, motor and shade
    whose names point to it (Loxone names like "Fenster Küche West 1", "Jalousie Küche links").
    Present ambiguous cases as a short list of options instead of guessing.
-3. Write datapoints.json and the `data` references; run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <folder>`, which
+3. Write datapoints.json and the `data` references; run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --house-check <folder>`, which
    checks that every reference exists.
 4. If HouseVis has been connected before (the stored token is used, read-only):
-   `HOUSEVIS_CONFIG=<folder> "$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --values` prints the live value of every datapoint of
+   `$env:HOUSEVIS_CONFIG = '<folder>'; & "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --values` prints the live value of every datapoint of
    that folder. Without `HOUSEVIS_CONFIG` it prints the app's configuration folder instead. Filter the
    output with grep; the `loxone:values=<filter>` form printed nothing in practice. Check
    plausibility (temperatures, which rooms are lit or playing, contact polarity) and report it.

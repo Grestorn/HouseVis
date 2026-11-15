@@ -36,7 +36,10 @@ mean missing permissions, not missing hardware.
 ```
 
 Ids: `<roomId>.<role>` for rooms, `window.<openingId>`, `shade.<openingId>.position` — or follow
-the convention of an existing datapoints.json of the user. `label` = the name in Loxone Config.
+the convention of an existing datapoints.json of the user. Datapoint ids allow only lower-case
+letters, digits, `.` and `-` (`^[a-z0-9][a-z0-9.-]{0,79}$`): no capitals, underscores, spaces or
+umlauts, so a Loxone name is converted (`Licht_Decke` → `licht-decke`, `Küche` → `kueche`).
+`label` = the name in Loxone Config.
 
 | HouseVis role | Typical Loxone control → state | `as` |
 |---|---|---|
@@ -106,6 +109,12 @@ Quirks that matter here:
 - Sensors the user names but the inventory lacks (a motion detector "Decke") are not enabled for
   the user interface in Loxone Config, or the user lacks permission: record it, map it later.
 - `lightColor` alone decides whether a room is lit (black = off); `light` is then optional.
+- **Several light controllers in one room** (kitchen and living room, bedroom, bathroom with a
+  mirror light): the room's `lightColor` list takes outputs of any controller, mixed into one
+  colour, so the room is lit when any of them is on. Put every output there; never pick one.
+  `light` and the other roles take one datapoint only. Two controllers with the same name in
+  different rooms (an old copy left in another room) are worth mentioning to the user: one is
+  often stale.
 - `CentralJalousie`, `CentralWindow`, `CentralLightController` are group controls: not per
   opening, skip them.
 
@@ -137,8 +146,9 @@ Quirks that matter here:
   get a second rule with `"kind": "music-paused"`; that kind is not shown by default, the user
   can give it an icon (menu "Globale Einstellungen …"), so say so. Any kind can be set to "Nicht
   anzeigen" there (`"hidden"` in global.json). Any other kind you invent gets a placeholder icon
-  until the user picks one, so say so too. Other indicators (mailbox, washing machine): one
-  indicator per thing with a rule per state, see `format.md` *Indicators*.
+  until the user picks one, so say so too. Other indicators (mailbox, washing machine, robot
+  mower, vacuum, camera; SKILL.md block 10): one indicator per thing with a rule per state, see
+  `format.md` *Indicators*. Status texts map with `"as": "text"` and compare with `equals`.
 - **Areas with controls of their own** (a sauna with its control's `tempActual`/`tempTarget`/
   `power`, its own light output and audio zone) can become a room of their own even if Loxone
   files their controls under another room; suggest it.

@@ -36,7 +36,7 @@ them (D). The reference for the house-model skill is `.claude/skills/house-model
 ## A — versioning and space ids (done)
 
 ```json
-{ "version": 2, "floors": [ … ],
+{ "version": 7, "floors": [ … ],
   "spaces": [ { "id": "kueche", "roomId": "kueche", "floor": "eg", "polygon": [[0.37, 6.32], …] } ] }
 ```
 
@@ -328,7 +328,7 @@ and light should be a room (the owner's request):
 Asked 2026-11-07: lanterns along the walkway, wall lights
 on the facade, lit furniture inside, each with its own live light.
 
-- `lights`: a list with `kind` `pendant`, `ceilingSpot`, `lantern`, `wallLight` or `strip`. Placed
+- `lights`: a list with `kind` `pendant`, `ceilingSpot`, `lantern`, `groundSpot`, `wallLight` or `strip`. Placed
   by **plan points**, like openings, never by wall id (wall ids are derived from coordinates and
   change with the room): `position` (a strip: `from`, `to`). A `wallLight`'s point lies on the
   inner face of its wall (an edge of a room polygon, like an opening's ends), and `side`
@@ -340,7 +340,9 @@ on the facade, lit furniture inside, each with its own live light.
   post reaches down to the terrain), a wall light's center, a strip's line (`height` at `from`;
   an optional `toHeight` at `to` makes it rise, e.g. under a sloped ceiling or along stairs, or
   stand upright with `from` and `to` the same point). A ceiling spot sits in
-  its area's ceiling; outside every area (under a canopy) it needs `height`. Validation keeps
+  its area's ceiling; outside every area (under a canopy) it needs `height`. A ground spot
+  (2026-11-15, asked by a beta tester for in-ground uplights) has no height: it sits in the floor
+  of the area it lies in, otherwise in the terrain, and shines up. Validation keeps
   inside lights between the area's floor and ceiling (an outbuilding's `level` counts).
 - `data` with the room's light roles (`light`, `lightColor` also as a list, `lightLevel`; same value
   types). Without data a light follows its room's light: `room`, else the room of the area it lies

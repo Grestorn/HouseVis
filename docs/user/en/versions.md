@@ -5,6 +5,45 @@
 What changed for you in each version. Update the plugin together with the app (`/plugin marketplace update
 housevis`, [chapter 2](2-house-model.md)).
 
+## 0.9.4
+
+**Important for the tablet:** a configuration with a data panel or an in-ground spot does not
+load in an app from before 0.9.4. Update the Android app together with the Windows app before you
+export such a configuration.
+
+**Pages and devices**
+- **Data panels:** any Loxone value on a page (PV power, grid, battery …), each with icon, name and
+  the format Loxone gives it; picked in the device editor from the list of the Miniserver's values,
+  filtered by room and category and searchable ([chapter 3](3-using-the-app.md#data-panels)).
+- **Device editor tidied up:** devices, pages and panels in three columns; **+** opens a choice
+  (HouseVis or Loxone page; view, clock, date or data panel); panels fold open and shut; the panel
+  list is the order from front to back, arrows move one forward or back. **Separate
+  orientations** is now a setting of the device.
+- **AI assistant with DeepSeek:** besides an Anthropic key, the assistant takes another service
+  with Anthropic's API, e.g. DeepSeek (`deepseek-flash`, its model that can see plans): tick the
+  box in the key form, enter address, model and key. Not tested by us; no cost is shown then.
+- **The skill for Codex, Gemini CLI and Mistral Vibe:** the house-model skill also comes as a
+  plain skill folder for these agents ([chapter 2](2-house-model.md#other-ai-agents-codex-gemini-cli-mistral-vibe));
+  not tested by us.
+- Its commands are written for PowerShell, the shell these agents use on Windows; a `plans\`
+  folder in a clone of this repository stays out of Git.
+
+**From the first feedback**
+- **In-ground spots** as a light kind of their own: set into the ground or a terrace, shining up
+  (facade, pillar, tree).
+- **Rooms without datapoints** are named by the model check; when the assistant is connected to
+  the Miniserver (or the skill finds `loxone-inventory.json`), it warns about each one whose Loxone
+  room has lights, a room controller or presence: a room that stays dark because its mapping got
+  lost shows up at once.
+- **AI assistant:** error messages say how to fix the problem (e.g. the lower-case id, `lightColor`
+  as a list for several light controllers in a room); a change that removes datapoints says so at
+  once. The test pictures no longer fail so easily at the start ("Starting the capture window did
+  not finish"): more time and a second try.
+- The skill asks right away which side photos without one in their name show, checks after a
+  refused change that everything arrived, and combines several light controllers of a room.
+- **Robot mowers, vacuum robots and cameras**: the skill offers them as an icon at their place
+  (charging station, gate) showing their state: mowing, charging, error, doorbell.
+
 ## 0.9.3
 
 **Important for the tablet:** a configuration using the new icons (from another set, with a
