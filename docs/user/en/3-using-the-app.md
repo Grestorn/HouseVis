@@ -18,6 +18,7 @@
 |---|---|
 | Connect to Miniserver | sign in, change the Miniserver |
 | Loxone UI sign-in … | store the Loxone interface's user and password, so it does not ask after every start of the app (optional; the password then lies encrypted on the device, see the note in the dialog; only with an encrypted connection). After storing, the app shows the Loxone page and signs in at once; if Loxone refuses, the dialog opens again with a note |
+| Cameras … | add and set up cameras (Reolink, Loxone Intercom, others), store user and password, look at a test picture ([Cameras](#cameras)); on the tablet only the sign-in |
 | AI assistant … | change the model with Claude ([chapter 2](2-house-model.md)) and more: create playbacks, check the mapping to Loxone |
 | Edit views … | from where you look, which rooms are open, what is left out |
 | Edit devices / pages … | which pages a PC, tablet or phone shows; per device also simple lighting and a reduced frame rate for slower devices; export for the tablet |
@@ -65,7 +66,8 @@ which shows the views themselves) or a **Loxone UI** page with the Loxone interf
 the indicators, one-colour ones with a color, or "Show no icon"), and **Show the current
 weather**. The **+** beside **Panels** adds what lies on the page: a **View** (beside it the views
 not on the page yet), **Clock**, **Date** (the time and the long date with weekday and month as the
-device's system settings format them, e.g. 12 or 24 hours) and **Data panel**. Only the chosen
+device's system settings format them, e.g. 12 or 24 hours), **Data panel** and **Camera**
+([Cameras](#cameras)). Only the chosen
 panel is open and marked in the preview; a click on its name opens or closes it. The list is also
 the order from front to back: what is higher lies in front and covers everything below it; the
 arrows at the top right of each panel move it one layer forward or back, the trash can removes it.
@@ -111,6 +113,50 @@ changed afterwards: the **icon** (or “Show no icon”), the **name** (empty: i
 the **format** (`%.1f` one decimal, `%d` none, `%%` a percent sign, the unit after it; **From
 Loxone** fetches it again). The list needs a connection to the Miniserver; it shows only what the
 signed-in user may see in Loxone.
+
+### Cameras
+
+![Cameras](../images/en/cameras.jpg)
+
+HouseVis shows camera pictures on a page: as a **still picture** renewed every few seconds (beside
+the house that is enough and spares the tablet), or as the **live picture**.
+
+**Adding a camera:** menu → **Cameras …** → **New camera …**, give it a **Name** and choose the
+**Kind**:
+
+- **Reolink (still and live picture)** – the camera's **Address** (name or IP address, optionally
+  with :port). On the camera, switch on **HTTP** and **RTMP** under *Network → Advanced → Server
+  settings* and save there; the live picture comes over RTMP, RTSP is not needed. **Stream for the
+  live picture**: **Fluent** suits a tablet; *Balanced* is not on every model; *Clear* is the full
+  resolution, often in H.265, which not every device plays. For the "Fluent" stream choose H.264
+  and a low frame rate in the Reolink app (e.g. 4 fps); that plays smoothly. **Channel** only on a
+  recorder (NVR), otherwise 0.
+- **Loxone Intercom (through the Miniserver)** – choose the **Intercom** (2nd generation) from the
+  list; HouseVis finds it in the Miniserver, no address is needed. The picture comes through the
+  Miniserver, encrypted; for that, HouseVis must be signed in with **Encrypted connection (TLS)**.
+  It signs in with the user and password of a Miniserver user that may sign in to the intercom (the
+  intercom accepts no sign-in without a password).
+- **Other camera (still picture only)** – the **Address** and the **Path of the still picture**
+  from the camera's manual, e.g. `/cgi-bin/snapshot.cgi?channel=1`.
+
+Under **Sign-in** enter **User** and **Password** and **Save**. The password lies encrypted on this
+device and only there: on the tablet, enter it once more under **Cameras …** (the cameras
+themselves are there already; they come with the configuration). Best use a camera user that may
+only watch. **Show a test picture** shows whether everything is right and fetches a new picture
+every few seconds. A camera still on a page cannot be removed; the dialog names the pages.
+
+**Putting it on a page:** menu → **Edit devices / pages …**, at the page **+** → **Camera** → the
+camera. Per camera: which **Camera**, **Live picture** (otherwise **Still picture every … seconds**,
+30 if not set) and **With frame and title**. The preview always shows a still picture.
+
+![A camera on a page of its own](../images/en/camera-page.jpg)
+
+The live picture is best on a page of cameras alone; beside a 3D view a still picture is usually
+enough. A live picture is about a second behind reality. To try it, the demo house has a camera
+"Einfahrt": small beside the house and live on the page **Einfahrt**.
+
+How to get the Loxone Intercom's picture is documented nowhere by Loxone. It rests on the work of
+Markus Laube: [loxone-intercom2](https://github.com/markuslaube/loxone-intercom2). Thank you!
 
 ## Ideas: ways to use HouseVis
 

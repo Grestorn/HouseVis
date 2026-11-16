@@ -79,7 +79,7 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
-**First, once per session: check the versions.** This skill was built for HouseVis 0.9.4.
+**First, once per session: check the versions.** This skill was built for HouseVis 0.9.5.
 Run `& "$env:LOCALAPPDATA\Programs\HouseVis\HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
 the user before anything else, in their language:
 - **The app is newer:** this skill is out of date and may not know what the app reads now. Install
@@ -235,7 +235,10 @@ Treat such a warning as a lost mapping until the user says the room stays withou
    plan image; mark estimated heights.
 4. **Roof.** Parts with their wall line (`outline`), overhangs per side, eave heights at the wall
    line, ridge height or pitch, roof windows — all as the plans print them, no conversions (see
-   *Roof* in [reference/format.md](reference/format.md)). Show: the pitch per side printed by
+   *Roof* in [reference/format.md](reference/format.md)). A roof whose outline is not a rectangle
+   (L, T, U, a cross gable, a wrap-around canopy) is one `polygon` part with its edges' slopes and
+   gables (*Polygon parts*), not several overlapping rectangles. PV panels on the roof, from photos and
+   drone shots: one array per block of panels (`pvArrays`, counted panels, same section). Show: the pitch per side printed by
    `house:check` against the section's value; the top storey's plan with the roof faces.
 5. **Surroundings.** Terrain level, terrace and gravel areas, pits and light wells, exterior stairs,
    steps and canopies, conservatory, garage as outbuilding. All of it against the outer faces.
@@ -273,6 +276,13 @@ Treat such a warning as a lost mapping until the user says the room stays withou
    weather station's panel and a screen's sky (temperature, felt temperature, humidity, wind,
    wind warning, rain, sunshine, weather type). Ask which family each comes from when Loxone has
    several (weather station, weather service, System).
+   **Room humidity:** suggest the room's `humidity` role for every room that has one, from the
+   room controller first, as for the temperature: `IRoomControllerV2` → `humidityActual` when
+   its humidity input is wired (inventory `"humidityInput": true`) and the value is plausible.
+   Only for a room without a controller, or with the input not wired, take the room's own
+   sensor, usually its Touch (T5; `InfoOnlyAnalog`, format "…%"), and say which rooms use it.
+   The temperature label shows it beside the target temperature, each with an icon (droplet, an arrow to a line) the user can change or turn off ("Nicht anzeigen", menu
+   "Globale Einstellungen …"). Not an indicator with a value in the room's row.
    **A room with several light controllers or outputs** (kitchen/living, bedroom, bathroom): put
    every output in the room's `lightColor` list, whichever controller it belongs to; the list is
    mixed, so the room is lit when any of them is on. `light` takes one datapoint only.
@@ -314,8 +324,9 @@ Treat such a warning as a lost mapping until the user says the room stays withou
    show the current weather as its sky with rain or snow over it, switched on per page in the
    device editor ("Aktuelles Wetter anzeigen"); the menu's "Wetter-Demo" shows every weather type.
 
-10. **Devices at a place** (optional; offer it when the inventory or the user names a robot
-   mower, a vacuum robot, a camera or an intercom). The app has no element of its own for them,
+10. **Devices and values at a place** (optional; offer it when the inventory or the user names a
+   robot mower, a vacuum robot, a camera, an intercom, an appliance with a state in Loxone, or a
+   value they want to see in the house). The app has no element of its own for them,
    and needs none: an **indicator at a point** (*Indicators* in
    [reference/format.md](reference/format.md)) shows their state where they are. One indicator
    per device, its states as rules, most important first:
@@ -330,6 +341,18 @@ Treat such a warning as a lost mapping until the user says the room stays withou
    - **Camera / intercom**: at its place on the facade or the gate; a rule for the doorbell or
      motion (an `Intercom` control's bell state, a motion input), otherwise a plain marker with
      one rule without `when`. The camera picture cannot be shown yet.
+   - **Appliances in a room** (stove, cooker hood, dishwasher, washing machine): ask the user
+     whether each goes in the room's row with its other indicators (music …) or at a point at
+     the appliance; both work, it is their choice (*Indicators*, "Where it shows").
+   - **Values at a place** (a pond's or wine cellar's temperature, a heat pump's power; a
+     room's humidity is the room role `humidity` instead, block 7): an indicator with `value`, its datapoint with Loxone's `format`; ask the
+     same way whether it goes in a room's row or at a point. A value of the whole house (the
+     whole plant's PV power, the day's energy) belongs on a page as a data panel, the user's
+     (device editor).
+   - **PV power per array**: when Loxone measures arrays separately (a `Meter` per roof side or
+     string, its `actual` state), an indicator with that `value` at the array (`"pvArray"`,
+     *Indicators*); kind e.g. `pv` (`lucide:sun`). Only one meter for the whole plant: a data
+     panel, not an indicator on one of the arrays.
    Suggest kinds and say that they get a placeholder icon until the user picks one (menu
    "Globale Einstellungen …"); if asked to set them: Fluent `robot`, `video-camera`, `bell`,
    `warning`, `low-battery`, or `lucide:bot`, `lucide:cctv`, `lucide:camera`,
@@ -396,6 +419,11 @@ temperature instead of the station's".
 Light sources are changed only here (the app has no editor for them): "add a pendant over the
 dining table", "the lantern stands 50 cm further left", "the wall light also shines up",
 "remove the garage spot". Keep their ids, map new ones as in block 8, and render with `--lit=lights`.
+
+"Show the humidity on each room's temperature panel": the room role `humidity` (block 7), one
+datapoint per room, the room controller's `humidityActual` first and the Touch's humidity only
+where the controller has none; name the rooms that fall back and those that have none. If the model has indicators showing a room's humidity in its row, offer to
+replace them with the role.
 
 Devices at a place likewise (block 10): "show the mower at its station", "a camera marker at
 the gate", "the vacuum shows an error icon when it is stuck".

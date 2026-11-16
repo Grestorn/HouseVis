@@ -5,7 +5,28 @@
       "type": "loxone"
     }
   },
+  "cameras": {
+    "einfahrt": { "type": "reolink", "name": "Einfahrt", "host": "127.0.0.1", "port": 47811 }
+  },
   "datapoints": {
+    "aussen.teich": {
+      "source": "miniserver",
+      "label": "Teichtemperatur",
+      "loxone": {
+        "control": "1c0de0a3-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "format": "%.1f°"
+    },
+    "bad.feuchte": {
+      "source": "miniserver",
+      "label": "Bad Luftfeuchte",
+      "loxone": {
+        "control": "1c0de0a4-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "format": "%.0f%%"
+    },
     "hobbyraum.temperature": {
       "source": "miniserver",
       "label": "Hobbyraum",
@@ -1662,6 +1683,59 @@
         "control": "1c0de067-0000-0000-ffffdec0de000000",
         "state": "value"
       }
+    },
+    "pv.dach-sued": {
+      "source": "miniserver",
+      "label": "PV Dach Süd",
+      "loxone": {
+        "control": "1c0de0a8-0000-0000-ffffdec0de000000",
+        "state": "actual"
+      },
+      "format": "%.2f kW"
+    },
+    "pv.carport": {
+      "source": "miniserver",
+      "label": "PV Carport",
+      "loxone": {
+        "control": "1c0de0a9-0000-0000-ffffdec0de000000",
+        "state": "actual"
+      },
+      "format": "%.2f kW"
+    },
+    "wallbox.carport.leistung": {
+      "source": "miniserver",
+      "label": "Wallbox Carport",
+      "loxone": {
+        "control": "1c0de0a5-0000-0000-ffffdec0de000000",
+        "state": "actual"
+      },
+      "format": "%.1fkW"
+    },
+    "wallbox.carport.verbunden": {
+      "source": "miniserver",
+      "label": "Wallbox Carport",
+      "loxone": {
+        "control": "1c0de0a5-0000-0000-ffffdec0de000000",
+        "state": "connected"
+      }
+    },
+    "auto.ladestand": {
+      "source": "miniserver",
+      "label": "E-Auto Ladestand",
+      "loxone": {
+        "control": "1c0de0a6-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "format": "%.0f%%"
+    },
+    "auto.reichweite": {
+      "source": "miniserver",
+      "label": "E-Auto Reichweite",
+      "loxone": {
+        "control": "1c0de0a7-0000-0000-ffffdec0de000000",
+        "state": "value"
+      },
+      "format": "%.0fkm"
     }
   }
 }

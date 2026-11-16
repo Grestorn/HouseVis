@@ -5,6 +5,45 @@
 Was sich in jeder Version für dich geändert hat. Das Plugin mit der App zusammen aktualisieren
 (`/plugin marketplace update housevis`, [Kapitel 2](2-hausmodell.md)).
 
+## 0.9.5
+
+**Wichtig fürs Tablet:** Eine Konfiguration mit einer Kamera, PV-Modulen, einem Dach mit L-, T-
+oder U-Umriss, Raumfeuchte oder einem Wert an einem Indikator lädt nicht in einer App vor 0.9.5.
+Die Android-App zusammen mit der Windows-App aktualisieren, bevor du so eine Konfiguration
+exportierst.
+
+**Kameras**
+- **Kamerabilder auf einer Seite:** neben dem Haus ein Standbild, das alle paar Sekunden erneuert
+  wird, auf einer Seite mit Kameras das Livebild. Reolink-Kameras (Stand- und Livebild), die
+  **Loxone Intercom** (2. Generation) über den Miniserver, andere Kameras mit Standbild.
+  Eingerichtet unter Menü → **Kameras …**, mit dem Geräte-Editor auf eine Seite gelegt
+  ([Kapitel 3](3-app-benutzen.md#kameras)). Das Demohaus hat eine Kamera zum Ausprobieren.
+
+**Hausmodell (aus dem Beta-Feedback)**
+- **PV-Module** auf dem Dach: Claude zeichnet sie nach Dachfotos oder Drohnenaufnahmen; ein
+  Indikator über jedem Feld kann zeigen, was es gerade liefert ([Kapitel 2](2-hausmodell.md)).
+- **Dächer mit L-, T- oder U-Umriss** sind jetzt ein Dachteil, mit Graten und Kehlen, wo sie
+  hingehören; die Dachstücke eines älteren Modells fasst Claude auf Wunsch zu einem zusammen.
+- **Raumfeuchte** in der kleinen Zeile unter der Temperatur, neben der Solltemperatur, beide mit
+  einem Symbol, das du unter **Globale Einstellungen …** ändern oder abschalten kannst.
+- **Werte an Indikatoren:** Ein Indikator kann einen Wert aus Loxone mit Einheit zeigen, z. B. die
+  Temperatur des Teichs oder die Leistung der Wärmepumpe.
+- **Alle 2.030 Lucide-Symbole** in der Symbolauswahl: die Hausgruppen zuerst, der Rest unter
+  **Weitere Gruppen …**.
+- Der KI-Assistent und der Skill platzieren Beschriftungen und Indikatoren in einer Ansicht nach
+  Augenschein der gerenderten Seite.
+- Die Modellprüfung warnt nicht mehr beim inneren Ende eines Zwerchgiebels, das ins Hauptdach
+  läuft.
+
+**Korrekturen**
+- Windows: **Alt** blendet keine Menüleiste mehr ein (Alt+Klick im Ansichten-Editor geht wieder).
+- Ansichten-Editor: Wände, die ein inaktiver Raum hinter einer Öffnung zeichnet (die Seitenwand
+  hinter dem offenen Garagentor), lassen sich anklicken.
+- Geräte-Editor: Alle Seiten auf ein Gerät mit nur einer Ausrichtung kopieren behält die Seiten
+  dieser Ausrichtung.
+- Formate mit Breite (`%5.1f`, `%02d`) werden formatiert angezeigt.
+- Android: Textfelder in Dialogen bleiben über der Bildschirmtastatur.
+
 ## 0.9.4
 
 **Wichtig fürs Tablet:** Eine Konfiguration mit einem Datenpanel oder einem Bodeneinbaustrahler

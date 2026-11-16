@@ -16,7 +16,8 @@
                   { "id": "pv", "loxone": { "control": "1c0de0a0-0000-0000-ffffdec0de000000", "state": "actual" }, "name": "PV", "icon": "sun", "format": "%.2f kW" },
                   { "id": "netz", "loxone": { "control": "1c0de0a1-0000-0000-ffffdec0de000000", "state": "actual" }, "name": "Netz", "icon": "electric-plug", "format": "%.2f kW" },
                   { "id": "batterie", "loxone": { "control": "1c0de0a2-0000-0000-ffffdec0de000000", "state": "value" }, "name": "Batterie", "icon": "battery", "format": "%.0f%%" }
-                ] }
+                ] },
+              { "type": "camera", "id": "einfahrt", "camera": "einfahrt", "area": { "x": 79, "y": 14, "width": 19, "height": 21 }, "frame": true }
             ] },
           {
             "id": "65ffa8d1-3d60-46aa-b19a-bbe31a28b0f9",
@@ -30,6 +31,9 @@
           },
           { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
           { "id": "aussen", "title": "Außen", "icon": "trees", "components": [{ "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }], "weather": true },
+          { "id": "einfahrt", "title": "Einfahrt", "icon": "cctv", "components": [
+              { "type": "camera", "id": "einfahrt", "camera": "einfahrt", "area": { "x": 3, "y": 4, "width": 94, "height": 92 }, "live": true, "frame": true }
+            ] },
           { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
         ]
       }
@@ -54,6 +58,9 @@
                 ] }
             ] },
           { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
+          { "id": "einfahrt", "title": "Einfahrt", "icon": "cctv", "components": [
+              { "type": "camera", "id": "einfahrt", "camera": "einfahrt", "area": { "x": 3, "y": 4, "width": 94, "height": 92 }, "live": true, "frame": true }
+            ] },
           { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
         ]
       },

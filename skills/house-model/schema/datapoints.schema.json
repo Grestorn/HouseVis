@@ -39,6 +39,16 @@
         ]
       }
     },
+    "cameras": {
+      "description": "Network cameras by id, shown on a page by a camera component (docs/cameras.md). Addresses only: the sign-in is stored on each device, encrypted (menu \"Kameras …\").",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/camera"
+      }
+    },
     "datapoints": {
       "description": "Datapoints by id, e.g. \"kueche.temperatur\".",
       "type": "object",
@@ -51,6 +61,46 @@
     }
   },
   "$defs": {
+    "camera": {
+      "type": "object",
+      "required": ["type", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": ["reolink", "loxoneIntercom", "snapshot"],
+          "description": "reolink: snapshots over its CGI API and the live picture as HTTP-FLV (sub stream; enable HTTP and RTMP under Network > Advanced > Server settings). loxoneIntercom: a Loxone Intercom (gen. 2) through the Miniserver HouseVis is signed in to (TLS only; MJPEG; a Miniserver user's password). snapshot: any camera with a JPEG snapshot address and HTTP Basic sign-in; no live picture."
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60, "description": "Shown in a framed camera component and in the sign-in dialog." },
+        "host": { "type": "string", "minLength": 1, "maxLength": 253, "description": "reolink, snapshot: host name or IPv4 address in the home network, without scheme, port or path." },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535, "description": "Absent: 80, or 443 with tls." },
+        "tls": { "type": "boolean", "description": "HTTPS with the normal certificate check. Most cameras have a certificate of their own that does not pass it; leave it off in the home network." },
+        "channel": { "type": "integer", "minimum": 0, "maximum": 63, "description": "reolink: the channel on an NVR (or a camera with several lenses); absent: 0." },
+        "stream": { "enum": ["sub", "ext", "main"], "description": "reolink: the stream of the live picture. sub (default): the small \"fluent\" one every Reolink has, H.264; ext: the \"balanced\" one some models have; main: full size, often H.265, which plays only with hardware decoding." },
+        "path": { "type": "string", "minLength": 1, "maxLength": 300, "description": "snapshot: path and query of the JPEG snapshot on the camera, e.g. \"/cgi-bin/snapshot.cgi?channel=1\"." },
+        "device": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{16}$",
+          "description": "loxoneIntercom: the intercom's deviceUuid (details of the IntercomV2 control in the structure file)."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "reolink" } } },
+          "then": { "required": ["host"], "not": { "anyOf": [{ "required": ["path"] }, { "required": ["device"] }] } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "snapshot" } } },
+          "then": { "required": ["host", "path"], "not": { "anyOf": [{ "required": ["channel"] }, { "required": ["stream"] }, { "required": ["device"] }] } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "loxoneIntercom" } } },
+          "then": {
+            "required": ["device"],
+            "not": { "anyOf": [{ "required": ["host"] }, { "required": ["port"] }, { "required": ["tls"] }, { "required": ["channel"] }, { "required": ["stream"] }, { "required": ["path"] }] }
+          }
+        }
+      ]
+    },
     "datapoint": {
       "type": "object",
       "required": [
@@ -72,7 +122,13 @@
         "unit": {
           "type": "string",
           "maxLength": 12,
-          "description": "Unit for the display, e.g. \"°C\", \"%\", \"W\"."
+          "description": "Unit for the display, e.g. \"°C\", \"%\", \"W\"; written after the number when there is no \"format\"."
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "How the value is written, in Loxone's printf-like format as the structure file gives it (details.format, or a per-state format such as a Meter's actualFormat): \"%.1f°\", \"%.0f%%\", \"%.2f kW\". Takes precedence over \"unit\" and \"decimals\"."
         },
         "as": {
           "description": "Conversion of the raw value. Short form \"number\", \"boolean\", \"text\" or \"color\"; without it, \"number\" applies. \"color\" parses Loxone colors such as \"hsv(30,80,100)\" and \"temp(80,2700)\" (brightness, Kelvin).",

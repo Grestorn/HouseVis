@@ -4,9 +4,14 @@
   "fill": 0.9,
   "rooms": ["hobbyraum", "vorrat", "wohnen", "gaestezimmer", "eltern", "bad"],
   "toggles": ["roof", "outside", "Garage"],
-  "structures": { "carport-stuetze-sw": "hidden", "carport-stuetze-so": "hidden", "balkon": "transparent" },
+  "indicators": {
+    "auto-ladestand": { "offset": [0, 3], "height": 1.5 },
+    "auto-reichweite": { "offset": [0, 3], "height": 0.9 },
+    "wallbox": { "offset": [2.62, 0.05], "height": 0.3 }
+  },
+  "structures": { "carport-stuetze-sw": "hidden", "carport-stuetze-so": "hidden", "terrassendach-stuetze-sw": "hidden", "terrassendach-stuetze-s": "hidden", "terrassendach-stuetze-so": "hidden", "terrassendach-stuetze-no": "hidden", "balkon": "transparent" },
   "appearance": { "glassOpacity": 0.02, "outlines": { "solid": 0.4, "glass": 0.5 }, "openingHighlight": { "color": "#ffb02e", "strength": 0.8, "pulse": false } },
-  "roofs": { "carport": "hidden" },
+  "roofs": { "carport": "hidden", "terrassendach": "transparent" },
   "walls": { "kind-2@10.64,0.37-10.64,4.4": "transparent", "wohnen@0.37,0.37-6.6,0.37": "hidden" },
   "labels": {
     "hobbyraum": { "temperature": { "height": 0.37, "offset": [0.21, -0.5] }, "indicators": { "height": 1.61, "offset": [-1.82, -0.56] }, "name": { "wall": "hobbyraum@5.6,0.3-5.6,4.6", "shift": -1.04, "height": 0.17 } },

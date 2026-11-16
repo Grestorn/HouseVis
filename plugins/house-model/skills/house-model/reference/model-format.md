@@ -97,6 +97,7 @@ written as plans dimension it (format 7):
 | `hip` | like `gable` | a slope on every side; with `ridgeHeight` one pitch everywhere and the ridge shorter than the outline by its width |
 | `shed` | `low` (side), `eaveHeight` (at the low wall line), `ridgeHeight` (at the high one) or `pitch` | one slope |
 | `flat` | `height` | flat roof |
+| `polygon` | `outline` as corners, `eaveHeight`, `pitch`, `overhang`, `edges` (one per outline edge: `"slope"`, `"gable"` or its own values) | a slope on every edge that is not a gable; hips at outside corners, valleys at inside ones (section T) |
 
 - `outline` is the **wall line** under the part (outer wall faces); `overhang` reaches beyond it,
   one value or per side (missing sides 0). `eaveHeight` is the height **at the wall line**, where
@@ -155,8 +156,8 @@ written as plans dimension it (format 7):
   `from`/`to` run along the width from the left edge seen from outside looking up the slope.
 - Known limits: overlapping parts are drawn completely (the hidden piece lies under the higher
   roof); a wing whose roof reaches beyond the rooms shows its open end.
-- Later, additive: polygon outlines, dormers, mansard roofs. The plane-per-side model takes them
-  without another format change: a polygon outline is more sides, a dormer a part of its own.
+- Later, additive: dormers, mansard roofs. Polygon outlines came first (section T): a polygon
+  is more sides; a dormer will be a part of its own.
 
 ## F — exterior walls with thickness (done)
 
@@ -432,7 +433,64 @@ so every paved area or the garage moved the edge, and the plot could not end at 
   storey's floor; the view editor writes it by dragging. The point itself is edited in
   `house.json` only, and moving it moves it in every view.
 
-## Later, additive (no version bump needed)
+## Q — indicators with a value (additive, format 7)
+
+- Any indicator, in a room's row or at a point, may give `"value": { "datapoint": … }`: it then
+  writes that datapoint's value beside its icon. The datapoint
+  gives a number or a text. A rule still decides whether it shows (`"rules": [{}]` always); a
+  kind whose icon global.json hides (`"hidden"`) shows the value alone.
+- How it is written belongs to the datapoint, not to the indicator: `datapoints.json` gains
+  `format` (Loxone's printf-like text, `"%.1f°"`), which takes precedence over `unit` (now used:
+  after the number) and `as.decimals`. `src/model/valueFormat.ts` (`displayOf`, `valueText`)
+  writes it with the app language's decimal separator; assembly copies the display into the
+  house (`withValueDisplays`), since the scene has the house but not the datapoints.
+
+## R — a room's humidity (additive, format 7)
+
+- The room role `humidity` (number, percent): like the temperature, from the room's
+  `IRoomControllerV2` (`humidityActual`) when its humidity input is wired (`details.connectedInputs`
+  bit 14, the inventory's `humidityInput`), else from the room's own sensor, usually its Touch
+  (T5). The temperature label's small line shows it after the target temperature, rounded to
+  whole percent. Both get an icon of their own from global.json's indicator kinds,
+  `target-temperature` (default Lucide `arrow-right-to-line`, →|, in the line's colour) and `humidity` (default droplet; the same kind as an
+  indicator writing a humidity value, so a house picks one icon for both); "hidden" leaves the
+  bare number. The settings list `humidity` only once a room maps it.
+- A room's humidity is this role, not an indicator with a value in the room's row (section Q):
+  that stays for values without a room role (a pond, a heat pump).
+
+## S — PV arrays on the roof (additive, format 7)
+
+- `pvArrays`: a rectangle of panels lying in one slope of a roof part, placed like a roof window
+  (`roof`, `center` in the plan, `width` along the eave, `depth` across it in the plan) with
+  `columns` × `rows` panels. Validation: within one slope, not over a roof window of that slope,
+  ids unique.
+- Drawn without thickness, a few centimetres above the roof (`PV_LIFT`): the roof's cut-away
+  (section D, `roofCutaway.ts`) cuts the panels with the same plan polygons, leaving a faint
+  outline of the array where they are cut; a see-through roof part makes them see-through too.
+- An indicator may sit at an array (`"pvArray": "<id>"`, a third choice besides `room` and
+  `position`): above the array's centre, shown while the view draws its roof part, with that
+  part's tags. Everything else of an indicator at a point (the view's nudge, the editor's drag,
+  the "behind" check, `value`) applies unchanged.
+
+## T — polygon roof parts (additive, format 7)
+
+- `kind: "polygon"`: `outline` a list of corners (the wall line, either direction), defaults
+  `eaveHeight`, `pitch` and `overhang` on the part, and `edges` with one entry per outline edge
+  (edge i from corner i to the next): `"slope"`, `"gable"`, or an object with its own `gable`,
+  `eaveHeight`, `pitch`, `overhang`. No `ridgeHeight` (an arbitrary outline has no one ridge
+  that would fix the pitches) and no `rotation`. Pitch 0 everywhere is a flat roof.
+- Geometry (`src/model/roofPolygon.ts`): a slope's plane goes through its edge at its eave height
+  and rises inwards. It applies only within its *reach*: the footprint (each edge's line moved
+  out by its overhang), bounded at each end of its edge by the line where it meets the
+  neighbouring slope (on the side of the edge itself), or by a neighbouring gable's line and
+  verge. The surface is the lowest of the planes reaching a point. For a convex outline this is
+  the rectangle kinds' "lowest of all planes" (a rectangle written as a polygon gives their
+  heights exactly); on an L or T it keeps an inside edge's plane out of the other wing. It is the
+  straight skeleton without its later events, enough for house outlines (tested on T, L, U,
+  cross and a wrap-around canopy).
+- Validation: one edge entry per corner, at least one slope, pitches below 90° and not 0 beside
+  sloped ones, a simple outline, and slopes covering the footprint. Gable walls and the open-gable
+  warning work per gable edge, named by number.
 
 - Polygon footprints for structures, ground areas, pits and pavilions (today rectangles
   `x0/x1/y0/y1`, which stay as shorthand).

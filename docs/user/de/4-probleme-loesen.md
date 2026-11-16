@@ -35,6 +35,18 @@
 | „Miniserver getrennt" | Ist der Miniserver erreichbar (Adresse, Netz)? HouseVis versucht es selbst erneut. Neue Adresse: Menü → **Mit Miniserver verbinden**. |
 | Anmeldung abgelehnt oder Zertifikatsfrage | Benutzername und Passwort prüfen; **Verschlüsselte Verbindung (TLS)** nur bei einem Miniserver 2. Ein neues Zertifikat nur im eigenen Netz übernehmen. |
 
+## Kameras
+
+| Problem | Was tun |
+|---|---|
+| „Keine oder eine falsche Anmeldung“ | Menü → **Kameras …**: Benutzer und Kennwort neu eintragen und **Speichern**. Nach einer geänderten Adresse ist das immer nötig, und an jedem Gerät eigens. |
+| „Die Adresse der Kamera ist unbekannt“ oder „Keine Verbindung zur Kamera“ | Adresse und Port prüfen; ist die Kamera im selben Netz? Bei Reolink: **HTTP** an der Kamera eingeschaltet und gespeichert (sonst leitet sie auf HTTPS um)? |
+| „Die Kamera antwortet nicht rechtzeitig“ | Kameras im WLAN schlafen manchmal ein: Das erste Bild nach einer Pause dauert einige Sekunden, HouseVis versucht es zweimal. Bleibt es dabei, den WLAN-Empfang der Kamera prüfen. |
+| Reolink: Standbild ja, Livebild nein | An der Kamera **RTMP** einschalten (*Netzwerk → Erweitert → Servereinstellungen*) und speichern; unter **Kameras …** den Stream **Flüssig (Fluent)** wählen, *Ausgewogen* hat nicht jedes Modell. |
+| Das Livebild ruckelt oder hängt hinterher | Stream **Flüssig (Fluent)** in H.264 mit niedriger Bildrate; auf einem schwachen Tablet besser ein Standbild statt des Livebilds. |
+| Intercom: „Die Intercom geht nur mit einer verschlüsselten Verbindung zum Miniserver“ | Menü → **Mit Miniserver verbinden**, mit **Verschlüsselte Verbindung (TLS)**. |
+| Intercom: Benutzer oder Kennwort werden abgelehnt | Der Benutzer muss sich an der Intercom anmelden dürfen. Zum Prüfen die Weboberfläche der Intercom im Browser öffnen (ihre Adresse steht in Loxone Config) und mit diesem Benutzer anmelden. Klappt das nicht, fehlt ihm das Recht in Loxone Config. |
+
 ## Geschwindigkeit
 
 | Problem | Was tun |

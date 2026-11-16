@@ -41,6 +41,7 @@ Leg alles in einen Ordner pro Haus, z. B. `C:\Users\<du>\HouseVis-Projekte\plans
 | Was anders gebaut wurde als geplant, als Textdatei `plan-changes.txt` („Garage 70 cm nach Norden versetzt") | sehr empfohlen |
 | Lageplan, eigene Skizze von Terrasse und Wegen | empfohlen |
 | Elektroplan, Fotos in der Dämmerung (für Außen- und besondere Leuchten) | optional |
+| Fotos oder Drohnenaufnahmen vom Dach (für die PV-Module) | optional |
 
 - **Der PDF-Plansatz des Architekten kommt unverändert hinein**, unter beliebigem Namen. Claude
   findet selbst heraus, welche Seite was zeigt.
@@ -91,14 +92,35 @@ Ausgabenlimit.
    **Wetterstation**.
 4. **Anzeigen** zeigen einen Zustand als Symbol: Musik läuft oder pausiert, die Waschmaschine
    läuft, Post im Briefkasten. Ein Gerät bekommt eine Anzeige mit einem Symbol je Zustand (*„zeig
-   den Briefkasten: ein Brief für Post, ein Paket für ein Paket"*). Meist sitzt sie in der Reihe
-   ihres Raums; eine, die zu einem eigenen Ort gehört, schwebt dort (*„zeig den Briefkasten an der
-   Haustür"*).
+   den Briefkasten: ein Brief für Post, ein Paket für ein Paket"*). Sie sitzt entweder in der
+   Reihe ihres Raums, neben den anderen Symbolen (Musik …), oder schwebt an einem eigenen Ort (*„zeig
+   den Briefkasten an der Haustür"*, *„den Herd über dem Kochfeld"*); bei einem Gerät in einem Raum
+   fragt Claude, was dir lieber ist.
+5. Eine Anzeige kann auch einen **Wert** aus Loxone mit seiner Einheit zeigen, z. B. *„zeig die
+   Teichtemperatur im Garten"* oder *„die Leistung der Wärmepumpe"*: im Format, das Loxone für den Wert
+   angibt (z. B. „21,4°“, „55%“), Temperaturen in ihrer Farbe. Soll nur der Wert ohne Symbol
+   erscheinen, stell das Symbol seiner Art unter **Globale Einstellungen …** auf „Nicht anzeigen“.
+   Werte, die zu keinem Ort gehören (PV-Leistung der ganzen Anlage, Energie des Tages), kommen als
+   [Datenpanel](3-app-benutzen.md#datenpanels) auf eine Seite.
+   **PV-Module** zeichnet Claude aus Dachfotos oder Drohnenaufnahmen aufs Dach (*„die PV-Module
+   auf dem Süddach, 5 × 2"*), ein Feld je Modulblock. Misst Loxone die Felder einzeln (ein Zähler je
+   Dachseite), zeigt eine Anzeige über jedem Feld, was es gerade liefert (*„zeig die Leistung
+   jedes PV-Felds"*). In Ansichten, die das Dach aufschneiden, werden die Module mit aufgeschnitten;
+   dort bleibt nur ihr Umriss.
+6. Die **Luftfeuchte eines Raums** kennt meist der Raumregler, sonst misst sie der Loxone-Taster
+   (Touch, T5) mit; Claude nimmt wie bei der Temperatur zuerst den Raumregler. Sag *„zeig die
+   Luftfeuchte bei den Raumtemperaturen"*, dann steht sie in der kleinen Zeile unter der
+   Temperatur, neben der Solltemperatur: „→| 21,0° 💧 48%“. Die beiden Symbole (Pfeil an einen
+   Strich, Tropfen) änderst du unter **Globale Einstellungen …** („Heizung: Solltemperatur“,
+   „Luftfeuchte“), oder stellst sie auf „Nicht anzeigen“ für die bloßen Zahlen.
 
 ### Spätere Änderungen
 
 Öffne den Haus-Assistenten und sag, was falsch ist, z. B. *„Das Badfenster liegt 20 cm zu weit
-rechts"* oder *„Die Garage hat ein Flachdach."* Claude ändert nur das. Links neben dem Assistenten
+rechts"* oder *„Die Garage hat ein Flachdach."* Claude ändert nur das. Ein Dach, das in einem
+älteren Modell aus mehreren Stücken besteht (etwa ein Zwerchgiebel aus überlappenden Teilen),
+fasst Claude auf Wunsch zu einem Dach zusammen: *„Mach das Hauptdach mit dem Zwerchgiebel zu
+einem Dach."* Links neben dem Assistenten
 siehst du das Haus mit jeder Änderung: oben wählst du eine deiner Ansichten oder **Ganzes Haus**
 (alle Räume offen, auch neue); ziehen dreht, das Mausrad zoomt, **Zurück zur Ansicht** stellt die
 Kamera zurück. Gespeichert wird dabei nichts an den Ansichten.

@@ -128,9 +128,13 @@ opaque doors (front door, side door, basement door).
 
 ## Roof
 
-`roofs` is a list of parts (`gable`, `hip`, `shed`, `flat`); see the table in
-`${CLAUDE_PLUGIN_ROOT}/skills/house-model/reference/model-format.md`. Most houses are one `gable` or `hip`; an L-shaped house is two parts that
-overlap (the higher one wins, valleys form by themselves); a garage has its own `flat` or `shed`.
+`roofs` is a list of parts (`gable`, `hip`, `shed`, `flat` on a rectangle; `polygon` on any
+outline); see the table in `${CLAUDE_PLUGIN_ROOT}/skills/house-model/reference/model-format.md`. Most houses are one `gable` or `hip`. An L, T
+or U house, a main roof with a cross gable, a bay with its own small roof running into the main
+one, a canopy wrapping round a corner: **one `polygon` part** (*Polygon parts* below), not
+several rectangles. Parts that really are separate roofs stay separate: a wing one storey lower
+(its own `floor`), a garage with its own `flat` or `shed`; where such parts overlap, the higher
+one wins.
 
 - `floor`: the storey whose rooms reach into the roof (the attic, or the upper floor with knee
   walls). Its heights are relative to that storey's FFB. For a cold, unused attic above a full
@@ -201,8 +205,70 @@ A part is written as the plans dimension it (format 7); nothing needs converting
   the eave, `depth` = extent across the eave **in the plan**, i.e. window length × cos(pitch).
   Typical sizes (width × length): 0.78 × 0.98, 0.78 × 1.18, 0.78 × 1.40, 1.14 × 1.18, 1.14 × 1.40,
   1.34 × 0.98. Plans mark them as rectangles with crossed lines or "DFF".
-- Not representable yet: dormers, mansard roofs, polygon footprints. Approximate (e.g. a dormer
-  by a small gable part) only after asking; list them in `model-notes.md`.
+- **PV arrays** (`pvArrays`, optional): a rectangle of panels lying in one slope, placed exactly
+  like a roof window: `roof` = part id, `center` in plan coordinates, `width` along the eave,
+  `depth` across the eave **in the plan** (length on the slope × cos(pitch)), `columns` panels
+  along the eave and `rows` up the slope (default 1 each). One array per block of panels: a slope
+  with a roof window between two blocks gets two arrays (an array must not cover a roof window,
+  and must lie within one slope). They come from roof photos and drone shots, rarely from plans:
+  count the panels per row and column and take the size from the count (a panel is about
+  1.0–1.15 × 1.7–1.8 m, portrait unless the photo shows them lying across) rather than from the
+  photo's edges; place the block against what you can measure on the roof (the verge, the ridge,
+  a roof window). In a drone shot taken at an angle, the roof's top shifts away from the camera
+  against the ground, so measure along the roof, never against the ground below.
+  `house:check` lists each under its roof part (slope it faces, panels, size on the slope, the
+  panel size it implies: check that against the real panel) and draws it dark blue in the plan.
+  The panels are drawn flat on the slope; a view that cuts the roof open cuts them too.
+  ```json
+  { "id": "pv-sued", "roof": "main", "center": [2.9, 2.0], "width": 5.2, "depth": 2.8, "columns": 5, "rows": 2 }
+  ```
+- Not representable yet: dormers, mansard roofs. Approximate (e.g. a dormer by a small gable
+  part) only after asking; list them in `model-notes.md`.
+
+### Polygon parts
+
+For an outline that is not a rectangle. Every edge of the outline carries a slope (rising
+inwards from its edge) or ends in a gable wall; where two slopes meet at an outside corner they
+form a hip, at an inside corner a valley, and a narrower wing at the same pitch gets a lower
+ridge that runs into the main slope by itself, as on the real roof.
+
+```json
+{ "id": "main", "kind": "polygon", "floor": "og",
+  "outline": [[0, 0], [12, 0], [12, 4], [8, 4], [8, 10], [4, 10], [4, 4], [0, 4]],
+  "eaveHeight": 1.0, "pitch": 35, "overhang": 0.6,
+  "edges": ["slope", "gable", "slope", "slope", { "gable": true, "overhang": 0.3 }, "slope", "slope", "gable"],
+  "color": "#3a3d40" }
+```
+
+- `outline`: the wall line corner by corner (outer wall faces, as for a rectangle part, within
+  2 cm), in either direction. Edge i runs from corner i to the next, the last back to the first.
+- `edges`: **one entry per edge, in the same order** (the check refuses another count):
+  `"slope"`, `"gable"`, or an object giving that edge its own values (`{ "gable": true,
+  "overhang": 0.3 }`, `{ "pitch": 45 }`, `{ "eaveHeight": 2.0 }`). Gable edges are where the
+  plans show a gable wall (Giebel): the ends of the main roof and of a cross gable. Eaves
+  (Traufe) are slopes. When you add or remove a corner, add or remove its edge too.
+- `eaveHeight` and `pitch` for every slope, `overhang` for every edge (default 0); per edge only
+  where it differs (a verge flush with the wall, a steeper cross gable). **No `ridgeHeight`**:
+  where the section gives eave and ridge heights, the pitch is
+  `atan((ridgeHeight − eaveHeight) / half the width across that ridge)` in degrees. Several
+  ridges at different heights from one pitch (a narrower wing) are expected; different pitches
+  per wing go on that wing's edges.
+- `pitch` 0 on every edge is a flat roof at `eaveHeight` (an L-shaped flat roof).
+- No `rotation`: the corners are plan coordinates already.
+- house:check prints a polygon part's corners, defaults and top, and every edge in order (slope
+  or gable, length, its own values): compare the top with the section's ridge, the edge lengths
+  with the dimension chains. Open gables are named by edge (`GABLE OPEN on edge 4 (…)`). The
+  slopes must cover the whole outline; an error names the gap.
+- A wrap-around canopy over no walls: its outer edges are slopes, the edges against the house
+  walls gables with `"overhang": 0` (it must not reach into the house), the free ends gables or
+  slopes as built; posts as `structures`, tagged together with the part.
+- **An existing roof built from several rectangles** that is one roof (a cross gable from
+  overlapping parts, a main roof split into pieces so an eave would not run across a gable, two
+  sheds meeting in a valley where the real roof has a hip): offer to merge them into one
+  polygon. The outline is the outer boundary of the walls under all pieces; the slopes and
+  gables as the real roof has them; keep the id the views and roof windows use most and re-point
+  the others' `roofWindows[].roof`, `pvArrays[].roof` and views' `roofs` entries. Check with
+  house:check (same top, no `GABLE OPEN`) and renders before and after.
 
 ## Surroundings
 
@@ -405,20 +471,56 @@ placeholder until they pick one, so say so. If they ask you to set one, `global.
 
   No rule matching hides it (stopped music shows nothing). `"show": false` in a rule hides it for
   that state explicitly, ahead of later rules.
-- **In a room's row** (`room`): the usual case, for what concerns the room (music, a window
-  contact summary). Every indicator of a room shares its row; the views place the row.
-- **At a point** (`position` instead of `room`) for an indicator that belongs to a place of its own:
-  the mailbox by the front door, the washing machine in a cellar corner, the garage gate, a robot
-  mower's station, a camera (SKILL.md block 10).
-  `{ "floor": "eg", "x": 6.1, "y": -0.4, "height": 1.2 }`, `height` the icon's middle above the
-  storey's floor (default 1.5; inside a room it must stay below the ceiling). It shows with the
-  room its point lies in; outside the building with `outside`. `tags` (only here) for a group of
-  the user's. Suggest it when the user names a place ("at the mailbox"); ask where if the plans
-  do not show it. `house:check` lists it per storey and marks it as a purple diamond in the plan;
-  `house:render` shows the icon there (the simulation shows every indicator).
-  Where the icon covers something in one view, the user drags it in the view editor ("Ansichten
-  bearbeiten …"); that view stores `"indicators": { "<id>": { "offset": [east, north], "height": h
-  } }` relative to the point. Leave it to them; move the point itself when it is wrong everywhere.
+- **Where it shows: two ways, and the user chooses.** For every new indicator that belongs to an
+  item in a room (the stove, the dishwasher, the cooker hood, a sensor's value), name both and ask
+  which they prefer; do not settle it yourself. Several at once may share one question ("the
+  kitchen's stove, hood and dishwasher: in the kitchen's row with the music icon, or each at its
+  appliance?"). Only for what concerns the room as a whole (its music, a window summary) the row
+  goes without asking, and for a thing outside every room (the mailbox, a mower's station) the
+  point does.
+  - **In the room's row** (`room`): beside the room's other indicators (music …). Every indicator
+    of a room shares the row, one spot and one height per view (the views place the row), so the
+    row says *which room*, not *where in it*.
+  - **At a point of its own** (`position` instead of `room`): at the item, where it is in the
+    room or outside; the mailbox by the front door, the washing machine in a cellar corner, the
+    garage gate, a robot mower's station, a camera (SKILL.md block 10).
+    `{ "floor": "eg", "x": 6.1, "y": -0.4, "height": 1.2 }`, `height` the icon's middle above the
+    storey's floor (default 1.5; inside a room it must stay below the ceiling; an appliance's
+    top, e.g. 1.0 above a hob, reads well). Take the point from the furniture you modelled
+    (block 8) or the plans, else ask where. It shows with the room its point lies in; outside
+    the building with `outside`. `tags` (only here) for a group of the user's. `house:check`
+    lists it per storey and marks it as a purple diamond in the plan; `house:render` shows the
+    icon there (the simulation shows every indicator).
+    Where the icon covers something in one view, the user drags it in the view editor ("Ansichten
+    bearbeiten …"); that view stores `"indicators": { "<id>": { "offset": [east, north], "height": h
+    } }` relative to the point. Leave it to them unless they ask you to place it (*Placing labels
+    and indicators in a view* below); move the point itself when it is wrong everywhere.
+  - **At a PV array** (`"pvArray": "<array id>"` instead of `room` or `position`): for what that
+    array produces, with a `value` (its power). The icon floats above the array's centre; it shows
+    while the view draws the array's roof part and goes with its tags (`roof`, so a view or switch
+    without the roof hides it). No question needed: an array's power belongs at the array. Where
+    one Loxone meter measures several arrays (one string over a roof window), put the indicator at
+    the largest of them. The per-view nudge works as for a point.
+- **A value** (`"value": { "datapoint": … }`): the indicator also writes a datapoint's value
+  beside its icon, e.g. a pond's or a wine cellar's temperature, a heat pump's power (a room's
+  humidity is the room role `humidity`, shown in its temperature label; loxone-mapping.md). Use it when the user wants a Loxone value shown at a place in the 3D view; where it
+  shows is asked as above (in the room's row, or at a point, also outside). The datapoint must
+  give a number or a text (not `"boolean"` or `"color"`); give the datapoint the **format Loxone
+  has for that state** (`"format": "%.1f°"`, as `loxone_controls` / the inventory reports it, a
+  Meter's per state: `actualFormat` for `actual`, `totalFormat` for `total…`), so the app writes
+  it as Loxone does with the app language's decimal separator. Only when Loxone has none, set
+  `"unit"` (and `as.decimals`) on the datapoint instead. A rule decides whether it shows:
+  `"rules": [{}]` always. To show only the value, without an icon, the kind's icon is set to
+  `"hidden"` in `global.json` (menu "Globale Einstellungen …", "Nicht anzeigen"); say so rather
+  than inventing a kind for it. A value that belongs to no place (the whole plant's PV power, the
+  day's energy) goes on a page as a **data panel** instead, which the user adds in the device editor
+  ("Geräte bearbeiten …", "+ Datenpanel"); point them there.
+
+  ```json
+  { "id": "teich", "kind": "thermometer", "position": { "floor": "eg", "x": 6.5, "y": -5.2, "height": 0.4 },
+    "value": { "datapoint": "aussen.teich" }, "rules": [{}] }
+  { "id": "pv-sued-leistung", "kind": "pv", "pvArray": "pv-sued", "value": { "datapoint": "pv.sued" }, "rules": [{}] }
+  ```
 
 ## Tags
 
@@ -429,9 +531,9 @@ user name groups of their own. Background and rules: `${CLAUDE_PLUGIN_ROOT}/skil
   parts are `roof`; structures `structure`; pavilions `pavilion` + `outside`; areas with
   `outbuilding: true` `outbuilding` (without `exteriorWall` also `outside`); outdoor areas (`height: 0`) `outside`; the
   terrain `ground` + `outside` (its pits too); a roof part over outbuildings only also gets their tags.
-  Openings, roof windows and gables go with their area or roof part and have no tags of their own.
+  Openings, roof windows, PV arrays and gables go with their area or roof part and have no tags of their own.
 - **Add `"tags"` only for what the kind cannot tell** (optional on `spaces`, `roofs`,
-  `structures`, `pavilions`, `lights`, `furniture`, `ground.pits`, and `indicators` at a point):
+  `structures`, `pavilions`, `lights`, `furniture`, `ground.pits`, and `indicators` at a point or a PV array):
   - On pits a group name such as `"Lichtschacht"` when the user wants to leave the light wells out
     with the basement (a view with `floors` without the basement still draws the terrain and its
     pits; `"hide": ["Lichtschacht"]` leaves them out, and the terrain closes over them). Exterior
@@ -484,6 +586,39 @@ and `hide` directly:
   `toggles` as well as in `hide`.
 - Check with `house:check` (it warns about unknown storeys, tags no element carries, a view
   without a visible active room, switches for tags that are left out) and render the view.
+
+## Placing labels and indicators in a view
+
+Where an icon or label sits in one view is normally set by dragging it in the view editor. When
+the user asks you to do it ("the mailbox icon covers the door in the garden view", "line up the
+indicators on the ground-floor page"), you can: the renders show every indicator (the
+simulation shows them all, whatever their rules), the room labels and the temperatures, so you
+see what the user sees.
+
+1. Render the page: `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render <model folder> --page <n|id|title>` (`--device <id>`
+   for another device's pages). Look at `view-<id>.png` of the view in question (the page's
+   picture `page-<n>-<title>.png` shows all its views side by side).
+2. Change only that view's file `views/<id>.json`; every setting there is relative, so it follows
+   when the house is edited:
+   - **An indicator at a point** (house.json `position`): `"indicators": { "<indicator id>": {
+     "offset": [east, north], "height": h } }`, the offset in meters from the indicator's point,
+     the height above the storey's floor (default the point's).
+   - **A room's indicator row** (indicators with `room`) and its **temperature**:
+     `"labels": { "<room id>": { "indicators": { "offset": [east, north], "height": h },
+     "temperature": { … } } }`, the offset in meters from the room's centroid (without one the
+     spot floats over the middle of the visible floor), the height above the room's floor
+     (row default 30 cm below the ceiling, temperature 1.35). The row and the temperature start
+     from the same spot; give the row its own offset or height to separate them.
+   - **A room's name**: `labels.<room id>.name` (on a wall with `wall`, `shift`, `height`, or
+     `{ "floor": true, "offset": … }`, or `"hidden"`); see `${CLAUDE_PLUGIN_ROOT}/skills/house-model/schema/view.schema.json`.
+   Offsets are in the house's directions (east, north), not the picture's: work out from the
+   view's camera which way is left/right/up in the image before moving anything. Only rooms the
+   view cuts open get labels.
+3. `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check <model folder>`, render the page again, compare, repeat. Show the user
+   the final `view-<id>.png`.
+
+Move the point in house.json instead when the icon is wrong in every view. Never touch views
+the user did not name.
 
 ## Checking
 

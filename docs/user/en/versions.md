@@ -5,6 +5,44 @@
 What changed for you in each version. Update the plugin together with the app (`/plugin marketplace update
 housevis`, [chapter 2](2-house-model.md)).
 
+## 0.9.5
+
+**Important for the tablet:** a configuration with a camera, PV panels, a roof with an L, T or U
+outline, room humidity or a value on an indicator does not load in an app from before 0.9.5.
+Update the Android app together with the Windows app before you export such a configuration.
+
+**Cameras**
+- **Camera pictures on a page:** beside the house a still picture renewed every few seconds, on a
+  page of cameras the live picture. Reolink cameras (still and live picture), the **Loxone
+  Intercom** (2nd generation) through the Miniserver, other cameras with a still picture. Set up
+  under menu → **Cameras …**, put on a page with the device editor
+  ([chapter 3](3-using-the-app.md#cameras)). The demo house has a camera to try.
+
+**House model (from the beta feedback)**
+- **PV panels** on the roof: Claude draws them from roof photos or drone shots; an indicator above
+  each array can show what it delivers right now ([chapter 2](2-house-model.md)).
+- **Roofs with an L, T or U outline** are one roof part now, with hips and valleys where they
+  belong; Claude merges an older model's roof pieces into one on request.
+- **Room humidity** in the small line below the temperature, beside the target temperature, both
+  with an icon you can change or switch off under **Global settings …**.
+- **Values on indicators:** an indicator can show a Loxone value with its unit, e.g. the pond's
+  temperature or the heat pump's power.
+- **All 2,030 Lucide icons** in the icon picker: the house groups first, the rest under **More
+  groups …**.
+- The AI assistant and the skill place labels and indicators in a view by looking at the rendered
+  page.
+- The model check no longer warns about the inner end of a cross gable that runs into the main
+  roof.
+
+**Fixes**
+- Windows: **Alt** no longer brings up a menu bar (Alt+click in the view editor works again).
+- View editor: walls an inactive room draws behind an opening (the side wall behind an open garage
+  gate) can be clicked.
+- Device editor: copying all pages onto a device with one orientation keeps that orientation's
+  pages.
+- Formats with a width (`%5.1f`, `%02d`) are shown formatted.
+- Android: text fields in dialogs stay above the on-screen keyboard.
+
 ## 0.9.4
 
 **Important for the tablet:** a configuration with a data panel or an in-ground spot does not

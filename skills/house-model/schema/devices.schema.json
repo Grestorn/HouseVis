@@ -109,7 +109,7 @@
         },
         "components": {
           "type": "array",
-          "description": "What the page shows, each placed in percent of the page: views, and optionally a clock, a date and data panels.",
+          "description": "What the page shows, each placed in percent of the page: views, and optionally a clock, a date, data panels and cameras.",
           "items": { "$ref": "#/$defs/component" }
         },
         "weather": {
@@ -139,8 +139,23 @@
     "component": {
       "type": "object",
       "required": ["type"],
-      "properties": { "type": { "enum": ["view", "clock", "date", "panel"] } },
-      "oneOf": [{ "$ref": "#/$defs/viewComponent" }, { "$ref": "#/$defs/widgetComponent" }, { "$ref": "#/$defs/panelComponent" }]
+      "properties": { "type": { "enum": ["view", "clock", "date", "panel", "camera"] } },
+      "oneOf": [{ "$ref": "#/$defs/viewComponent" }, { "$ref": "#/$defs/widgetComponent" }, { "$ref": "#/$defs/panelComponent" }, { "$ref": "#/$defs/cameraComponent" }]
+    },
+    "cameraComponent": {
+      "type": "object",
+      "description": "A camera's picture (docs/cameras.md): snapshots refreshed every \"interval\" seconds, or with \"live\" the camera's live picture. Drawn over the page's views like a data panel; a page may hold several.",
+      "required": ["type", "id", "camera", "area"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "camera" },
+        "id": { "$ref": "#/$defs/id", "description": "Unique among the page's camera components." },
+        "camera": { "$ref": "#/$defs/id", "description": "A camera id from datapoints.json \"cameras\"." },
+        "area": { "$ref": "#/$defs/area" },
+        "frame": { "type": "boolean", "description": "Drawn with a frame and the camera's name." },
+        "live": { "type": "boolean", "description": "The live picture instead of snapshots (a camera without one shows snapshots). Best on a page of cameras alone: decoding video costs a tablet." },
+        "interval": { "type": "integer", "minimum": 2, "maximum": 3600, "description": "Seconds between snapshots; default 30." }
+      }
     },
     "panelComponent": {
       "type": "object",

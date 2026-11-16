@@ -18,6 +18,7 @@
 |---|---|
 | Mit Miniserver verbinden | anmelden, Miniserver wechseln |
 | Loxone-UI-Anmeldung … | Benutzer und Kennwort der Loxone-Oberfläche speichern, damit sie nach dem Start der App nicht jedes Mal fragt (freiwillig; das Kennwort liegt dann verschlüsselt auf dem Gerät, siehe Hinweis im Dialog; nur bei verschlüsselter Verbindung). Nach dem Speichern zeigt die App die Loxone-Seite und meldet sich gleich an; lehnt Loxone ab, öffnet sich der Dialog wieder mit einem Hinweis |
+| Kameras … | Kameras anlegen und einrichten (Reolink, Loxone Intercom, andere), Benutzer und Kennwort speichern, ein Testbild ansehen ([Kameras](#kameras)); am Tablet nur die Anmeldung |
 | KI-Assistent … | das Modell mit Claude ändern ([Kapitel 2](2-hausmodell.md)) und mehr: Vorführungen anlegen, Zuordnungen zu Loxone prüfen |
 | Ansichten bearbeiten … | von wo du schaust, welche Räume offen sind, was ausgeblendet ist |
 | Geräte / Seiten bearbeiten … | welche Seiten PC, Tablet oder Handy zeigen; pro Gerät auch einfache Beleuchtung und reduzierte Bildrate für langsamere Geräte; Export fürs Tablet |
@@ -68,7 +69,8 @@ Klick darauf wählt es aus denselben Sätzen wie die Anzeigen, einfarbige mit Fa
 Symbol zeigen“), und **Aktuelles Wetter anzeigen**. Das **+** neben **Panele** fügt hinzu, was auf
 der Seite liegt: eine **Ansicht** (daneben die Ansichten, die noch nicht auf der Seite sind),
 **Uhr**, **Datum** (Uhrzeit und langes Datum mit Wochentag und Monat, so wie die
-Systemeinstellungen des Geräts sie schreiben, z. B. 12 oder 24 Stunden) und **Datenpanel**. Nur das
+Systemeinstellungen des Geräts sie schreiben, z. B. 12 oder 24 Stunden), **Datenpanel** und
+**Kamera** ([Kameras](#kameras)). Nur das
 gewählte Panel ist aufgeklappt und in der Vorschau markiert; ein Klick auf seinen Namen klappt es
 auf oder zu. Die Liste ist auch die Reihenfolge von vorn nach hinten: was oben steht, liegt vorn
 und verdeckt alles darunter; die Pfeile rechts oben an jedem Panel schieben es eine Ebene nach vorn
@@ -116,6 +118,52 @@ Danach lässt sich alles ändern: das **Symbol** (oder „Kein Symbol zeigen“)
 Symbol und Wert) und das **Format** (`%.1f` eine Nachkommastelle, `%d` keine, `%%` ein
 Prozentzeichen, dahinter die Einheit; **Aus Loxone** holt es neu). Die Liste braucht eine Verbindung
 zum Miniserver; sie zeigt nur, was der angemeldete Benutzer in Loxone sehen darf.
+
+### Kameras
+
+![Kameras](../images/de/cameras.jpg)
+
+HouseVis zeigt Kamerabilder auf einer Seite: als **Standbild**, das sich alle paar Sekunden
+erneuert (neben dem Haus reicht das und schont das Tablet), oder als **Livebild**.
+
+**Kamera anlegen:** Menü → **Kameras …** → **Neue Kamera …**, einen **Namen** geben und die
+**Art** wählen:
+
+- **Reolink (Standbild und Livebild)** – die **Adresse** der Kamera (Name oder IP-Adresse,
+  wahlweise mit :Port). An der Kamera unter *Netzwerk → Erweitert → Servereinstellungen* **HTTP**
+  und **RTMP** einschalten und dort speichern; das Livebild kommt über RTMP, RTSP braucht es nicht.
+  **Stream für das Livebild**: **Flüssig (Fluent)** passt fürs Tablet; *Ausgewogen* hat nicht jedes
+  Modell; *Klar* ist die volle Auflösung, oft in H.265, das nicht jedes Gerät abspielt. Für den
+  Stream „Flüssig“ in der Reolink-App H.264 und eine niedrige Bildrate wählen (z. B. 4 fps), das
+  läuft ruckelfrei. **Kanal** nur bei einem Rekorder (NVR), sonst 0.
+- **Loxone Intercom (über den Miniserver)** – die **Intercom** (2. Generation) aus der Liste wählen;
+  HouseVis findet sie im Miniserver, eine Adresse braucht es nicht. Das Bild kommt verschlüsselt über
+  den Miniserver; dafür muss HouseVis mit der Einstellung **Verschlüsselte Verbindung (TLS)**
+  angemeldet sein.
+  Angemeldet wird mit Benutzer und Kennwort eines Miniserver-Benutzers, der sich an der Intercom
+  anmelden darf (die Intercom nimmt keine Anmeldung ohne Kennwort an).
+- **Andere Kamera (nur Standbild)** – die **Adresse** und den **Pfad des Standbilds** aus dem
+  Handbuch der Kamera, z. B. `/cgi-bin/snapshot.cgi?channel=1`.
+
+Unter **Anmeldung** **Benutzer** und **Kennwort** eintragen und **Speichern**. Das Kennwort liegt
+verschlüsselt auf diesem Gerät und nur dort: Am Tablet trägt man es unter **Kameras …** noch
+einmal ein (die Kameras selbst stehen dort schon, sie kommen mit der Konfiguration). Am besten
+einen Kamera-Benutzer nehmen, der nur zuschauen darf. **Testbild anzeigen** zeigt, ob alles stimmt,
+und holt alle paar Sekunden ein neues Bild. Eine Kamera, die noch auf einer Seite liegt, lässt sich
+nicht entfernen; der Dialog nennt die Seiten.
+
+**Auf eine Seite legen:** Menü → **Geräte / Seiten bearbeiten …**, bei der Seite **+** →
+**Kamera** → die Kamera. Pro Kamera: welche **Kamera**, **Livebild** (sonst **Standbild alle …
+Sekunden**, ohne Angabe 30) und **Mit Rahmen und Titel**. Die Vorschau zeigt immer ein Standbild.
+
+![Eine Kamera auf einer eigenen Seite](../images/de/camera-page.jpg)
+
+Das Livebild läuft am besten auf einer Seite nur mit Kameras; neben einer 3D-Ansicht genügt meist
+ein Standbild. Ein Livebild ist etwa eine Sekunde hinter der Wirklichkeit. Zum Ausprobieren hat das
+Demo-Haus eine Kamera „Einfahrt“: klein neben dem Haus und live auf der Seite **Einfahrt**.
+
+Wie man an das Bild der Loxone Intercom kommt, beschreibt Loxone nirgends. Es beruht auf der Arbeit
+von Markus Laube: [loxone-intercom2](https://github.com/markuslaube/loxone-intercom2). Danke!
 
 ## Ideen: so kannst du HouseVis nutzen
 

@@ -35,6 +35,18 @@
 | "Miniserver disconnected" | Is the Miniserver reachable (address, network)? HouseVis tries again by itself. For a new address: menu → **Connect to Miniserver**. |
 | Sign-in refused, or a certificate question | User name and password; **Encrypted connection (TLS)** only for a Miniserver 2. Accept a new certificate only in your own network. |
 
+## Cameras
+
+| Problem | What to do |
+|---|---|
+| "No sign-in, or a wrong one" | Menu → **Cameras …**: enter user and password again and **Save**. After a changed address this is always needed, and on every device by itself. |
+| "The camera’s address is unknown" or "No connection to the camera" | Check address and port; is the camera in the same network? On a Reolink: is **HTTP** switched on and saved on the camera (otherwise it redirects to HTTPS)? |
+| "The camera does not answer in time" | Cameras on WiFi sometimes doze off: the first picture after a pause takes a few seconds, HouseVis tries twice. If it stays that way, check the camera's WiFi reception. |
+| Reolink: still picture yes, live picture no | Switch on **RTMP** on the camera (*Network → Advanced → Server settings*) and save; under **Cameras …** choose the stream **Fluent**, *Balanced* is not on every model. |
+| The live picture stutters or lags behind | Stream **Fluent** in H.264 with a low frame rate; on a weak tablet better a still picture than the live picture. |
+| Intercom: "The intercom works only with an encrypted connection to the Miniserver" | Menu → **Connect to Miniserver**, with **Encrypted connection (TLS)**. |
+| Intercom: user or password refused | The user must be allowed to sign in to the intercom. To check, open the intercom's web interface in a browser (its address is in Loxone Config) and sign in with that user. If that fails, the user lacks the right in Loxone Config. |
+
 ## Performance
 
 | Problem | What to do |

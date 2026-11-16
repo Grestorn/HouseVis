@@ -45,6 +45,7 @@ umlauts, so a Loxone name is converted (`Licht_Decke` → `licht-decke`, `Küche
 |---|---|---|
 | room `temperature` | `IRoomControllerV2` → `tempActual`; or a sensor `InfoOnlyAnalog` → `value` | (number) |
 | room `targetTemperature` | `IRoomControllerV2` → `tempTarget` | (number) |
+| room `humidity` | first the room's `IRoomControllerV2` → `humidityActual`, when its humidity input is wired (inventory `"humidityInput": true`; `loxone_controls`: "humidity input wired") and it reports a plausible value; else the room's own humidity sensor, usually its Touch (T5): `InfoOnlyAnalog` → `value`, format "…%", named like "Luftfeuchte …" / "Feuchte …" | (number, %) |
 | room `heating` | the climate controller's `controls` (`ClimateController`/`ClimateControllerUS`), picking the room controller | `{ "type": "climateDemand", "control": "<IRoomControllerV2 uuid>", "demand": "heating" }` |
 | room `cooling` | same as `heating` | same, with `"demand": "cooling"` |
 | room `presence` | `PresenceDetector` → `active` | `"boolean"` |
@@ -58,6 +59,7 @@ umlauts, so a Loxone name is converted (`Licht_Decke` → `licht-decke`, `Küche
 | shade `position` | `Jalousie` → `position` | (number 0–1) |
 | shade `slats` | `Jalousie` → `shadePosition` (blinds only) | (number 0–1) |
 | indicator condition | e.g. `AudioZoneV2` → `playState` | used in `indicators[].rules[].when` |
+| indicator `value` | any value to write out: a sensor `InfoOnlyAnalog` → `value`, a `Meter` → `actual`/`total…`, a `TextState` → `textAndIcon` | (number) or `"text"`; with `"format"` copied from Loxone (`details.format`, a Meter's `actualFormat`/`totalFormat`) |
 | light source `lightColor` | a light controller output `…/AIn` (`ColorPickerV2`) → `color` | `"color"`; a list for several outputs |
 | light source `light` | a switch output (`Switch` → `active`), or a lamp's output state (`InfoOnlyDigital` → `active`, e.g. "Wandstrahler Haustür") | `"boolean"` |
 | light source `lightLevel` | a dimmer (`Dimmer` → `position`, 0–100) | (number) |
@@ -148,7 +150,17 @@ Quirks that matter here:
   anzeigen" there (`"hidden"` in global.json). Any other kind you invent gets a placeholder icon
   until the user picks one, so say so too. Other indicators (mailbox, washing machine, robot
   mower, vacuum, camera; SKILL.md block 10): one indicator per thing with a rule per state, see
-  `format.md` *Indicators*. Status texts map with `"as": "text"` and compare with `equals`.
+  `format.md` *Indicators*; for one belonging to an item in a room (an appliance), ask whether it
+  goes in the room's row or at the item. Status texts map with `"as": "text"` and compare with
+  `equals`. A value to show in the 3D view (a pond's temperature, a heat pump's power) is an
+  indicator with `value` (same section), its datapoint with Loxone's `format`. A **room's
+  humidity** is not: it is the room role `humidity` (table), shown in the temperature label's
+  small line beside the target temperature. As with the temperature, the room controller is the
+  source: it is what the heating works with, and the controller averages or picks among the
+  room's sensors as the installer set it up. A Touch's own humidity is only the fallback: for a
+  room without a controller, or one whose humidity input is not wired (`"humidityInput": false`,
+  or a `humidityActual` of 0 or none at all). An older structure file (before Loxone 15.1) has
+  neither `humidityActual` nor the flag; then take the Touch.
 - **Areas with controls of their own** (a sauna with its control's `tempActual`/`tempTarget`/
   `power`, its own light output and audio zone) can become a room of their own even if Loxone
   files their controls under another room; suggest it.

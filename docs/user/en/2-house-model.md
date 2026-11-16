@@ -41,6 +41,7 @@ Put everything into one folder per house, e.g. `C:\Users\<you>\HouseVis-Projects
 | What was built differently from the plans, as a text file `plan-changes.txt` ("the garage moved 70 cm north") | strongly recommended |
 | Site plan, your own sketch of terrace and paths | recommended |
 | Electrical plan, photos at dusk (for outdoor and special lamps) | optional |
+| Photos or drone shots of the roof (for the PV panels) | optional |
 
 - **The architect's PDF set goes in as it is**, under any name. Claude finds out which page shows
   what.
@@ -87,13 +88,32 @@ hard cap, set a monthly spend limit in the Console.
    edges, e.g. *"a light strip under the wall cupboards"*) and your **weather station**.
 4. **Indicators** show a state as an icon: music playing or paused, the washing machine running,
    post in the mailbox. One device gets one indicator with an icon per state (*"show the mailbox:
-   a letter for post, a parcel for a parcel"*). Usually it sits in its room's row; one that
-   belongs to a place of its own floats there (*"show the mailbox at the front door"*).
+   a letter for post, a parcel for a parcel"*). It either sits in its room's row, beside the
+   other icons (music …), or floats at a place of its own (*"show the mailbox at the front door"*,
+   *"the stove above the hob"*); for a device in a room Claude asks which you prefer.
+5. An indicator can also show a **value** from Loxone with its unit, e.g. *"show the pond's
+   temperature in the garden"* or *"the heat pump's power"*: in the format Loxone gives for the
+   value (e.g. "21.4°", "55%"), temperatures in their colour. For the value alone without an icon,
+   set its kind's icon to "Do not show" under **Global settings …**. Values that belong to no
+   place (the whole plant's PV power, the day's energy) go on a page as a [data panel](3-using-the-app.md#data-panels).
+   Claude draws **PV panels** on the roof from roof photos or drone shots (*"the PV panels on the
+   south roof, 5 × 2"*), one array per block of panels. If Loxone measures the arrays separately
+   (a meter per roof side), an indicator above each array shows what it delivers right now
+   (*"show each PV array's power"*). Views that cut the roof open cut the panels too; only their
+   outline stays there.
+6. A room's **humidity** is usually known to its room controller, otherwise its Touch switch
+   (T5) measures it; as with the temperature, Claude takes the room controller first. Say *"show the humidity
+   with the room temperatures"*, and it appears in the small line below the temperature, beside
+   the target temperature: "→| 21.0° 💧 48%". Change the two icons (arrow to a line, droplet) under
+   **Global settings …** ("Heating: target temperature", "Humidity"), or set them to "Do not
+   show" for the bare numbers.
 
 ### Later changes
 
 Open the house assistant and say what is wrong, e.g. *"The bathroom window is 20 cm too far
-right"* or *"The garage has a flat roof."* Claude changes only that. Left of the assistant you
+right"* or *"The garage has a flat roof."* Claude changes only that. A roof that an older
+model built from several pieces (say a cross gable from overlapping parts) Claude merges into
+one on request: *"Make the main roof and the cross gable one roof."* Left of the assistant you
 see the house with every change: at the top choose one of your views or **Whole house** (every
 room open, new ones too); drag to turn, the wheel zooms, **Back to the view** resets the camera.
 Nothing of this is saved to the views.

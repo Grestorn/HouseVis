@@ -25,6 +25,7 @@ Windows and on Android tablets.
 | install HouseVis and connect it to my Miniserver | [1 – Installation and first start](1-install.md) |
 | **get a 3D model of my own house** | [2 – Creating the house model](2-house-model.md) |
 | arrange views, pages, a wall tablet | [3 – Using the app](3-using-the-app.md) |
+| show camera pictures (Reolink, Loxone Intercom) | [3 – Using the app: Cameras](3-using-the-app.md#cameras) |
 | fix something that looks wrong | [4 – Troubleshooting](4-troubleshooting.md) |
 | see what is new in a version | [Version history](versions.md) |
 | **get help, report a bug, suggest an idea** | **[the forum: forum.housevis.de](https://forum.housevis.de)** (in German) |

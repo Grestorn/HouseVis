@@ -131,7 +131,7 @@
             "description": "Display name on the wall, as short as possible."
           },
           "data": {
-            "description": "Datapoints from datapoints.json per role. Value types: temperature, targetTemperature, lightLevel, climateMode and climateOverride number; heating, light and presence true/false; lightColor color.",
+            "description": "Datapoints from datapoints.json per role. Value types: temperature, targetTemperature, humidity, lightLevel, climateMode and climateOverride number; heating, light and presence true/false; lightColor color.",
             "type": "object",
             "additionalProperties": false,
             "properties": {
@@ -142,6 +142,10 @@
               "targetTemperature": {
                 "$ref": "#/$defs/datapointRef",
                 "description": "Target temperature (number)."
+              },
+              "humidity": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Relative humidity in percent (number), e.g. the room's Touch (T5) humidity sensor; shown in the temperature label's small line beside the target temperature, rounded to whole percent."
               },
               "heating": {
                 "$ref": "#/$defs/datapointRef",
@@ -384,6 +388,24 @@
         }
       }
     },
+    "pvArrays": {
+      "description": "PV arrays: each a rectangle of panels lying in one slope of a roof part, placed like a roof window (the slope under \"center\" decides); drawn flat on the slope, cut away with the roof. An indicator at an array (\"pvArray\") shows what it produces.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "roof", "center", "width", "depth"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id", "description": "Unique id, e.g. \"pv-south\"; an indicator's \"pvArray\" refers to it." },
+          "roof": { "$ref": "#/$defs/id", "description": "Id of the roof part from \"roofs\"." },
+          "center": { "$ref": "#/$defs/point", "description": "Center of the array in the floor plan." },
+          "width": { "type": "number", "exclusiveMinimum": 0, "description": "Width along the eave (horizontal on the slope) in meters." },
+          "depth": { "type": "number", "exclusiveMinimum": 0, "description": "Extent across the eave, measured in the floor plan (not along the slope), in meters." },
+          "columns": { "type": "integer", "minimum": 1, "description": "Panels along the eave; default 1." },
+          "rows": { "type": "integer", "minimum": 1, "description": "Panels up the slope; default 1." }
+        }
+      }
+    },
     "roofWindows": {
       "description": "Roof windows. Each lies in one slope of a roof part; the slope under \"center\" decides.",
       "type": "array",
@@ -443,7 +465,7 @@
       }
     },
     "roofs": {
-      "description": "Roof as a list of parts, each as plans dimension it: the wall line it sits on (\"outline\"), how far it reaches beyond (\"overhang\"), and its slopes by their height at the wall line. Each slope is a plane through its side of the outline; within a part the surface is the lowest of them, cut off at the outline plus the overhangs. Where parts overlap, the higher one counts (e.g. a wing running into the main roof forms valleys). Rooms on a part's floor end below its slopes.",
+      "description": "Roof as a list of parts, each as plans dimension it: the wall line it sits on (\"outline\"), how far it reaches beyond (\"overhang\"), and its slopes by their height at the wall line. Each slope is a plane through its side of the outline; within a part the surface is the lowest of them, cut off at the outline plus the overhangs (a \"polygon\" part: the lowest of those whose edge reaches the point). Where parts overlap, the higher one counts (e.g. a wing running into the main roof forms valleys). Rooms on a part's floor end below its slopes.",
       "type": "array",
       "items": {
         "oneOf": [
@@ -522,6 +544,102 @@
               "tags": { "$ref": "#/$defs/tags" },
               "color": { "$ref": "#/$defs/roofColor" },
               "height": { "type": "number", "minimum": 0, "description": "Height above the floor in meters." }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Roof with a polygon outline (an L, T or U, a main roof with a cross gable, a wrap-around canopy): every edge of the outline carries a slope or ends in a gable wall. Each slope rises inwards from its edge; at an outside corner two slopes meet in a hip, at an inside corner in a valley. Use the rectangle kinds where they fit.",
+            "required": [
+              "id",
+              "kind",
+              "floor",
+              "outline",
+              "eaveHeight",
+              "pitch",
+              "edges"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id",
+                "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it."
+              },
+              "kind": {
+                "const": "polygon"
+              },
+              "floor": {
+                "$ref": "#/$defs/id",
+                "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof."
+              },
+              "outline": {
+                "type": "array",
+                "minItems": 3,
+                "items": {
+                  "$ref": "#/$defs/point"
+                },
+                "description": "The wall line under the roof, corner by corner in either direction: the outer faces of the walls it sits on (Außenkante); a roof over no walls (carport, canopy) its own edges without overhang. Edge i runs from corner i to the next (the last back to the first)."
+              },
+              "eaveHeight": {
+                "type": "number",
+                "description": "Height of the slopes at the wall line, above the floor; an edge may give its own."
+              },
+              "pitch": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 90,
+                "description": "Pitch of the slopes in degrees; an edge may give its own. 0 on every edge: a flat roof at \"eaveHeight\"."
+              },
+              "overhang": {
+                "type": "number",
+                "minimum": 0,
+                "description": "How far the roof reaches beyond every edge, in meters (default 0); an edge may give its own."
+              },
+              "edges": {
+                "type": "array",
+                "minItems": 3,
+                "description": "One entry per edge of \"outline\", in the same order (edge i from corner i to the next): \"slope\", \"gable\" (a vertical gable wall closes the roof there), or an object giving that edge its own values.",
+                "items": {
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "slope",
+                        "gable"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "gable": {
+                          "type": "boolean",
+                          "description": "true: a gable edge (no slope)."
+                        },
+                        "eaveHeight": {
+                          "type": "number",
+                          "description": "This slope's height at the wall line."
+                        },
+                        "pitch": {
+                          "type": "number",
+                          "minimum": 0,
+                          "exclusiveMaximum": 90,
+                          "description": "This slope's pitch in degrees."
+                        },
+                        "overhang": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "How far the roof reaches beyond this edge (a gable's verge)."
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "tags": {
+                "$ref": "#/$defs/tags"
+              },
+              "color": {
+                "$ref": "#/$defs/roofColor"
+              }
             }
           }
         ]
@@ -1578,9 +1696,27 @@
             "$ref": "#/$defs/position",
             "description": "A point of its own instead of a room's row, for an indicator that belongs to a place (the mailbox by the front door): \"height\" is the icon's middle above the storey's floor (default 1.5). It shows with the room of the area the point lies in, or as \"outside\"."
           },
+          "pvArray": {
+            "$ref": "#/$defs/id",
+            "description": "Id of a PV array from \"pvArrays\": the icon floats above the array's centre, instead of a room's row or a \"position\", for what that array produces (a \"value\" with its power). It shows while the view draws the array's roof part and goes with that part's tags (\"roof\")."
+          },
           "tags": {
             "$ref": "#/$defs/tags",
-            "description": "Only with \"position\": tags of its own besides those of the area it lies in."
+            "description": "Only with \"position\" or \"pvArray\": tags of its own besides those of the area it lies in (at a PV array: those of the array's roof part)."
+          },
+          "value": {
+            "type": "object",
+            "required": [
+              "datapoint"
+            ],
+            "additionalProperties": false,
+            "description": "Shows a datapoint's value beside the icon (a pool's temperature, a room's humidity), while a rule shows the indicator (\"rules\": [{}] always). A kind without an icon (global.json) shows the value alone. Written in the datapoint's \"format\" (Loxone's, e.g. \"%.1f°\"), else with its \"unit\".",
+            "properties": {
+              "datapoint": {
+                "$ref": "#/$defs/datapointRef",
+                "description": "Datapoint from datapoints.json, a number or a text."
+              }
+            }
           },
           "rules": {
             "type": "array",
@@ -1604,18 +1740,7 @@
             }
           }
         },
-        "oneOf": [
-          {
-            "required": [
-              "room"
-            ]
-          },
-          {
-            "required": [
-              "position"
-            ]
-          }
-        ]
+        "oneOf": [{ "required": ["room"] }, { "required": ["position"] }, { "required": ["pvArray"] }]
       }
     },
     "objects": {
