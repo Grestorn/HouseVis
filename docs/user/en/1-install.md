@@ -2,18 +2,13 @@
 
 [← Overview](README.md) · [Deutsch](../de/1-installation.md)
 
-> [!IMPORTANT]
-> **During the beta, HouseVis is available through the forum.** On
-> [forum.housevis.de](https://forum.housevis.de/g/Beta-Tester), ask to join the group **Beta-Tester**. Once you are
-> in, the Windows installer and the Android APK are in the category
-> [Beta-Programm](https://forum.housevis.de/c/beta-programm).
-
 ## Windows
 
 1. Download `HouseVis-Setup-<version>.exe` from the
-   [Releases page](https://github.com/Grestorn/HouseVis/releases) and start it.
-2. Windows may warn about an "unknown publisher" (the installer is not signed yet): click
-   **More info** → **Run anyway**.
+   [download page](https://www.housevis.de/download/) (in German) and start it.
+2. The installer is signed, publisher "Martin Korndörfer". While a new version has had few
+   downloads, Windows SmartScreen may still warn: check the publisher under **More info**, then
+   click **Run anyway**.
 3. The installer installs HouseVis for your Windows user only; no administrator rights needed.
 
 **Updating from an older version:** just run the new installer. If the new version needs a newer
@@ -55,7 +50,10 @@ do not ("Connecting to the Miniserver …", "Miniserver disconnected", "Simulate
 
 The tablet shows what you set up on the PC; it has no editors.
 
-1. Install the APK from the [Releases page](https://github.com/Grestorn/HouseVis/releases) (Android asks to allow installing from this source).
+1. Install the APK from the [download page](https://www.housevis.de/download/) (Android asks to allow installing from this source).
+   On Google Play, HouseVis is still in testing; sign up for the test on the same page.
+   On first start, **Show the demo house** shows the demo house with its values, no Miniserver
+   needed.
 2. On the PC: menu → **Edit devices / pages …**, choose the device (e.g. "Tablet"),
    **Export device …**. This writes one `.housevis` file with the model and its pages; no
    sign-in data. The next export offers the same folder again.

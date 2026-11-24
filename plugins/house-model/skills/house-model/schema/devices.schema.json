@@ -74,6 +74,10 @@
           "$ref": "#/$defs/id",
           "description": "A room of house.json with a presence datapoint: while it reports nobody there, the screen turns black (Android: lowest backlight) and the app keeps running; presence brings it back at once, and a tap wakes it for a minute. The screen then never sleeps, as with keepAwake."
         },
+        "doorbellLoxone": {
+          "type": "boolean",
+          "description": "When an intercom of the Miniserver rings (the bell state of any Intercom or IntercomV2 control), show the device's Loxone page, where the Loxone interface shows its door dialog, and wake a screen dimmed for lack of presence; when the ring ends, go back to the page shown before, unless another page was chosen meanwhile. Default true."
+        },
         "lightMode": {
           "enum": ["real", "simple"],
           "description": "How light sources are drawn on this device: real with three.js lights, simple with glowing bodies and painted pools of light, for weaker devices (docs/lights.md). Default: simple on android, real otherwise."
@@ -159,7 +163,7 @@
     },
     "panelComponent": {
       "type": "object",
-      "description": "A data panel: Loxone values side by side, each with an optional icon and name and the value in its format; drawn over the page's views like the clock (docs/values.md). A page may hold several.",
+      "description": "A data panel: Loxone values side by side, each with an optional icon and name and the value in its format; drawn over the page's views like the clock (docs/devices.md). A page may hold several.",
       "required": ["type", "id", "area", "entries"],
       "additionalProperties": false,
       "properties": {

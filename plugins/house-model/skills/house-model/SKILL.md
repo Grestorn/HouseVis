@@ -48,6 +48,14 @@ the user calls them.
   asks); elsewhere tell the user to report it to the HouseVis author with the render. Do not bend
   the model around it. Workarounds in the model are fine only for what the format cannot express, and
   they go into `model-notes.md`.
+- **Calm before complete.** Model what the user needs to recognise their house and read its
+  values: storeys, rooms, walls, openings, roofs, and the terrain, terraces and outbuildings that
+  shape it. Detail beyond that (furniture, light sources besides the room light, stairs, railings,
+  exterior steps, small structures, garden features) only where the user wants it or it clearly
+  helps reading the house (a stair in a stairwell the views open, a gallery's railing), offered
+  rather than added: every element is one more thing on a wall tablet's screen and makes the
+  views busy. Prefer few, larger elements to many small ones (a kitchen row as one box, not every
+  cabinet). When the plans show more than that, say what you left out and offer it.
 - **Confirm block by block.** After each block below, show the result (summary + plan or render
   images) and wait for the user's confirmation or corrections before the next block. Errors in the
   rooms carry into everything after them.
@@ -79,13 +87,13 @@ Reference: [reference/format.md](reference/format.md) (from plans to coordinates
 
 ## Tools
 
-**First, once per session: check the versions.** This skill was built for HouseVis 0.9.5.
+**First, once per session: check the versions.** This skill was built for HouseVis 1.0.0.
 Run `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --version` (it prints `HouseVis <version>`). If it prints a different version, tell
 the user before anything else, in their language:
 - **The app is newer:** this skill is out of date and may not know what the app reads now. Update
   it in Claude Code with `/plugin marketplace update housevis`, then start a new session (or
   run `/reload-plugins`).
-- **The app is older:** update HouseVis (https://github.com/Grestorn/HouseVis/releases); an
+- **The app is older:** update HouseVis (https://www.housevis.de/download/); an
   older app may refuse the model this skill writes.
 
 Then go on with the task, unless the user wants to update first. Same version: say nothing about it.
@@ -213,21 +221,29 @@ Treat such a warning as a lost mapping until the user says the room stays withou
    of the main building), north direction and how the house is aligned. Show: a table of storeys
    with level, height, wall thickness, source.
 2. **Rooms per storey.** Rooms (Loxone names) and spaces from the dimension chains; check that every
-   chain adds up; every area becomes a space (hallways, stairs, storage). Show: `plan-<floor>.png`
+   chain adds up; every area becomes a space (hallways, stairs, storage); a bay (Erker) is part of
+   its room's polygon (*Bays* in [reference/format.md](reference/format.md)); a room open through
+   two storeys (a crossed-out "Luftraum" on the upper plan) is one area on the lower storey with
+   `openTo` (*Double-height spaces*); a room a few steps down or up gets `level` (*Split levels*); where stairs help (see *Calm before complete*), a stair between storeys is a `stairs` entry written by its
+   walking line, with its rises and turns from the plan's label (*Stairs*); railings along a gallery's
+   edge, a balcony or a stair are `railings` (*Railings*), and a gallery's railing opens its wall. Show: `plan-<floor>.png`
    per storey next to the original plan, and the areas compared with the areas printed in the plan.
    Typical findings to look for: gaps wider than 0.7 m that should be walls (overlapping or missing
    rooms), rooms not aligned between storeys, an interior wall that came out too thick.
 3. **Openings.** Windows and exterior doors per wall with width, sill, top, type, sashes, side
-   panels, shades (elevations and photos). Show: per storey the list from `house:check` and the
+   panels, shades (elevations and photos); then the interior doors, passages and glass
+   partitions from the floor plans (*Openings* in [reference/format.md](reference/format.md)). Show: per storey the list from `house:check` and the
    plan image; mark estimated heights.
 4. **Roof.** Parts with their wall line (`outline`), overhangs per side, eave heights at the wall
    line, ridge height or pitch, roof windows — all as the plans print them, no conversions (see
    *Roof* in [reference/format.md](reference/format.md)). A roof whose outline is not a rectangle
    (L, T, U, a cross gable, a wrap-around canopy) is one `polygon` part with its edges' slopes and
-   gables (*Polygon parts*), not several overlapping rectangles. PV panels on the roof, from photos and
+   gables (*Polygon parts*), not several overlapping rectangles. A bay's own small roof is a part
+   on the bay's storey over its wall line (*Bays*). Dormers (Gauben, shed or gable) go under
+   `dormers`, written by their front; their windows are ordinary openings (*Dormers*). PV panels on the roof, from photos and
    drone shots: one array per block of panels (`pvArrays`, counted panels, same section). Show: the pitch per side printed by
    `house:check` against the section's value; the top storey's plan with the roof faces.
-5. **Surroundings.** Terrain level, terrace and gravel areas, pits and light wells, exterior stairs,
+5. **Surroundings.** Terrain level (flat, or spot heights from the site plan on a slope, with platforms), terrace and gravel areas, pits and light wells, exterior stairs,
    steps and canopies, conservatory, garage as outbuilding. All of it against the outer faces.
    **A garage (or any closed outbuilding) is built complete:** its area (`outbuilding: true`, the
    polygon is its inside) with its own `exteriorWall` and, if its floor lies lower, `level`; a roof
@@ -237,9 +253,10 @@ Treat such a warning as a lost mapping until the user says the room stays withou
    view, presence, labels). Its walls will hide part of the house in some views; tell the user
    that a view can make them transparent, leave the group out (`hide`) or give it a switch
    (`toggles`).
-   **Tag** what the kind cannot tell (see *Tags* in [reference/format.md](reference/format.md)):
-   `outside` on freestanding parts (garden wall, carport roof and posts), group names for parts
-   that belong together ("Carport", "Garage"). Show the tag list from `house:check`.
+   Keep to what the user wants shown (*Calm before complete*). **Tag** every component (see
+   *Tags* in [reference/format.md](reference/format.md)): one specific tag each, as the user calls
+   it ("Carport", "Lichtschacht Waschküche", "Pool"), `outside` on freestanding parts, group names
+   for what belongs together ("Garten"). Show the tag list from `house:check`.
 6. **Visual comparison.** `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check … --views`, then `"$LOCALAPPDATA/Programs/HouseVis/HouseVis.exe" --house-check --render …`.
    Put each `view-<direction>.png` next to the matching facade photo (`photo-<side>` and
    `view-<side>` both mean the house seen from that side; if a photo plainly shows another
@@ -327,7 +344,8 @@ Treat such a warning as a lost mapping until the user says the room stays withou
      integration reports the room.
    - **Camera / intercom**: at its place on the facade or the gate; a rule for the doorbell or
      motion (an `Intercom` control's bell state, a motion input), otherwise a plain marker with
-     one rule without `when`. The camera picture cannot be shown yet.
+     one rule without `when`. Its live picture goes on a page (the app's "Kameras …" and the device
+     editor, not house.json).
    - **Appliances in a room** (stove, cooker hood, dishwasher, washing machine): ask the user
      whether each goes in the room's row with its other indicators (music …) or at a point at
      the appliance; both work, it is their choice (*Indicators*, "Where it shows").

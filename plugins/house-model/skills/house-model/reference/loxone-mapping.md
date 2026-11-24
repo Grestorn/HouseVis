@@ -164,8 +164,10 @@ Quirks that matter here:
 - **Areas with controls of their own** (a sauna with its control's `tempActual`/`tempTarget`/
   `power`, its own light output and audio zone) can become a room of their own even if Loxone
   files their controls under another room; suggest it.
-- Values without a place in the model yet (interior door contacts, a sauna's "active" state) are
-  kept as unreferenced datapoints, so they need no second search later.
+- An interior door's contact goes on that door's `data.open`, as for an exterior one (the door is
+  an opening on the interior wall, *Openings* in format.md). Values without a place in the model
+  yet (a sauna's "active" state) are kept as unreferenced datapoints, so they need no second
+  search later.
 
 ## Procedure
 

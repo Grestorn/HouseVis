@@ -233,7 +233,11 @@
           "height": {
             "type": "number",
             "minimum": 0,
-            "description": "Deviating room height in meters; otherwise the floor height applies."
+            "description": "Deviating room height in meters; otherwise the floor height applies (for an area with \"openTo\" the heights of the storeys it passes)."
+          },
+          "openTo": {
+            "$ref": "#/$defs/id",
+            "description": "A double-height space (\"Luftraum\", a two-storey bay or hall): id of the highest storey above its own this area is open through. Those storeys have no floor slab over it and no area of theirs may overlap it; its windows may reach up into them (\"top\" up to the heights of all these storeys). Written on the lower area, which is the room standing there (e.g. the living room under the Luftraum)."
           },
           "outbuilding": {
             "type": "boolean",
@@ -260,7 +264,7 @@
       }
     },
     "openings": {
-      "description": "Windows and exterior doors in the walls.",
+      "description": "Windows and doors in the walls: exterior ones, and interior doors, passages and glass partitions between two rooms (on an interior edge, the room across the wall found by itself).",
       "type": "array",
       "items": {
         "type": "object",
@@ -310,7 +314,7 @@
           },
           "start": {
             "$ref": "#/$defs/point",
-            "description": "One end of the opening in the floor plan, on the inner face of its wall, i.e. on an edge of the room polygon (5 mm tolerance). The room and the outward direction follow from that edge."
+            "description": "One end of the opening in the floor plan, on the inner face of its wall, i.e. on an edge of the room polygon (5 mm tolerance). The room and the outward direction follow from that edge; on an interior wall either room's face, the room across the wall gap follows too. In a dormer's front: on its inner face or on the outer face as \"front\" gives it; the room behind it and the dormer's facing follow."
           },
           "end": {
             "$ref": "#/$defs/point",
@@ -332,9 +336,10 @@
               "slide",
               "top-hung",
               "overhead",
-              "fixed"
+              "fixed",
+              "none"
             ],
-            "description": "Type: \"turn\" side-hung sash (opens inwards, windows 30°, doors 90°), \"slide\" sliding sash (e.g. lift-and-slide door), \"top-hung\" hinged at the top (opens outwards at the bottom), \"overhead\" garage gate opening upwards into the room (up-and-over or sectional; one leaf, \"position\" is the share of the height that is clear), \"fixed\" fixed glazing. Default \"turn\"."
+            "description": "Type: \"none\" a door without a leaf (a passage between rooms, only the hole through the wall); \"turn\" side-hung sash (opens inwards, windows 30°, doors 90°), \"slide\" sliding sash (e.g. lift-and-slide door), \"top-hung\" hinged at the top (opens outwards at the bottom), \"overhead\" garage gate opening upwards into the room (up-and-over or sectional; one leaf, \"position\" is the share of the height that is clear), \"fixed\" fixed glazing. Default \"turn\"."
           },
           "side": {
             "enum": [
@@ -384,7 +389,52 @@
           "color": {
             "$ref": "#/$defs/color",
             "description": "A door's leaf color; a window's frame color (frame, sash frames, fixed parts), e.g. \"#f2f2f0\" for white frames. Default: dark brown-grey leaves, grey frames."
+          },
+          "glass": {
+            "type": "boolean",
+            "description": "Doors only: a glazed leaf, drawn like a window pane (a glass door, e.g. a sauna's or a patio door's)."
+          },
+          "frame": {
+            "type": "boolean",
+            "description": "false: frameless glass, held by fittings only (a sauna's glass front and door, a glass partition); no frame drawn. Default true."
           }
+        }
+      }
+    },
+    "dormers": {
+      "description": "Dormers (Gauben), each standing on one slope of a roof part and written by its front, as plans dimension it. It faces down the slope, its front along the slope's eave; its cheeks reach back to where its eave (gable) or its roof (shed) meets the slope. The host roof is cut away under it, and the rooms below get its ceiling. Windows in its front are ordinary openings.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "roof", "kind", "front", "eaveHeight", "pitch"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id", "description": "Unique among roof parts and dormers, e.g. \"gaube-nord\"." },
+          "roof": { "$ref": "#/$defs/id", "description": "Id of the roof part from \"roofs\" it stands on; its heights refer to that part's floor." },
+          "kind": { "enum": ["shed", "gable"], "description": "\"shed\": one slope falling towards the front (Schleppgaube); \"gable\": two slopes with a gable over the front (Giebelgaube)." },
+          "front": {
+            "type": "array",
+            "prefixItems": [{ "$ref": "#/$defs/point" }, { "$ref": "#/$defs/point" }],
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "The outer face of the front wall in the floor plan: its two ends, in either order."
+          },
+          "eaveHeight": { "type": "number", "minimum": 0, "description": "Height above the floor, in meters, of the front wall's top (shed) or of the cheeks' top (gable), at the outer face." },
+          "pitch": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 90, "description": "Pitch of the dormer's roof in degrees; a shed dormer's must be less than the slope it stands on." },
+          "overhang": {
+            "description": "How far its roof reaches beyond the front and beyond the cheeks, in meters: one value, or { \"front\": 0.3, \"sides\": 0.15 }. Default 0.",
+            "oneOf": [
+              { "type": "number", "minimum": 0 },
+              {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": false,
+                "properties": { "front": { "type": "number", "minimum": 0 }, "sides": { "type": "number", "minimum": 0 } }
+              }
+            ]
+          },
+          "color": { "$ref": "#/$defs/roofColor", "description": "Color of its roof covering; default the roof part's." },
+          "wallColor": { "$ref": "#/$defs/color", "description": "Color of its front and cheeks seen from outside, e.g. \"#5a5e63\" for slate or zinc cladding; default the facade's." }
         }
       }
     },
@@ -487,6 +537,48 @@
               "eaveHeight": { "$ref": "#/$defs/eaveHeight" },
               "ridgeHeight": { "$ref": "#/$defs/ridgeHeight" },
               "pitch": { "$ref": "#/$defs/pitch" }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Half-hip roof (Krüppelwalm): a gable roof whose gable walls end below the ridge in a small hip. The two slopes as for \"gable\"; at each gable end a hip slope starting at \"hipEaveHeight\" on the gable's wall line, rising at \"hipPitch\". Per side (the gable ends: west and east for an east-west ridge) for different ends, or for a half-hip at one end only.",
+            "required": ["id", "kind", "floor", "outline", "ridge", "eaveHeight", "hipEaveHeight", "hipPitch"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "$ref": "#/$defs/id", "description": "Unique id, e.g. \"main\"; roof windows, views and the editor refer to it." },
+              "kind": { "const": "halfHip" },
+              "floor": { "$ref": "#/$defs/id", "description": "Floor whose level the heights refer to; the rooms of that floor end below the roof." },
+              "outline": { "$ref": "#/$defs/outline" },
+              "overhang": { "$ref": "#/$defs/overhang" },
+              "rotation": { "$ref": "#/$defs/rotation" },
+              "tags": { "$ref": "#/$defs/tags" },
+              "color": { "$ref": "#/$defs/roofColor" },
+              "ridge": { "enum": ["north-south", "east-west"], "description": "Direction of the ridge (before rotation); the slopes lie on the two sides along it, the half-hips at its ends." },
+              "eaveHeight": { "$ref": "#/$defs/eaveHeight" },
+              "ridgeHeight": { "$ref": "#/$defs/ridgeHeight" },
+              "pitch": { "$ref": "#/$defs/pitch" },
+              "hipEaveHeight": {
+                "description": "Where the half-hip starts: its height above the floor at the gable's wall line (the top of the gable wall, sections give it as the hip's eave), between the eaves and the ridge. One value for both ends, or per gable side; a gable side without one stays a full gable.",
+                "oneOf": [
+                  { "type": "number", "minimum": 0 },
+                  { "allOf": [{ "$ref": "#/$defs/perSide" }], "properties": { "north": { "minimum": 0 }, "south": { "minimum": 0 }, "east": { "minimum": 0 }, "west": { "minimum": 0 } } }
+                ]
+              },
+              "hipPitch": {
+                "description": "Pitch of the half-hip in degrees (usually steeper than the slopes), one value or per gable side, for the same sides as \"hipEaveHeight\".",
+                "oneOf": [
+                  { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+                  {
+                    "allOf": [{ "$ref": "#/$defs/perSide" }],
+                    "properties": {
+                      "north": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+                      "south": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+                      "east": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 },
+                      "west": { "exclusiveMinimum": 0, "exclusiveMaximum": 90 }
+                    }
+                  }
+                ]
+              }
             }
           },
           {
@@ -650,23 +742,33 @@
       "type": "object",
       "required": [
         "floor",
-        "level",
         "outline"
       ],
       "additionalProperties": false,
       "properties": {
         "floor": {
           "type": "string",
-          "description": "Floor whose level \"level\" refers to."
+          "description": "Floor whose level \"level\", \"heights\" and the heights of pits and platforms refer to."
         },
         "level": {
           "type": "number",
-          "description": "Height of the terrain relative to that floor in meters, e.g. -0.3."
+          "description": "Height of a flat terrain relative to that floor in meters, e.g. -0.3. Give either this or \"heights\"."
+        },
+        "heights": {
+          "description": "Spot heights of a sloped terrain, as a site plan gives them: [x, y, level] with the level relative to the floor of \"floor\" (not above sea level). The terrain runs linearly between them (triangles between neighbouring points); two points or points on one line give a slope along that line, level across it; outside the points the slope continues. Give either this or \"level\".",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": { "type": "number" }
+          }
         },
         "outline": {
-          "description": "Where the terrain ends: its outline in plan coordinates, at least 4 corners in order, every edge running east-west or north-south (right angles; an L-shaped plot or a cut-out corner is fine). The terrain is exactly this outline: nothing is derived from the house, the garage or the areas, so the model decides where the plot ends (e.g. at the street). The house and its outbuildings lie inside it; parts of areas outside it are cut off.",
+          "description": "Where the terrain ends: its outline in plan coordinates, at least 3 corners in order, at any angle (a plot ending at a street that does not run north-south). The terrain is exactly this outline: nothing is derived from the house, the garage or the areas, so the model decides where the plot ends (e.g. at the street). The house and its outbuildings lie inside it; parts of areas outside it are cut off.",
           "type": "array",
-          "minItems": 4,
+          "minItems": 3,
           "items": { "$ref": "#/$defs/point" }
         },
         "pits": {
@@ -675,16 +777,18 @@
           "items": {
             "type": "object",
             "required": [
-              "x0",
-              "x1",
-              "y0",
-              "y1",
               "bottom"
             ],
             "additionalProperties": false,
             "properties": {
               "name": {
                 "type": "string"
+              },
+              "polygon": {
+                "description": "The footprint at any angle, corners in plan coordinates (docs/polygon-footprints.md); instead of x0/x1/y0/y1, which give a rectangle.",
+                "type": "array",
+                "minItems": 3,
+                "items": { "$ref": "#/$defs/point" }
               },
               "x0": {
                 "type": "number"
@@ -738,21 +842,23 @@
           }
         },
         "areas": {
-          "description": "Areas in the terrain with their own color, e.g. terrace, gravel strip or paving. Nothing is drawn below the house.",
+          "description": "Areas in the terrain with their own color, e.g. terrace, gravel strip or paving; with \"level\" a flat platform. Nothing is drawn below the house. Where areas overlap, the last one listed wins.",
           "type": "array",
           "items": {
             "type": "object",
             "required": [
-              "x0",
-              "x1",
-              "y0",
-              "y1",
               "color"
             ],
             "additionalProperties": false,
             "properties": {
               "name": {
                 "type": "string"
+              },
+              "polygon": {
+                "description": "The footprint at any angle, corners in plan coordinates (docs/polygon-footprints.md); instead of x0/x1/y0/y1, which give a rectangle.",
+                "type": "array",
+                "minItems": 3,
+                "items": { "$ref": "#/$defs/point" }
               },
               "x0": {
                 "type": "number"
@@ -768,6 +874,10 @@
               },
               "color": {
                 "$ref": "#/$defs/color"
+              },
+              "level": {
+                "type": "number",
+                "description": "Makes the area a platform lying flat at this level (relative to the floor of ground.floor), e.g. a terrace or a drive cut into a slope; where the terrain round it lies higher or lower, an edge (retaining wall, embankment) is drawn. Without it the area follows the terrain."
               }
             }
           }
@@ -782,10 +892,6 @@
         "required": [
           "id",
           "floor",
-          "x0",
-          "x1",
-          "y0",
-          "y1",
           "bottom",
           "top"
         ],
@@ -802,6 +908,12 @@
           },
           "floor": {
             "type": "string"
+          },
+          "polygon": {
+            "description": "The footprint at any angle, corners in plan coordinates (docs/polygon-footprints.md); instead of x0/x1/y0/y1, which give a rectangle.",
+            "type": "array",
+            "minItems": 3,
+            "items": { "$ref": "#/$defs/point" }
           },
           "x0": {
             "type": "number"
@@ -843,10 +955,6 @@
         "required": [
           "id",
           "floor",
-          "x0",
-          "x1",
-          "y0",
-          "y1",
           "bottom",
           "top",
           "lowTop",
@@ -867,6 +975,12 @@
           "floor": {
             "type": "string",
             "description": "Floor whose level the heights refer to."
+          },
+          "polygon": {
+            "description": "The footprint at any angle, corners in plan coordinates (docs/polygon-footprints.md); instead of x0/x1/y0/y1, which give a rectangle.",
+            "type": "array",
+            "minItems": 3,
+            "items": { "$ref": "#/$defs/point" }
           },
           "x0": {
             "type": "number"
@@ -1525,7 +1639,7 @@
       }
     },
     "furniture": {
-      "description": "Furniture as simple boxes (docs/furniture.md): lines with a faint fill, shown with its room; its edges can carry light strips. Either against a wall (\"from\", \"to\": its back edge, \"depth\"), which also fits a slanted wall, or along the plan axes (\"x0\"…\"y1\" and \"front\"). Implied tags \"furniture\", the tags of the area it stands in, and \"outside\" outside the building.",
+      "description": "Furniture as simple boxes (docs/lights.md): lines with a faint fill, shown with its room; its edges can carry light strips. Either against a wall (\"from\", \"to\": its back edge, \"depth\"), which also fits a slanted wall, or along the plan axes (\"x0\"…\"y1\" and \"front\"). Implied tags \"furniture\", the tags of the area it stands in, and \"outside\" outside the building.",
       "type": "array",
       "items": {
         "oneOf": [
@@ -1741,6 +1855,63 @@
           }
         },
         "oneOf": [{ "required": ["room"] }, { "required": ["position"] }, { "required": ["pvArray"] }]
+      }
+    },
+    "stairs": {
+      "description": "Stairs between storeys (docs/stairs.md), written by their walking line as a plan draws it. Where a stair climbs into the storey above, it cuts the opening into that storey's slab and floors.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "floor", "line", "width", "rises"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "floor": { "type": "string", "description": "The storey the stair starts on." },
+          "to": { "type": "string", "description": "The storey it arrives on; default the next one up." },
+          "line": {
+            "description": "The walking line (Lauflinie) in the middle of the stair, in plan coordinates: from the front edge of the first step to the edge of the upper floor, with a corner wherever the stair turns (two points straight, three an L, four a U). Every corner turns by 90°.",
+            "type": "array",
+            "minItems": 2,
+            "items": { "$ref": "#/$defs/point" }
+          },
+          "width": { "type": "number", "exclusiveMinimum": 0, "description": "Width of the stair in metres, e.g. 1.0." },
+          "rises": { "type": "integer", "minimum": 2, "description": "Number of rises (Steigungen) from floor to floor, as a plan prints it (\"16 St. 17,8/27\": 16)." },
+          "turns": {
+            "description": "One per corner of the line: \"landing\" (a square landing, the default) or \"winders\" (the corner's steps fanned, a gewendelte stair).",
+            "type": "array",
+            "items": { "enum": ["landing", "winders"] }
+          },
+          "color": { "$ref": "#/$defs/color", "description": "Colour of the steps; default a light stone grey." },
+          "tags": { "$ref": "#/$defs/tags", "description": "Tags in addition to \"stairs\" and those of the area it starts in." }
+        }
+      }
+    },
+    "railings": {
+      "description": "Railings (docs/railings.md): along a plan line on a storey (gallery edge, balcony, roof terrace) or along a stair's side. A line railing standing in an interior wall's gap opens that wall along it; exterior walls are never opened.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "floor": { "type": "string", "description": "The storey a line railing stands on." },
+          "line": {
+            "description": "Its course in plan coordinates, at any angle. On a gallery's edge, in the wall gap towards the open space (at most 0.5 m off the wall), where it opens the wall.",
+            "type": "array",
+            "minItems": 2,
+            "items": { "$ref": "#/$defs/point" }
+          },
+          "stair": { "type": "string", "description": "Instead of floor and line: the stair whose side it follows." },
+          "side": { "enum": ["left", "right"], "description": "The stair's side, seen walking up." },
+          "kind": { "enum": ["glass", "bars", "solid"], "description": "glass: panes with a top rail; bars: handrail, bottom rail and upright bars; solid: a closed parapet." },
+          "height": { "type": "number", "exclusiveMinimum": 0, "description": "Its top above its foot (default 1.0), or above the stair's nosings (default 0.9)." },
+          "base": { "type": "number", "description": "A line railing's foot above its storey's floor, default 0 (e.g. a balcony slab's top)." },
+          "color": { "$ref": "#/$defs/color", "description": "Colour of the frame or the parapet." },
+          "tags": { "$ref": "#/$defs/tags" }
+        }
       }
     },
     "objects": {

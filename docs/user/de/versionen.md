@@ -5,6 +5,98 @@
 Was sich in jeder Version für dich geändert hat. Das Plugin mit der App zusammen aktualisieren
 (`/plugin marketplace update housevis`, [Kapitel 2](2-hausmodell.md)).
 
+## 1.0.0
+
+Die erste Version für alle: die Downloads liegen jetzt frei zugänglich auf
+[www.housevis.de](https://www.housevis.de/download/), und Installer und App für Windows sind
+signiert (Herausgeber „Martin Korndörfer"). Die Android-App ist im Google Play Store im Test:
+anmelden auf der Download-Seite. Die Tablet-App bietet das Demo-Haus beim ersten Start an und, wie
+die Windows-App, jederzeit unter **Vorführungen …**. Neu seit der Beta 0.9.5:
+
+**Wichtig fürs Tablet:** Eine Konfiguration mit einer Gaube, einem Krüppelwalmdach, einem Raum,
+der über zwei Geschosse offen ist, einer Innentür, einer Treppe, einem Geländer, einem Raum ein paar Stufen tiefer, einem Gelände am Hang oder einer schrägen Form außerhalb des Hauses lädt nicht in einer App vor 1.0.0. Die Android-App zusammen mit der Windows-App
+aktualisieren, bevor du so eine Konfiguration exportierst.
+
+**Räume**
+- **Innentüren, Durchgänge und Glaswände:** Türen zwischen Räumen, offene Durchgänge ohne Tür,
+  Glaswände und Glastüren, auch rahmenlos (die Glasfront einer Sauna), in den Wänden beider Räume,
+  sobald einer davon aufgeschnitten ist; der Skill liest sie aus den Grundrissen.
+- **Räume über zwei Geschosse:** Ein Raum kann bis in die Geschosse darüber offen sein (ein
+  Luftraum über dem Wohnzimmer, eine zweigeschossige Diele oder ein Erker): kein Boden darüber,
+  seine Wände bis zur Decke oder zum Dach des obersten Geschosses, Fenster so hoch wie in der
+  Ansicht. Eine Ansicht nur mit dem unteren Geschoss zeigt ihn als gewöhnlichen Raum; seine
+  Anzeigen bleiben in der üblichen Höhe. Die Modellprüfung streicht ihn im oberen Plan durch;
+  Skill und Assistent kennen ihn.
+- **Treppen:** Treppen zwischen Geschossen, beschrieben über ihre Lauflinie wie im Grundriss
+  (gerade, L- oder U-förmig, mit Podest oder gewendelt), als massive Stufen gezeigt, wenn ihr Raum
+  aufgeschnitten ist, mit ihrem Treppenauge im Geschoss darüber. Die Modellprüfung gibt Steigung
+  und Auftritt wie die Treppenbeschriftung eines Plans aus und zeichnet die Treppe; Skill und
+  Assistent kennen sie.
+- **Geländer:** aus Glas, mit Stäben oder als geschlossene Brüstung, an der Kante einer Galerie,
+  um einen Balkon oder an einer Treppe (ihrer Steigung folgend). Ein Galeriegeländer öffnet die
+  Wand, die an der Kante stand, sodass man in die Diele darunter sieht.
+- **Versetzte Ebenen:** ein Raum ein paar Stufen tiefer oder höher (ein abgesenktes Wohnzimmer)
+  mit seinen Stufen; seine Decke bleibt, wo sie ist. Am Hang listet die Modellprüfung die Wände im
+  Erdreich und nennt Fenster und Türen unter dem Gelände ohne Lichtschacht, für ein Hanggeschoss.
+- **Außen in jedem Winkel:** Terrassen, Wege, Lichtschächte, Stufen, Vordächer und Wintergärten
+  können jede Form haben, nicht nur Rechtecke, und die Grundstücksgrenze darf schräg verlaufen;
+  das Gelände schließt sauber an ein gedrehtes Gartenhaus an.
+
+**Dach**
+- **Krüppelwalmdächer:** Ein Satteldach, dessen Giebelwände unterhalb des Firsts in einem kleinen
+  Walm enden, an einem oder beiden Enden; Skill und Assistent kennen es.
+- **Gauben:** Schlepp- und Giebelgauben auf einer Dachfläche, beschrieben über ihre Front; das Dach
+  ist unter ihnen ausgeschnitten, der Raum darunter bekommt ihre Decke, die Fenster in ihrer Front
+  sind gewöhnliche Fenster mit Datenpunkten und Beschattung. Dach und Wände können eigene Farben
+  haben (Wangen in Schiefer oder Zink). Die Einstellung einer Ansicht fürs Dach gilt auch für
+  seine Gauben.
+- **Erker:** Ein Erker vor einem Giebel nimmt den Giebel nicht mehr mit nach außen (der Giebel
+  blieb offen); die Modellprüfung warnt vor einem Erker unter der Traufe, wo das Dach niedriger
+  ist als seine Wände. Skill und Assistent wissen, wie Erker und Gauben modelliert werden.
+
+**Außenanlagen**
+- **Grundstücke am Hang:** Das Gelände kann den Höhenkoten des Lageplans folgen statt einer Höhe;
+  Terrasse, Zufahrt oder ein Sitzplatz lassen sich als ebene Flächen in den Hang setzen, mit
+  sichtbaren Stützkanten. Lichtschächte, Gartenleuchten und der Mast der Wetterstation stehen auf
+  dem Hang. Die Modellprüfung zeichnet die Höhenkoten in den Plan; Skill und Assistent kennen es.
+
+**Kameras und Tablet**
+- Die Standbilder neben dem Haus lassen die Tablet-App nicht mehr wachsen, bis Android sie
+  schließt (ein Bild alle 5 s kostete etwa 57 MB pro Minute).
+- Kamera-Anmeldungen aus den ersten Kamera-Versionen gelten weiter (nach einem Update standen alle
+  Kameras als abgemeldet da).
+- Die **Loxone-Seite bleibt angemeldet:** einmal direkt auf ihr anmelden, danach meldet HouseVis
+  sie mit einem Token selbst an – ohne Kennwort und ohne Anmelde-Mail des Miniservers.
+- Die **Loxone Intercom** braucht keine eigene Anmeldung mehr: HouseVis holt ihr Bild mit seiner
+  Anmeldung am Miniserver, ohne Kennwort. Seit Loxone 17.3 schickte der Miniserver sonst bei jedem
+  Bild eine Anmelde-Mail. Ein gespeichertes Intercom-Kennwort wird gelöscht.
+- Solange der Bildschirm abgedunkelt ist, weil niemand da ist, pausiert die App: kein Neuzeichnen,
+  keine Wetteranimation, keine Kamerabilder; bei Berührung geht es weiter.
+
+**Demohaus und Assistent**
+- Das Demohaus ist jetzt ein glaubwürdiges Familienhaus: ein T-förmiger Grundriss mit Keller zum
+  Garten hin, offener Treppe, Galerie, Wohnzimmer zwei Stufen tiefer, Wintergarten, Dachterrasse
+  über der Garage und Pool. Die Vorführungen und Bilder zeigen das neue Haus.
+- **Vorführungen …** ist aufgeräumt: ohne „Demo-Haus ansehen“ (bleibt auf dem Startbildschirm) und
+  Rundflug; in der Wetter-Demo zeigt ein Klick aufs Haus den nächsten Wettertyp.
+- Skill und Assistent halten das Modell ruhig: Möbel, zusätzliche Leuchten, Treppen, Geländer und
+  Kleinteile nur, wo du sie willst; sie bieten sie an, statt sie einfach hinzuzufügen. Jedes
+  solche Teil bekommt eine eigene Markierung („Sofa Wohnzimmer“), damit du es in einer Ansicht
+  einzeln oder mit allen seiner Art ausblenden kannst.
+- Der Haus-Assistent zeigt im Gespräch die Bilder, die Claude sich ansieht (Planausschnitte,
+  gerenderte Ansichten); sein Bereich ist breiter.
+- Ein neues Haus bekommt beim ersten Speichern drei Ansichten mit je einer Seite: Alle Räume,
+  Außenansicht und Glasmodell (ohne Werte), dazu eine Seite mit der Loxone-Oberfläche.
+
+**Loxone-Seite**
+- **Bei Türklingel zur Loxone-Seite** (Geräteeinstellung, von Anfang an ein): klingelt es an einer Loxone Intercom,
+  zeigt das Gerät seine Loxone-Seite mit dem Türdialog und weckt einen abgedunkelten Bildschirm;
+  nach dem Klingeln geht es zur vorigen Seite zurück.
+- Ein neues Gerät im Geräte-Editor beginnt nicht mehr leer: mit einer Seite mit dem Haus und einer
+  Loxone-Seite.
+- Wer bei **Loxone-UI-Anmeldung …** speichert und auf dem Gerät noch keine Loxone-Seite hat,
+  bekommt eine (Windows); die Anmeldung wird dort gleich ausprobiert.
+
 ## 0.9.5
 
 **Wichtig fürs Tablet:** Eine Konfiguration mit einer Kamera, PV-Modulen, einem Dach mit L-, T-

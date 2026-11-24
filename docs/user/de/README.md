@@ -6,11 +6,11 @@
 > ### 💬 Das HouseVis-Forum: [forum.housevis.de](https://forum.housevis.de)
 >
 > Fragen stellen, Hilfe beim Hausmodell bekommen, Fehler melden, Ideen vorschlagen, Neuigkeiten
-> erfahren – und während der Beta die Downloads.
+> erfahren.
 >
 > [Hilfe](https://forum.housevis.de/c/hilfe) · [Hausmodell & Pläne](https://forum.housevis.de/c/hausmodell) ·
 > [Feedback zum Haus-Assistenten](https://forum.housevis.de/c/skill-feedback) · [Fehler melden](https://forum.housevis.de/c/fehlerberichte) ·
-> [Ideen](https://forum.housevis.de/c/ideen) · [Beta-Tester werden](https://forum.housevis.de/g/Beta-Tester)
+> [Ideen](https://forum.housevis.de/c/ideen)
 
 HouseVis zeigt dein Haus in 3D mit Live-Werten aus deinem Loxone Miniserver: Temperaturen,
 Licht in seiner echten Farbe, offene Fenster, Beschattung, Präsenz, Heizung, Wetter. Es läuft

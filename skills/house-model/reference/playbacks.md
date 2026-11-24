@@ -125,6 +125,6 @@ For a live playback, "as it is right now": `base` `live`, one view or page, a ca
 ## Examples
 
 The demo house's playbacks in `example/playbacks/` show the camera, events, ramps and page changes
-(`vorfuehrung.json`, `licht.json`, `wetter-zeitraffer.json`, `rundflug.json`). They are written
+(`vorfuehrung.json`, `licht.json`, `wetter-zeitraffer.json`). They are written
 for the demo house in raw Loxone values over its own scenario; for the user's house write values
 in display terms as described above.

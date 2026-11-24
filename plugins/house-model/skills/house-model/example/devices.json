@@ -17,7 +17,7 @@
                   { "id": "netz", "loxone": { "control": "1c0de0a1-0000-0000-ffffdec0de000000", "state": "actual" }, "name": "Netz", "icon": "electric-plug", "format": "%.2f kW" },
                   { "id": "batterie", "loxone": { "control": "1c0de0a2-0000-0000-ffffdec0de000000", "state": "value" }, "name": "Batterie", "icon": "battery", "format": "%.0f%%" }
                 ] },
-              { "type": "camera", "id": "einfahrt", "camera": "einfahrt", "area": { "x": 79, "y": 14, "width": 19, "height": 21 }, "frame": true }
+              { "type": "camera", "id": "haustuer", "camera": "haustuer", "area": { "x": 79, "y": 14, "width": 19, "height": 21 }, "frame": true }
             ] },
           {
             "id": "65ffa8d1-3d60-46aa-b19a-bbe31a28b0f9",
@@ -31,8 +31,8 @@
           },
           { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
           { "id": "aussen", "title": "Außen", "icon": "trees", "components": [{ "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }], "weather": true },
-          { "id": "einfahrt", "title": "Einfahrt", "icon": "cctv", "components": [
-              { "type": "camera", "id": "einfahrt", "camera": "einfahrt", "area": { "x": 3, "y": 4, "width": 94, "height": 92 }, "live": true, "frame": true }
+          { "id": "haustuer", "title": "Haustür", "icon": "cctv", "components": [
+              { "type": "camera", "id": "haustuer", "camera": "haustuer", "area": { "x": 3, "y": 9, "width": 94, "height": 88 }, "live": true, "frame": true }
             ] },
           { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
         ]
@@ -58,8 +58,8 @@
                 ] }
             ] },
           { "id": "obergeschoss", "title": "Obergeschoss", "icon": "bed-double", "components": [{ "type": "view", "view": "obergeschoss", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
-          { "id": "einfahrt", "title": "Einfahrt", "icon": "cctv", "components": [
-              { "type": "camera", "id": "einfahrt", "camera": "einfahrt", "area": { "x": 3, "y": 4, "width": 94, "height": 92 }, "live": true, "frame": true }
+          { "id": "haustuer", "title": "Haustür", "icon": "cctv", "components": [
+              { "type": "camera", "id": "haustuer", "camera": "haustuer", "area": { "x": 3, "y": 9, "width": 94, "height": 88 }, "live": true, "frame": true }
             ] },
           { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
         ]
@@ -76,6 +76,10 @@
               { "type": "view", "view": "nordost", "area": { "x": 0, "y": 60, "width": 100, "height": 40 }, "frame": true }
             ]
           },
+          { "id": "haustuer", "title": "Haustür", "icon": "cctv", "weather": true, "components": [
+              { "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 56 } },
+              { "type": "camera", "id": "haustuer", "camera": "haustuer", "area": { "x": 3, "y": 59, "width": 94, "height": 39 }, "live": true, "frame": true }
+            ] },
           { "id": "loxone", "title": "Loxone", "icon": "layout-grid", "loxone": {} }
         ]
       }
@@ -85,10 +89,24 @@
       "name": "Telefon",
       "platform": "android",
       "aspect": { "width": 20, "height": 9 },
+      "lightMode": "simple",
+      "reducedFrameRate": true,
+      "landscape": {
+        "pages": [
+          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 }, "labelScale": 65 }] },
+          { "id": "aussen", "title": "Außen", "icon": "trees", "components": [{ "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 100 }, "labelScale": 65 }] }
+        ]
+      },
       "portrait": {
         "pages": [
-          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [{ "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] },
-          { "id": "aussen", "title": "Außen", "icon": "trees", "components": [{ "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 100 } }] }
+          { "id": "haus", "title": "Haus", "icon": "house", "weather": true, "components": [
+              { "type": "view", "view": "suedwest", "area": { "x": 0, "y": 0, "width": 100, "height": 52 }, "labelScale": 55 },
+              { "type": "view", "view": "nordost", "area": { "x": 0, "y": 54, "width": 100, "height": 46 }, "frame": true, "labelScale": 55 }
+            ] },
+          { "id": "haustuer", "title": "Haustür", "icon": "cctv", "weather": true, "components": [
+              { "type": "view", "view": "aussen", "area": { "x": 0, "y": 0, "width": 100, "height": 55 }, "labelScale": 55 },
+              { "type": "camera", "id": "haustuer", "camera": "haustuer", "area": { "x": 3, "y": 58, "width": 94, "height": 40 }, "live": true, "frame": true }
+            ] }
         ]
       }
     }

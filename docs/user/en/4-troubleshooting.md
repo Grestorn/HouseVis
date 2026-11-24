@@ -45,7 +45,7 @@
 | Reolink: still picture yes, live picture no | Switch on **RTMP** on the camera (*Network → Advanced → Server settings*) and save; under **Cameras …** choose the stream **Fluent**, *Balanced* is not on every model. |
 | The live picture stutters or lags behind | Stream **Fluent** in H.264 with a low frame rate; on a weak tablet better a still picture than the live picture. |
 | Intercom: "The intercom works only with an encrypted connection to the Miniserver" | Menu → **Connect to Miniserver**, with **Encrypted connection (TLS)**. |
-| Intercom: user or password refused | The user must be allowed to sign in to the intercom. To check, open the intercom's web interface in a browser (its address is in Loxone Config) and sign in with that user. If that fails, the user lacks the right in Loxone Config. |
+| Intercom: "The intercom refuses HouseVis's sign-in" | The Miniserver user HouseVis is signed in with (menu → **Connect to Miniserver**) needs the right for the intercom in Loxone Config. If it has it, connect to the Miniserver again. |
 
 ## Performance
 
@@ -61,4 +61,4 @@
 | Claude Code does not know the HouseVis skill | Both commands are needed: `/plugin marketplace add …` **and** `/plugin install house-model@housevis`; then a new session. |
 | Claude stops: usage limit reached | Normal with a Pro subscription. Wait until the time Claude names, then say "continue". |
 | Claude cannot find HouseVis | Install HouseVis on the same PC ([chapter 1](1-install.md)); if it is installed elsewhere, tell Claude the path. |
-| Windows warns when installing | The installer is not signed yet: **More info** → **Run anyway**. |
+| Windows warns when installing | SmartScreen does not know a new version yet. If **More info** shows the publisher "Martin Korndörfer": **Run anyway**. Any other or an unknown publisher: do not run it, download it again from the download page. |

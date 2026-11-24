@@ -1,0 +1,35 @@
+Raumnamen: Bezeichnung im Plan -> Raum im Miniserver (Loxone Config)
+
+KG:
+  Technik / HAR -> Technik
+  Hobby -> Hobbyraum
+  Flur -> Flur KG
+  Vorrat -> Vorrat
+  HWR -> Waschküche
+  Terrasse -> Terrasse
+
+EG:
+  Gast -> Gästezimmer
+  Arbeiten -> Arbeitszimmer
+  Du/WC -> Gäste-Bad
+  Flur -> Garderobe
+  Diele -> Diele
+  Treppe -> Diele
+  Speis -> Speis
+  Kochen -> Küche
+  Essen -> Wohnen/Essen
+  Wohnen -> Wohnen/Essen
+  Garage -> Garage
+  Veranda -> Veranda
+
+OG:
+  Galerie -> Flur OG
+  Bad -> Bad
+  Zimmer 3 -> Studio
+  Zimmer 1 -> Kind 1
+  Zimmer 2 -> Kind 2
+  Ankleide -> Eltern
+  Bad 2 -> Bad Eltern
+  Schlafen -> Eltern
+  Dachterrasse -> Dachterrasse
+  Balkon -> Eltern

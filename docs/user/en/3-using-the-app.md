@@ -17,8 +17,8 @@
 | Menu item | What for |
 |---|---|
 | Connect to Miniserver | sign in, change the Miniserver |
-| Loxone UI sign-in … | store the Loxone interface's user and password, so it does not ask after every start of the app (optional; the password then lies encrypted on the device, see the note in the dialog; only with an encrypted connection). After storing, the app shows the Loxone page and signs in at once; if Loxone refuses, the dialog opens again with a note |
-| Cameras … | add and set up cameras (Reolink, Loxone Intercom, others), store user and password, look at a test picture ([Cameras](#cameras)); on the tablet only the sign-in |
+| Loxone UI sign-in … | how the Loxone page signs in. Best sign in once directly on the Loxone page (**Go to the Loxone page** takes you there and, on Windows, adds one if the device has none): HouseVis keeps only a token, your password stays private, and the page stays signed in – without the Miniserver's login mail. HouseVis renews the token itself; only if the app is not used for a long time can it expire. Optionally, user and password can be stored in HouseVis too (encrypted; a small extra risk). Only with an encrypted connection |
+| Cameras … | add and set up cameras (Reolink, Loxone Intercom, others), store a camera's user and password, look at a test picture ([Cameras](#cameras)); on the tablet only the sign-in |
 | AI assistant … | change the model with Claude ([chapter 2](2-house-model.md)) and more: create playbacks, check the mapping to Loxone |
 | Edit views … | from where you look, which rooms are open, what is left out |
 | Edit devices / pages … | which pages a PC, tablet or phone shows; per device also simple lighting and a reduced frame rate for slower devices; export for the tablet |
@@ -27,7 +27,7 @@
 | Load configuration … | tablet only: load an exported file ([chapter 1](1-install.md)) |
 | Settings … | tablet only: the app's language and the size of the Loxone page for this device, apart from the global settings |
 | Device: … | test how another device's pages look |
-| Playbacks … | what the app shows by itself. **Demo house**: look around the made-up house; every weather type in turn (weather demo); a whole day in two minutes, the pages turning by themselves (showcase, for a screen left running); and short clips with camera moves (fly-around, lights in the evening, …). **Your house**: your own playbacks, made for you by the house assistant, e.g. “Make a playback like ‘A day in two minutes’ for my house”, with made-up values or the current ones. Esc or a click ends a playback; “Continuous loop” keeps it running. |
+| Playbacks … | what the app shows by itself. **Demo house**: the house itself with its values, to look around in (“End the demo” in the menu brings back yours); every weather type in turn (weather demo; a click on the house shows the next); a whole day in two minutes, the pages turning by themselves (showcase, for a screen left running); and short clips (lights in the evening, …). **Your house**: your own playbacks, made for you by the house assistant, e.g. “Make a playback like ‘A day in two minutes’ for my house”, with made-up values or the current ones. Esc or a click ends a playback; “Continuous loop” keeps it running. |
 | **Forum: help and feedback (German)** | opens [forum.housevis.de](https://forum.housevis.de) in the browser: questions, bug reports, ideas (Windows only) |
 
 ## Views: what you see
@@ -79,13 +79,16 @@ Per view on the page:
 second view) and **Size of temperatures and indicators** (30 to 150 %; double-click the slider for
 100 %).
 
-Per device (the **+** beside **Devices** adds one, the icons in its line duplicate or delete it):
+Per device (the **+** beside **Devices** adds one, with a page showing the house and a Loxone
+page; the icons in its line duplicate or delete it):
 **Name**, **Platform** and **Aspect ratio**. **Separate orientations** gives the device pages of
 their own for landscape and portrait (otherwise the same in both); two small icons beside
 **Pages** then choose which list you edit, and beside **Preview** you see the page in either
 shape. Under **Settings**: **Allow sleep mode** (off for wall tablets), **Automatic presence
-detection** (dark while nobody is in the room; the screen then stays on anyway), **Simple
-lighting** and **Reduced frame rate** (both for weaker devices). Right-click a device to make it
+detection** (dark while nobody is in the room; the screen then stays on anyway), **Loxone page on
+doorbell** (on from the start; when a Loxone Intercom rings, the device shows its Loxone page with the door dialog,
+wakes a dimmed screen, and goes back to the page before once the ring ends, after a minute),
+**Simple lighting** and **Reduced frame rate** (both for weaker devices). Right-click a device to make it
 the **default** (the device the PC shows without a choice of its own) or to copy all its pages to
 another device; right-click a page to copy it. Where the target already has a page of the same
 name, it is replaced after asking.
@@ -134,8 +137,12 @@ the house that is enough and spares the tablet), or as the **live picture**.
 - **Loxone Intercom (through the Miniserver)** – choose the **Intercom** (2nd generation) from the
   list; HouseVis finds it in the Miniserver, no address is needed. The picture comes through the
   Miniserver, encrypted; for that, HouseVis must be signed in with **Encrypted connection (TLS)**.
-  It signs in with the user and password of a Miniserver user that may sign in to the intercom (the
-  intercom accepts no sign-in without a password).
+  The intercom needs no sign-in of its own: HouseVis fetches the picture with its own sign-in to
+  the Miniserver, without a password. So the Miniserver sends no login mail for it (since Loxone
+  17.3 it sends one for every sign-in with a password). The user HouseVis is signed in with needs
+  the right for the intercom.
+
+  ![Cameras: a Loxone Intercom](../images/en/cameras-intercom.jpg)
 - **Other camera (still picture only)** – the **Address** and the **Path of the still picture**
   from the camera's manual, e.g. `/cgi-bin/snapshot.cgi?channel=1`.
 
@@ -153,7 +160,7 @@ camera. Per camera: which **Camera**, **Live picture** (otherwise **Still pictur
 
 The live picture is best on a page of cameras alone; beside a 3D view a still picture is usually
 enough. A live picture is about a second behind reality. To try it, the demo house has a camera
-"Einfahrt": small beside the house and live on the page **Einfahrt**.
+"Haustür": small beside the house and live on the page **Haustür**.
 
 How to get the Loxone Intercom's picture is documented nowhere by Loxone. It rests on the work of
 Markus Laube: [loxone-intercom2](https://github.com/markuslaube/loxone-intercom2). Thank you!

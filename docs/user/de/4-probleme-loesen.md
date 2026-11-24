@@ -45,7 +45,7 @@
 | Reolink: Standbild ja, Livebild nein | An der Kamera **RTMP** einschalten (*Netzwerk → Erweitert → Servereinstellungen*) und speichern; unter **Kameras …** den Stream **Flüssig (Fluent)** wählen, *Ausgewogen* hat nicht jedes Modell. |
 | Das Livebild ruckelt oder hängt hinterher | Stream **Flüssig (Fluent)** in H.264 mit niedriger Bildrate; auf einem schwachen Tablet besser ein Standbild statt des Livebilds. |
 | Intercom: „Die Intercom geht nur mit einer verschlüsselten Verbindung zum Miniserver“ | Menü → **Mit Miniserver verbinden**, mit **Verschlüsselte Verbindung (TLS)**. |
-| Intercom: Benutzer oder Kennwort werden abgelehnt | Der Benutzer muss sich an der Intercom anmelden dürfen. Zum Prüfen die Weboberfläche der Intercom im Browser öffnen (ihre Adresse steht in Loxone Config) und mit diesem Benutzer anmelden. Klappt das nicht, fehlt ihm das Recht in Loxone Config. |
+| Intercom: „Die Intercom lehnt die Anmeldung von HouseVis ab“ | Der Miniserver-Benutzer, mit dem HouseVis angemeldet ist (Menü → **Mit Miniserver verbinden**), braucht in Loxone Config das Recht für die Intercom. Hat er es, neu mit dem Miniserver verbinden. |
 
 ## Geschwindigkeit
 
@@ -61,4 +61,4 @@
 | Claude Code kennt den HouseVis-Skill nicht | Beide Befehle sind nötig: `/plugin marketplace add …` **und** `/plugin install house-model@housevis`; danach eine neue Sitzung. |
 | Claude hält an: Nutzungslimit erreicht | Normal mit einem Pro-Abo. Bis zu der Uhrzeit warten, die Claude nennt, dann „weiter" schreiben. |
 | Claude findet HouseVis nicht | HouseVis auf demselben PC installieren ([Kapitel 1](1-installation.md)); liegt es woanders, Claude den Pfad sagen. |
-| Windows warnt bei der Installation | Der Installer ist noch nicht signiert: **Weitere Informationen** → **Trotzdem ausführen**. |
+| Windows warnt bei der Installation | SmartScreen kennt eine neue Version noch nicht. Zeigt **Weitere Informationen** den Herausgeber „Martin Korndörfer": **Trotzdem ausführen**. Ein anderer oder unbekannter Herausgeber: nicht ausführen, erneut von der Download-Seite laden. |

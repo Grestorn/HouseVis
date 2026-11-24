@@ -5,6 +5,95 @@
 What changed for you in each version. Update the plugin together with the app (`/plugin marketplace update
 housevis`, [chapter 2](2-house-model.md)).
 
+## 1.0.0
+
+The first version for everyone: the downloads are now freely available on
+[www.housevis.de](https://www.housevis.de/download/), and the Windows installer and app are signed
+(publisher "Martin Korndörfer"). The Android app is in testing on Google Play: sign up on the
+download page. The tablet app offers the demo house on its first start and, like the Windows
+app, under **Playbacks …** at any time. New since the beta 0.9.5:
+
+**Important for the tablet:** a configuration with a dormer, a half-hip roof, a room open
+through two storeys, an interior door, stairs, railings, a room a few steps down, a sloped terrain or a shape at an angle outside the house does not load in an app from before 1.0.0. Update the Android app together with the Windows app
+before you export such a configuration.
+
+**Rooms**
+- **Interior doors, passages and glass walls:** doors between rooms, open passages without a door,
+  glass partitions and glass doors, also frameless (a sauna's glass front), shown in both rooms'
+  walls when either is cut open; the skill reads them from the floor plans.
+- **Double-height rooms:** a room can be open through the storeys above (a Luftraum over the
+  living room, a two-storey hall or bay): no floor above it, its walls up to the ceiling or roof
+  of the highest storey, windows as tall as the elevation shows. A view showing only the lower
+  storey shows it as an ordinary room; its indicators stay at the usual height. The model check
+  crosses it out on the upper plan; the skill and the assistant know it.
+- **Stairs:** stairs between storeys, written by their walking line as the floor plan draws it
+  (straight, L or U, turning on a landing or on winders), shown as solid steps when their room
+  is opened, with their opening cut into the storey above. The model check prints rises and
+  goings like a plan's stair label and draws the stair; the skill and the assistant know it.
+- **Railings:** glass, bars or a solid parapet, along a gallery's edge, round a balcony or beside
+  a stair (following its slope). A gallery's railing opens the wall that stood at its edge, so the
+  hall below shows through.
+- **Split levels:** a room a few steps down or up (a sunken living room) with its steps; its
+  ceiling stays where it is. On a slope the model check lists the walls in the ground and names
+  windows or doors under the terrain without a light well, for a basement opening to the garden.
+- **Outside at any angle:** terraces, paths, light wells, steps, canopies and conservatories can
+  have any shape, not only rectangles, and the plot's edge may run at an angle; the terrain meets
+  a turned garden house cleanly.
+
+**Roof**
+- **Half-hip roofs (Krüppelwalm):** a gable roof whose gable walls end below the ridge in a small
+  hip, at one or both ends; the skill and the assistant know it.
+- **Dormers:** shed and gable dormers (Schleppgaube, Giebelgaube) on a roof slope, written by their
+  front; the roof is cut away under them, the room below gets their ceiling, the windows in their
+  front are ordinary windows with datapoints and shades. Their roof and walls can have colours of
+  their own (slate or zinc cheeks). A view's setting for the roof covers its dormers.
+- **Bays:** a bay stepping out of a gable end no longer takes the gable out with it (the gable
+  stayed open); the model check warns about a bay standing under the eave, where the roof is lower
+  than its walls. The skill and the assistant know how to model bays and dormers.
+
+**Surroundings**
+- **Sloped plots:** the terrain can follow the site plan's spot heights instead of one level;
+  terraces, drives or a seating area can be cut into the slope as flat platforms, with their
+  retaining edges shown. Light wells, garden lights and the weather station's mast stand on the
+  slope. The model check draws the spot heights in the plan; the skill and the assistant know it.
+
+**Cameras and tablet**
+- The still pictures beside the house no longer make the tablet app grow until Android closes it
+  (a picture every 5 s used up about 57 MB a minute).
+- Camera sign-ins stored with the first camera builds keep working (all cameras showed as signed
+  out after an update).
+- The **Loxone page stays signed in:** sign in once directly on it, and HouseVis signs it in with
+  a token from then on – without a password and without the Miniserver's login mail.
+- The **Loxone Intercom** needs no sign-in of its own any more: HouseVis fetches its picture with
+  its own sign-in to the Miniserver, without a password. Since Loxone 17.3 the Miniserver otherwise
+  sent a login mail for every picture. A stored intercom password is deleted.
+- While the screen is dimmed for nobody being there, the app pauses: no redrawing, no weather
+  animation, no camera pictures; it carries on at a touch.
+
+**Demo house and assistant**
+- The demo house is now a believable family house: a T-shaped plan with a basement opening onto
+  the garden, an open stair, a gallery, a living room two steps down, a conservatory, a roof
+  terrace over the garage and a pool. The demonstrations and pictures show the new house.
+- **Playbacks …** is tidied up: without "Look around the demo house" (still on the start screen)
+  and the fly-around; in the weather demo a click on the house shows the next weather type.
+- The skill and the assistant keep the model calm: furniture, extra lights, stairs, railings and
+  small parts only where you want them; they offer them rather than just adding them. Each such
+  part gets a tag of its own ("Sofa Wohnzimmer"), so a view can hide it alone or with all of its
+  kind.
+- The house assistant shows the pictures Claude looks at (plan details, rendered views) in the
+  conversation; its panel is wider.
+- A new house gets three views with a page each on its first save: All rooms, Exterior and Glass
+  model (without values), and a page with the Loxone interface.
+
+**Loxone page**
+- **Loxone page on doorbell** (device setting, on from the start): when a Loxone Intercom rings, the device shows its
+  Loxone page with the door dialog and wakes a dimmed screen; after the ring it goes back to the
+  page before.
+- A new device in the device editor no longer starts empty: it has a page showing the house and a
+  Loxone page.
+- Saving in **Loxone UI sign-in …** on a device without a Loxone page adds one (Windows); the
+  sign-in is tried there at once.
+
 ## 0.9.5
 
 **Important for the tablet:** a configuration with a camera, PV panels, a roof with an L, T or U

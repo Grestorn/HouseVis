@@ -2,18 +2,13 @@
 
 [← Übersicht](README.md) · [English](../en/1-install.md)
 
-> [!IMPORTANT]
-> **Während der Beta gibt es HouseVis über das Forum.** Beantrage auf
-> [forum.housevis.de](https://forum.housevis.de/g/Beta-Tester) die Mitgliedschaft in der Gruppe **Beta-Tester**.
-> Sobald du freigeschaltet bist, findest du den Windows-Installer und die Android-APK im Bereich
-> [Beta-Programm](https://forum.housevis.de/c/beta-programm).
-
 ## Windows
 
 1. Lade `HouseVis-Setup-<Version>.exe` von der
-   [Releases-Seite](https://github.com/Grestorn/HouseVis/releases) herunter und starte es.
-2. Windows warnt eventuell vor einem „unbekannten Herausgeber" (der Installer ist noch nicht
-   signiert): **Weitere Informationen** → **Trotzdem ausführen**.
+   [Download-Seite](https://www.housevis.de/download/) herunter und starte es.
+2. Der Installer ist signiert, Herausgeber „Martin Korndörfer". Solange eine neue Version noch
+   selten heruntergeladen wurde, kann Windows SmartScreen trotzdem warnen: prüfe unter
+   **Weitere Informationen** den Herausgeber, dann **Trotzdem ausführen**.
 3. Der Installer installiert HouseVis nur für deinen Windows-Benutzer, ohne Administratorrechte.
 
 **Update von einer älteren Version:** einfach den neuen Installer starten. Braucht die neue
@@ -55,8 +50,10 @@ wenn sie es nicht tun („Verbinde mit dem Miniserver …", „Miniserver getren
 
 Das Tablet zeigt, was du am PC eingerichtet hast; Editoren hat es nicht.
 
-1. Installiere die APK von der [Releases-Seite](https://github.com/Grestorn/HouseVis/releases) (Android fragt, ob Installationen aus dieser Quelle
-   erlaubt sind).
+1. Installiere die APK von der [Download-Seite](https://www.housevis.de/download/) (Android fragt, ob Installationen aus dieser Quelle
+   erlaubt sind). Im Google Play Store ist HouseVis noch im Test; dafür meldest du dich auf
+   derselben Seite an. Beim ersten Start zeigt **Demo-Haus ansehen** das Demo-Haus mit seinen
+   Werten, ohne Miniserver.
 2. Am PC: Menü → **Geräte / Seiten bearbeiten …**, das Gerät wählen (z. B. „Tablet"),
    **Gerät exportieren …**. Das schreibt eine `.housevis`-Datei mit Modell und Seiten, ohne
    Anmeldedaten. Beim nächsten Export schlägt die App wieder denselben Ordner vor.

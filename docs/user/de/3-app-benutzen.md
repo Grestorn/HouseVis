@@ -17,8 +17,8 @@
 | Menüpunkt | Wofür |
 |---|---|
 | Mit Miniserver verbinden | anmelden, Miniserver wechseln |
-| Loxone-UI-Anmeldung … | Benutzer und Kennwort der Loxone-Oberfläche speichern, damit sie nach dem Start der App nicht jedes Mal fragt (freiwillig; das Kennwort liegt dann verschlüsselt auf dem Gerät, siehe Hinweis im Dialog; nur bei verschlüsselter Verbindung). Nach dem Speichern zeigt die App die Loxone-Seite und meldet sich gleich an; lehnt Loxone ab, öffnet sich der Dialog wieder mit einem Hinweis |
-| Kameras … | Kameras anlegen und einrichten (Reolink, Loxone Intercom, andere), Benutzer und Kennwort speichern, ein Testbild ansehen ([Kameras](#kameras)); am Tablet nur die Anmeldung |
+| Loxone-UI-Anmeldung … | wie sich die Loxone-Seite anmeldet. Am besten meldest du dich einmal direkt auf der Loxone-Seite an (**Zur Loxone-Seite** führt hin und legt sie unter Windows an, wenn das Gerät noch keine hat): HouseVis merkt sich nur ein Token, dein Kennwort bleibt privat, und die Seite bleibt angemeldet – ohne Anmelde-Mail des Miniservers. HouseVis erneuert das Token selbst; nur wenn die App längere Zeit nicht genutzt wird, kann es ablaufen. Wahlweise lassen sich Benutzer und Kennwort auch in HouseVis speichern (verschlüsselt; ein kleines zusätzliches Risiko). Nur bei verschlüsselter Verbindung |
+| Kameras … | Kameras anlegen und einrichten (Reolink, Loxone Intercom, andere), Benutzer und Kennwort einer Kamera speichern, ein Testbild ansehen ([Kameras](#kameras)); am Tablet nur die Anmeldung |
 | KI-Assistent … | das Modell mit Claude ändern ([Kapitel 2](2-hausmodell.md)) und mehr: Vorführungen anlegen, Zuordnungen zu Loxone prüfen |
 | Ansichten bearbeiten … | von wo du schaust, welche Räume offen sind, was ausgeblendet ist |
 | Geräte / Seiten bearbeiten … | welche Seiten PC, Tablet oder Handy zeigen; pro Gerät auch einfache Beleuchtung und reduzierte Bildrate für langsamere Geräte; Export fürs Tablet |
@@ -27,7 +27,7 @@
 | Konfiguration laden … | nur Tablet: eine exportierte Datei laden ([Kapitel 1](1-installation.md)) |
 | Einstellungen … | nur Tablet: Sprache der App und Größe der Loxone-Seite für dieses Gerät, abweichend von den Globalen Einstellungen |
 | Gerät: … | ausprobieren, wie die Seiten eines anderen Geräts aussehen |
-| Vorführungen … | was die App von selbst zeigt. **Demo-Haus**: das ausgedachte Haus ansehen; alle Wettertypen nacheinander (Wetter-Demo); ein ganzer Tag in zwei Minuten, die Seiten wechseln von selbst (Vorführung, für einen Bildschirm, der einfach läuft); dazu kurze Filme mit Kamerafahrt (Rundflug, Licht am Abend, …). **Dein Haus**: deine eigenen Vorführungen, die der Haus-Assistent dir anlegt, z. B. „Mach eine Vorführung wie ‚Ein Tag in zwei Minuten‘ für mein Haus“, mit ausgedachten oder mit den aktuellen Werten. Esc oder ein Klick beendet eine Vorführung; „Dauerschleife“ lässt sie endlos laufen. |
+| Vorführungen … | was die App von selbst zeigt. **Demo-Haus**: das Haus selbst mit seinen Werten, zum Umschauen („Demo beenden“ im Menü bringt deins zurück); alle Wettertypen nacheinander (Wetter-Demo; ein Klick aufs Haus zeigt den nächsten); ein ganzer Tag in zwei Minuten, die Seiten wechseln von selbst (Vorführung, für einen Bildschirm, der einfach läuft); dazu kurze Filme (Licht am Abend, …). **Dein Haus**: deine eigenen Vorführungen, die der Haus-Assistent dir anlegt, z. B. „Mach eine Vorführung wie ‚Ein Tag in zwei Minuten‘ für mein Haus“, mit ausgedachten oder mit den aktuellen Werten. Esc oder ein Klick beendet eine Vorführung; „Dauerschleife“ lässt sie endlos laufen. |
 | **Forum: Hilfe und Feedback** | öffnet [forum.housevis.de](https://forum.housevis.de) im Browser: Fragen, Fehler melden, Ideen (nur Windows) |
 
 ## Ansichten: was du siehst
@@ -82,13 +82,16 @@ Pro Ansicht auf der Seite: **Mit Rahmen und Titel**, **Temperaturen und Anzeigen
 ausblenden** (nur das Haus, z. B. für eine kleine Nebenansicht) und **Größe der Temperaturen und
 Anzeigen** (30 bis 150 %, Doppelklick auf den Regler: 100 %).
 
-Pro Gerät (das **+** neben **Geräte** legt eins an, die Symbole in seiner Zeile duplizieren oder
-löschen es): **Name**, **Plattform** und **Seitenverhältnis**. **Quer/Hoch getrennt** gibt dem
+Pro Gerät (das **+** neben **Geräte** legt eins an, mit einer Seite mit dem Haus und einer
+Loxone-Seite; die Symbole in seiner Zeile duplizieren oder löschen es): **Name**, **Plattform** und **Seitenverhältnis**. **Quer/Hoch getrennt** gibt dem
 Gerät eigene Seiten für Quer- und Hochformat (sonst dieselben in beiden); dann wählen zwei kleine
 Symbole neben **Seiten**, welche Liste du bearbeitest, und neben **Vorschau** siehst du die Seite
 in beiden Formen. Unter **Einstellungen**: **Sleepmodus erlauben** (für Wandtablets aus),
 **Automatische Präsenz-Erkennung** (dunkel, solange niemand im Raum ist; der Bildschirm bleibt dann
-ohnehin an), **Einfache Beleuchtung** und **Reduzierte Bildrate** (beide für schwächere Geräte).
+ohnehin an), **Bei Türklingel zur Loxone-Seite** (von Anfang an ein; klingelt es an einer Loxone Intercom, zeigt das
+Gerät seine Loxone-Seite mit dem Türdialog, weckt einen abgedunkelten Bildschirm und kehrt nach dem
+Klingeln, nach einer Minute, zur vorigen Seite zurück), **Einfache Beleuchtung** und **Reduzierte
+Bildrate** (beide für schwächere Geräte).
 Ein Rechtsklick auf ein Gerät macht es zum **Standard** (das Gerät, das der PC ohne eigene Wahl
 zeigt) oder kopiert alle seine Seiten auf ein anderes Gerät; ein Rechtsklick auf eine Seite kopiert
 sie. Hat das Ziel schon eine Seite gleichen Namens, wird nach einer Rückfrage diese ersetzt.
@@ -140,8 +143,12 @@ erneuert (neben dem Haus reicht das und schont das Tablet), oder als **Livebild*
   HouseVis findet sie im Miniserver, eine Adresse braucht es nicht. Das Bild kommt verschlüsselt über
   den Miniserver; dafür muss HouseVis mit der Einstellung **Verschlüsselte Verbindung (TLS)**
   angemeldet sein.
-  Angemeldet wird mit Benutzer und Kennwort eines Miniserver-Benutzers, der sich an der Intercom
-  anmelden darf (die Intercom nimmt keine Anmeldung ohne Kennwort an).
+  Eine eigene Anmeldung braucht die Intercom nicht: HouseVis holt das Bild mit seiner Anmeldung am
+  Miniserver, ohne Kennwort. Der Miniserver schickt dafür also keine Anmelde-Mail (seit Loxone 17.3
+  kommt eine bei jeder Anmeldung mit Kennwort). Der Benutzer, mit dem HouseVis angemeldet ist,
+  braucht das Recht für die Intercom.
+
+  ![Kameras: eine Loxone Intercom](../images/de/cameras-intercom.jpg)
 - **Andere Kamera (nur Standbild)** – die **Adresse** und den **Pfad des Standbilds** aus dem
   Handbuch der Kamera, z. B. `/cgi-bin/snapshot.cgi?channel=1`.
 
@@ -160,7 +167,7 @@ Sekunden**, ohne Angabe 30) und **Mit Rahmen und Titel**. Die Vorschau zeigt imm
 
 Das Livebild läuft am besten auf einer Seite nur mit Kameras; neben einer 3D-Ansicht genügt meist
 ein Standbild. Ein Livebild ist etwa eine Sekunde hinter der Wirklichkeit. Zum Ausprobieren hat das
-Demo-Haus eine Kamera „Einfahrt“: klein neben dem Haus und live auf der Seite **Einfahrt**.
+Demo-Haus eine Kamera „Haustür“: klein neben dem Haus und live auf der Seite **Haustür**.
 
 Wie man an das Bild der Loxone Intercom kommt, beschreibt Loxone nirgends. Es beruht auf der Arbeit
 von Markus Laube: [loxone-intercom2](https://github.com/markuslaube/loxone-intercom2). Danke!

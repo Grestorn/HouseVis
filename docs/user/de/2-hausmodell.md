@@ -39,7 +39,7 @@ Leg alles in einen Ordner pro Haus, z. B. `C:\Users\<du>\HouseVis-Projekte\plans
 | Ansichten (eine pro Seite) | sehr empfohlen |
 | Fotos jeder Fassade | sehr empfohlen |
 | Was anders gebaut wurde als geplant, als Textdatei `plan-changes.txt` („Garage 70 cm nach Norden versetzt") | sehr empfohlen |
-| Lageplan, eigene Skizze von Terrasse und Wegen | empfohlen |
+| Lageplan (mit seinen Höhenkoten, wenn das Grundstück abfällt), eigene Skizze von Terrasse und Wegen | empfohlen |
 | Elektroplan, Fotos in der Dämmerung (für Außen- und besondere Leuchten) | optional |
 | Fotos oder Drohnenaufnahmen vom Dach (für die PV-Module) | optional |
 
@@ -53,11 +53,15 @@ Leg alles in einen Ordner pro Haus, z. B. `C:\Users\<du>\HouseVis-Projekte\plans
 
 ### Einmal einrichten
 
-1. Erstelle einen API-Schlüssel auf [platform.claude.com](https://platform.claude.com)
-   (**API Keys**; vorher unter **Billing** ein Zahlungsmittel hinterlegen). Er beginnt mit
-   `sk-ant-`.
-2. HouseVis: Menü → **KI-Assistent …**, Schlüssel einfügen. Er wird nur auf diesem PC
-   verschlüsselt gespeichert.
+1. Melde dich auf [platform.claude.com](https://platform.claude.com) an; ohne Konto bei Anthropic
+   legst du dort eines an und hinterlegst unter **Billing** ein Zahlungsmittel. Erstelle unter
+   **API Keys** einen Schlüssel; er beginnt mit `sk-ant-`. Die Kosten jedes Gesprächs zeigt die
+   App oben im Fenster, nach jedem Schritt aktualisiert.
+2. HouseVis: Menü → **KI-Assistent …**. Ist noch kein Miniserver verbunden, fragt die App
+   zuerst danach: Mit Verbindung liest der Assistent die Räume und Bausteine deines Miniservers,
+   um das Haus mit Loxone zu verknüpfen; **Ohne Miniserver weiter** geht auch, verbinden kannst
+   du später.
+3. Schlüssel einfügen. Er wird nur auf diesem PC verschlüsselt gespeichert.
 
 **Ein anderer Dienst statt Anthropic (z. B. DeepSeek):** Hake im selben Formular **Anderer Dienst
 mit Anthropics API** an und trag Adresse, Modell und Schlüssel ein; für DeepSeek
@@ -120,10 +124,31 @@ Ausgabenlimit.
 rechts"* oder *„Die Garage hat ein Flachdach."* Claude ändert nur das. Ein Dach, das in einem
 älteren Modell aus mehreren Stücken besteht (etwa ein Zwerchgiebel aus überlappenden Teilen),
 fasst Claude auf Wunsch zu einem Dach zusammen: *„Mach das Hauptdach mit dem Zwerchgiebel zu
-einem Dach."* Links neben dem Assistenten
-siehst du das Haus mit jeder Änderung: oben wählst du eine deiner Ansichten oder **Ganzes Haus**
-(alle Räume offen, auch neue); ziehen dreht, das Mausrad zoomt, **Zurück zur Ansicht** stellt die
-Kamera zurück. Gespeichert wird dabei nichts an den Ansichten.
+einem Dach."* Ein Erker gehört zu seinem Raum und bekommt ein eigenes kleines Dach: *„Die
+Küche hat nach Norden einen Erker, 1 m tief und 2,30 m breit, mit Pultdach an der Wand."* Auch
+Gauben: *„Auf der Südseite eine Schleppgaube, Front 1,60 m breit ab 7,10 m, 1 m hinter der Traufe,
+Frontwand 2,40 m hoch, mit zweiflügeligem Fenster."* Ein Raum, der über zwei Geschosse offen ist
+(ein Luftraum über dem Wohnzimmer, eine zweigeschossige Diele), ist ein Raum, der nach oben
+reicht, seine Fenster so hoch wie in der Ansicht: *„Das Wohnzimmer ist bis ins Obergeschoss
+offen, mit einem Fenster in der Südwand von 0,50 m bis 4,80 m."* Türen zwischen Räumen, offene
+Durchgänge und Glaswände gehen genauso: *„Eine Glastür von der Diele ins Wohnzimmer, 90 cm breit"*,
+*„Die Sauna hat eine rahmenlose Glasfront mit Glastür zum Bad."* Ebenso Treppen und Geländer:
+*„Eine Treppe in der Diele hinauf zur Galerie, 16 Steigungen, mit Podest nach links"*, *„Ein
+Glasgeländer an der Galerie"* (es tritt an die Stelle der Wand, die dort stand), *„Ein
+Stabgeländer an der offenen Seite der Treppe"*. Ein Raum ein paar Stufen tiefer: *„Das Wohnzimmer
+liegt zwei Stufen tiefer als die Diele."* Ein abfallendes Grundstück folgt den Höhenkoten des
+Lageplans (*„Der Garten fällt nach Süden um 1,30 m ab"*), mit einer Terrasse oder einem Sitzplatz,
+der in den Hang gesetzt ist; Terrassen, Wege, Lichtschächte und Wintergärten dürfen jede Form
+haben, auch schräg. Links
+neben dem Assistenten
+siehst du das Haus mit jeder Änderung: oben wählst du eine deiner Ansichten, solange ein neuer Raum
+noch in keiner Ansicht offen ist auch **Ganzes Haus** (alle Räume offen); ziehen dreht, das
+Mausrad zoomt, **Zurück zur Ansicht** stellt die Kamera zurück. Gespeichert wird dabei nichts an
+den Ansichten. Bilder, die Claude sich ansieht (Planausschnitte, gerenderte Ansichten), stehen im
+Gespräch unter der Zeile; ein Klick vergrößert sie. Beim ersten Speichern eines neuen Hauses legt
+die App drei Ansichten mit je einer Seite an: **Alle Räume** (alle Räume offen, mit Werten),
+**Außenansicht** (das Haus geschlossen) und **Glasmodell** (alle Räume offen, ohne Werte), dazu
+eine Seite **Loxone** mit der Loxone-Oberfläche.
 
 ## 3. Weg B: Claude Code
 
@@ -218,7 +243,7 @@ dieses Agenten, zu dessen Bedingungen.
 ## 4. Nach dem Modell: Ansichten und Seiten
 
 Das Modell allein zeigt noch nichts – eine **Ansicht** legt fest, von wo du schaust und welche Räume
-offen sind. Klick auf dem Startbildschirm auf **Erste Ansicht anlegen**, dann weiter in
+offen sind. Klick auf dem Startbildschirm auf **Ansichten anlegen**, dann weiter in
 [Kapitel 3](3-app-benutzen.md).
 
 ## Hilfe und Feedback

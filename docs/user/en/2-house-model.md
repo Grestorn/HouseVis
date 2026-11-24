@@ -39,7 +39,7 @@ Put everything into one folder per house, e.g. `C:\Users\<you>\HouseVis-Projects
 | Elevations (one per side) | strongly recommended |
 | Photos of every facade | strongly recommended |
 | What was built differently from the plans, as a text file `plan-changes.txt` ("the garage moved 70 cm north") | strongly recommended |
-| Site plan, your own sketch of terrace and paths | recommended |
+| Site plan (with its spot heights if the plot slopes), your own sketch of terrace and paths | recommended |
 | Electrical plan, photos at dusk (for outdoor and special lamps) | optional |
 | Photos or drone shots of the roof (for the PV panels) | optional |
 
@@ -53,9 +53,14 @@ Put everything into one folder per house, e.g. `C:\Users\<you>\HouseVis-Projects
 
 ### Set up once
 
-1. Create an API key at [platform.claude.com](https://platform.claude.com) (**API Keys**; add
-   a payment method under **Billing** first). It starts with `sk-ant-`.
-2. HouseVis: menu → **AI assistant …**, paste the key. It is stored encrypted on this PC only.
+1. Sign in at [platform.claude.com](https://platform.claude.com); without an Anthropic account
+   you create one there and add a payment method under **Billing**. Create a key under **API
+   Keys**; it starts with `sk-ant-`. The app shows each conversation's cost at the top of the
+   window, updated after every step.
+2. HouseVis: menu → **AI assistant …**. With no Miniserver connected yet, the app asks for it
+   first: connected, the assistant reads your Miniserver's rooms and controls to link the house
+   with Loxone; **Continue without Miniserver** works too, you can connect later.
+3. Paste the key. It is stored encrypted on this PC only.
 
 **Another service instead of Anthropic (e.g. DeepSeek):** tick **Another service with
 Anthropic's API** in the same form and enter its address, model and key; for DeepSeek
@@ -113,10 +118,28 @@ hard cap, set a monthly spend limit in the Console.
 Open the house assistant and say what is wrong, e.g. *"The bathroom window is 20 cm too far
 right"* or *"The garage has a flat roof."* Claude changes only that. A roof that an older
 model built from several pieces (say a cross gable from overlapping parts) Claude merges into
-one on request: *"Make the main roof and the cross gable one roof."* Left of the assistant you
-see the house with every change: at the top choose one of your views or **Whole house** (every
-room open, new ones too); drag to turn, the wheel zooms, **Back to the view** resets the camera.
-Nothing of this is saved to the views.
+one on request: *"Make the main roof and the cross gable one roof."* A bay is part of its room
+and gets its own small roof: *"The kitchen has a bay to the north, 1 m deep and 2.3 m wide, with a
+shed roof against the wall."* Dormers too: *"On the south slope a shed dormer, front 1.6 m wide
+from 7.1 m, 1 m in from the eave, front wall 2.4 m high, with a two-leaf window."* A room open
+through two storeys (a Luftraum over the living room, a two-storey hall) is one room reaching up,
+its windows as tall as in the elevation: *"The living room is open up to the upper floor, with a
+window in the south wall from 0.5 m to 4.8 m."* Doors between rooms, open passages and glass
+walls work the same way: *"A glass door from the hall to the living room, 90 cm wide"*, *"The
+sauna has a frameless glass front with a glass door towards the bathroom."* So do stairs and
+railings: *"A stair in the hall up to the gallery, 16 steps, turning left on a landing"*, *"A glass
+railing along the gallery"* (it takes the place of the wall that stood there), *"Bars on the
+stair's open side"*. A room a few steps down: *"The living room lies two steps lower than the
+hall."* A sloping plot follows the site plan's spot heights (*"The garden falls 1.30 m to the
+south"*), with a terrace or a seat cut into the slope; terraces, paths, light wells and
+conservatories may have any shape, also at an angle. Left of the assistant you
+see the house with every change: at the top choose one of your views, and while a new room is open
+in no view yet also **Whole house** (every room open); drag to turn, the wheel zooms, **Back to the
+view** resets the camera. Nothing of this is saved to the views. Pictures Claude looks at (plan
+details, rendered views) appear in the conversation under their line; a click enlarges them. On the
+first save of a new house the app creates three views with a page each: **All rooms** (every room
+open, with values), **Exterior** (the house closed) and **Glass model** (every room open, without
+values), and a page **Loxone** with the Loxone interface.
 
 ## 3. Way B: Claude Code
 
@@ -208,7 +231,7 @@ its terms.
 ## 4. After the model: views and pages
 
 The model alone shows nothing yet – a **view** decides from where you look and which rooms are
-open. Click **Create first view** on the start screen, then see [chapter 3](3-using-the-app.md).
+open. Click **Create views** on the start screen, then see [chapter 3](3-using-the-app.md).
 
 ## Help and feedback
 

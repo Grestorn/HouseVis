@@ -1,279 +1,466 @@
 {
   "version": 7,
-  "data": { "outsideBrightness": "aussen.helligkeit", "outsideTemperature": "aussen.temperatur", "feltTemperature": "aussen.gefuehlt", "humidity": "aussen.feuchte", "windSpeed": "aussen.wind", "windDirection": "aussen.windrichtung", "windWarning": "aussen.windwarnung", "rain": "aussen.regen", "sunshine": "aussen.sonne", "weatherType": "aussen.wettertyp" },
-  "weatherStation": { "floor": "og", "position": [10.4, 4.75], "height": 5.3 },
-  "_comment": "Haus Sonnenhang: a made-up house for the demo and the tests (docs/demo-house.md). It uses every feature of the format; not a real building.",
+  "_comment": "Built by the house assistant from Sonnenhang-Eingabeplanung.pdf (Eingabeplanung 20.11.2026), plan-wintergarten.pdf, room-names.txt and plan-changes.txt. Origin: x = west face of the garage, y = south face of the main block (Gast/Essen). Plan up is treated as north; the real north lies about 11 degrees east of plan up. Completed by hand for the demo (docs/demo-house.md): what the recording left out, the Loxone mapping's corrections.",
   "floors": [
-    { "id": "kg", "name": "KG", "height": 2.6, "exteriorWall": 0.3 },
-    { "id": "eg", "name": "EG", "height": 2.85, "exteriorWall": 0.365 },
-    { "id": "og", "name": "OG", "height": 2.8, "exteriorWall": 0.365 }
+    { "id": "kg", "name": "Keller", "height": 2.5, "exteriorWall": 0.3 },
+    { "id": "eg", "name": "Erdgeschoss", "height": 2.85, "exteriorWall": 0.365 },
+    { "id": "og", "name": "Obergeschoss", "height": 2.8, "exteriorWall": 0.365 }
   ],
   "rooms": [
-    { "id": "hobbyraum", "name": "Hobbyraum", "data": { "temperature": "hobbyraum.temperature", "targetTemperature": "hobbyraum.target-temperature", "climateMode": "hobbyraum.climate-mode", "climateOverride": "hobbyraum.climate-override", "heating": "hobbyraum.heating", "cooling": "hobbyraum.cooling", "presence": "hobbyraum.presence", "light": "hobbyraum.light", "lightColor": "light.hobbyraum" } },
-    { "id": "flur-kg", "name": "Flur KG", "data": { "light": "flur-kg.light" } },
     { "id": "technik", "name": "Technik", "data": { "temperature": "technik.temperature", "light": "technik.light" } },
-    { "id": "waschkueche", "name": "Waschküche", "data": { "temperature": "waschkueche.temperature", "light": "waschkueche.light" } },
+    { "id": "hobbyraum", "name": "Hobbyraum", "data": { "temperature": "hobbyraum.temperature", "targetTemperature": "hobbyraum.target", "heating": "hobbyraum.heating", "cooling": "hobbyraum.cooling", "climateMode": "hobbyraum.mode", "climateOverride": "hobbyraum.override", "presence": "hobbyraum.presence", "light": "hobbyraum.light", "lightColor": "light.hobbyraum.decke" } },
+    { "id": "flur-kg", "name": "Flur KG", "data": { "light": "flur-kg.light" } },
     { "id": "vorrat", "name": "Vorrat" },
-    { "id": "lager", "name": "Lager" },
-    { "id": "wohnen", "name": "Wohnen/Essen", "data": { "temperature": "wohnen.temperature", "targetTemperature": "wohnen.target-temperature", "climateMode": "wohnen.climate-mode", "climateOverride": "wohnen.climate-override", "heating": "wohnen.heating", "cooling": "wohnen.cooling", "presence": "wohnen.presence", "light": "wohnen.light", "lightColor": "light.wohnen.decke" } },
-    { "id": "kueche", "name": "Küche", "data": { "temperature": "kueche.temperature", "targetTemperature": "kueche.target-temperature", "climateMode": "kueche.climate-mode", "climateOverride": "kueche.climate-override", "heating": "kueche.heating", "cooling": "kueche.cooling", "presence": "kueche.presence", "light": "kueche.light", "lightLevel": "kueche.light-level" } },
-    { "id": "diele", "name": "Diele", "data": { "temperature": "diele.temperature", "targetTemperature": "diele.target-temperature", "climateMode": "diele.climate-mode", "climateOverride": "diele.climate-override", "heating": "diele.heating", "cooling": "diele.cooling", "presence": "diele.presence", "light": "diele.light", "lightColor": "light.diele" } },
-    { "id": "gaeste-wc", "name": "Gäste-WC", "data": { "temperature": "gaeste-wc.temperature", "light": "gaeste-wc.light" } },
+    { "id": "waschkueche", "name": "Waschküche", "data": { "temperature": "waschkueche.temperature", "light": "waschkueche.light" } },
+    { "id": "terrasse", "name": "Terrasse", "data": { "lightColor": "light.aussen.terrasse" } },
     {
       "id": "gaestezimmer",
       "name": "Gästezimmer",
-      "data": { "temperature": "gaestezimmer.temperature", "targetTemperature": "gaestezimmer.target-temperature", "climateMode": "gaestezimmer.climate-mode", "climateOverride": "gaestezimmer.climate-override", "heating": "gaestezimmer.heating", "cooling": "gaestezimmer.cooling", "presence": "gaestezimmer.presence", "light": "gaestezimmer.light", "lightColor": "light.gaestezimmer" }
+      "data": { "temperature": "gaestezimmer.temperature", "targetTemperature": "gaestezimmer.target", "heating": "gaestezimmer.heating", "cooling": "gaestezimmer.cooling", "climateMode": "gaestezimmer.mode", "climateOverride": "gaestezimmer.override", "presence": "gaestezimmer.presence", "light": "gaestezimmer.light", "lightColor": "light.gaestezimmer.decke" }
     },
-    { "id": "garderobe", "name": "Garderobe", "data": { "light": "garderobe.light" } },
-    { "id": "speis", "name": "Speis" },
     {
       "id": "arbeitszimmer",
       "name": "Arbeitszimmer",
-      "data": { "temperature": "arbeitszimmer.temperature", "targetTemperature": "arbeitszimmer.target-temperature", "climateMode": "arbeitszimmer.climate-mode", "climateOverride": "arbeitszimmer.climate-override", "heating": "arbeitszimmer.heating", "cooling": "arbeitszimmer.cooling", "presence": "arbeitszimmer.presence", "light": "arbeitszimmer.light", "lightColor": "light.arbeitszimmer" }
+      "data": { "temperature": "arbeitszimmer.temperature", "targetTemperature": "arbeitszimmer.target", "heating": "arbeitszimmer.heating", "cooling": "arbeitszimmer.cooling", "climateMode": "arbeitszimmer.mode", "climateOverride": "arbeitszimmer.override", "presence": "arbeitszimmer.presence", "light": "arbeitszimmer.light", "lightColor": "light.arbeitszimmer.decke" }
     },
-    { "id": "eltern", "name": "Eltern", "data": { "temperature": "eltern.temperature", "targetTemperature": "eltern.target-temperature", "climateMode": "eltern.climate-mode", "climateOverride": "eltern.climate-override", "heating": "eltern.heating", "cooling": "eltern.cooling", "presence": "eltern.presence", "light": "eltern.light", "lightColor": "light.eltern" } },
-    { "id": "bad", "name": "Bad", "data": { "temperature": "bad.temperature", "targetTemperature": "bad.target-temperature", "humidity": "bad.feuchte", "climateMode": "bad.climate-mode", "climateOverride": "bad.climate-override", "heating": "bad.heating", "cooling": "bad.cooling", "presence": "bad.presence", "light": "bad.light", "lightColor": "light.bad" } },
-    { "id": "flur-og", "name": "Flur OG", "data": { "presence": "flur-og.presence", "light": "flur-og.light" } },
-    { "id": "kind-1", "name": "Kind 1", "data": { "temperature": "kind-1.temperature", "targetTemperature": "kind-1.target-temperature", "climateMode": "kind-1.climate-mode", "climateOverride": "kind-1.climate-override", "heating": "kind-1.heating", "cooling": "kind-1.cooling", "presence": "kind-1.presence", "light": "kind-1.light", "lightColor": "light.kind-1" } },
-    { "id": "kind-2", "name": "Kind 2", "data": { "temperature": "kind-2.temperature", "targetTemperature": "kind-2.target-temperature", "climateMode": "kind-2.climate-mode", "climateOverride": "kind-2.climate-override", "heating": "kind-2.heating", "cooling": "kind-2.cooling", "presence": "kind-2.presence", "light": "kind-2.light", "lightColor": "light.kind-2" } },
-    { "id": "studio", "name": "Studio", "data": { "temperature": "studio.temperature", "light": "studio.light" } },
+    { "id": "gaeste-bad", "name": "Gäste-Bad", "data": { "temperature": "gaeste-bad.temperature", "light": "gaeste-bad.light" } },
+    { "id": "garderobe", "name": "Garderobe", "data": { "light": "garderobe.light" } },
+    { "id": "diele", "name": "Diele", "data": { "temperature": "diele.temperature", "targetTemperature": "diele.target", "heating": "diele.heating", "cooling": "diele.cooling", "climateMode": "diele.mode", "climateOverride": "diele.override", "presence": "diele.presence", "light": "diele.light", "lightColor": "light.diele.decke" } },
+    { "id": "speis", "name": "Speis" },
+    { "id": "kueche", "name": "Küche", "data": { "temperature": "kueche.temperature", "targetTemperature": "kueche.target", "heating": "kueche.heating", "cooling": "kueche.cooling", "climateMode": "kueche.mode", "climateOverride": "kueche.override", "presence": "kueche.presence", "light": "kueche.light", "lightLevel": "light.kueche.spots" } },
+    {
+      "id": "wohnen-essen",
+      "name": "Wohnen/Essen",
+      "data": { "temperature": "wohnen-essen.temperature", "targetTemperature": "wohnen-essen.target", "heating": "wohnen-essen.heating", "cooling": "wohnen-essen.cooling", "climateMode": "wohnen-essen.mode", "climateOverride": "wohnen-essen.override", "presence": "wohnen-essen.presence", "light": "wohnen-essen.light", "lightColor": ["light.wohnen-essen.decke", "light.wohnen-essen.essplatz"] }
+    },
     { "id": "garage", "name": "Garage", "data": { "presence": "garage.presence", "light": "garage.light" } },
-    { "id": "pavillon", "name": "Pavillon", "data": { "temperature": "pavillon.temperature", "light": "pavillon.light", "lightColor": "light.pavillon" } }
+    { "id": "veranda", "name": "Veranda" },
+    { "id": "flur-og", "name": "Flur OG", "data": { "presence": "flur-og.presence", "light": "flur-og.light" } },
+    { "id": "bad", "name": "Bad", "data": { "temperature": "bad.temperature", "targetTemperature": "bad.target", "heating": "bad.heating", "cooling": "bad.cooling", "climateMode": "bad.mode", "climateOverride": "bad.override", "presence": "bad.presence", "light": "bad.light", "lightColor": "light.bad.decke", "humidity": "bad.humidity" } },
+    { "id": "studio", "name": "Studio", "data": { "temperature": "studio.temperature", "light": "studio.light" } },
+    { "id": "kind-1", "name": "Kind 1", "data": { "temperature": "kind-1.temperature", "targetTemperature": "kind-1.target", "heating": "kind-1.heating", "cooling": "kind-1.cooling", "climateMode": "kind-1.mode", "climateOverride": "kind-1.override", "presence": "kind-1.presence", "light": "kind-1.light", "lightColor": "light.kind-1.decke" } },
+    { "id": "kind-2", "name": "Kind 2", "data": { "temperature": "kind-2.temperature", "targetTemperature": "kind-2.target", "heating": "kind-2.heating", "cooling": "kind-2.cooling", "climateMode": "kind-2.mode", "climateOverride": "kind-2.override", "presence": "kind-2.presence", "light": "kind-2.light", "lightColor": "light.kind-2.decke" } },
+    { "id": "eltern", "name": "Eltern", "data": { "temperature": "eltern.temperature", "targetTemperature": "eltern.target", "heating": "eltern.heating", "cooling": "eltern.cooling", "climateMode": "eltern.mode", "climateOverride": "eltern.override", "presence": "eltern.presence", "light": "eltern.light", "lightColor": "light.eltern.decke" } },
+    { "id": "bad-eltern", "name": "Bad Eltern", "data": { "temperature": "bad-eltern.temperature", "light": "bad-eltern.light" } },
+    { "id": "dachterrasse", "name": "Dachterrasse", "data": { "lightColor": ["light.dachterrasse.bodenleuchten", "light.dachterrasse.wandleuchte"] } },
+    { "id": "wintergarten", "name": "Wintergarten", "data": { "temperature": "wintergarten.temperature", "light": "wintergarten.light", "lightColor": "light.wintergarten.decke" } },
+    { "id": "geraetehaus", "name": "Gerätehaus" }
   ],
   "spaces": [
-    { "id": "hobbyraum", "roomId": "hobbyraum", "floor": "kg", "polygon": [[0.3, 0.3], [5.6, 0.3], [5.6, 4.6], [0.3, 4.6]] },
-    { "id": "vorrat", "roomId": "vorrat", "floor": "kg", "polygon": [[0.3, 4.72], [5.6, 4.72], [5.6, 9.2], [0.3, 9.2]] },
-    { "id": "flur-kg", "roomId": "flur-kg", "floor": "kg", "polygon": [[5.72, 0.3], [7.2, 0.3], [7.2, 9.2], [5.72, 9.2]] },
-    { "id": "technik", "roomId": "technik", "floor": "kg", "polygon": [[7.32, 0.3], [10.7, 0.3], [10.7, 4.4], [7.32, 4.4]] },
-    { "id": "waschkueche", "roomId": "waschkueche", "floor": "kg", "polygon": [[7.32, 4.52], [10.7, 4.52], [10.7, 9.2], [7.32, 9.2]] },
-    { "id": "lager", "roomId": "lager", "floor": "kg", "polygon": [[11, 2.6], [14.6, 2.6], [14.6, 7.2], [11, 7.2]] },
-    { "id": "wohnen", "roomId": "wohnen", "floor": "eg", "polygon": [[0.365, 0.365], [6.6, 0.365], [6.6, 4], [4.2, 4], [4.2, 6.2], [0.365, 6.2]] },
-    { "id": "kueche", "roomId": "kueche", "floor": "eg", "polygon": [[0.365, 6.32], [4.08, 6.32], [4.08, 9.135], [0.365, 9.135]] },
-    { "id": "diele", "roomId": "diele", "floor": "eg", "polygon": [[4.32, 4.12], [6.6, 4.12], [6.6, 9.135], [4.32, 9.135]] },
-    { "id": "gaestezimmer", "roomId": "gaestezimmer", "floor": "eg", "polygon": [[6.72, 0.365], [10.635, 0.365], [10.635, 4.6], [6.72, 4.6]] },
-    { "id": "garderobe", "roomId": "garderobe", "floor": "eg", "polygon": [[6.72, 4.72], [10.635, 4.72], [10.635, 6.48], [6.72, 6.48]] },
-    { "id": "gaeste-wc", "roomId": "gaeste-wc", "floor": "eg", "polygon": [[6.72, 6.6], [8.4, 6.6], [8.4, 9.135], [6.72, 9.135]] },
-    { "id": "speis", "roomId": "speis", "floor": "eg", "polygon": [[8.52, 6.6], [10.635, 6.6], [10.635, 9.135], [8.52, 9.135]] },
-    { "id": "arbeitszimmer", "roomId": "arbeitszimmer", "floor": "eg", "facadeColor": "#b9b1a3", "polygon": [[11, 2.6], [14.6, 2.6], [14.6, 7.2], [11, 7.2]] },
-    { "id": "garage", "roomId": "garage", "floor": "eg", "polygon": [[-7.85, 1.15], [-2.15, 1.15], [-2.15, 6.85], [-7.85, 6.85]], "height": 3, "outbuilding": true, "exteriorWall": 0.15, "level": -0.3, "tags": ["Garage"] },
-    { "id": "eltern", "roomId": "eltern", "floor": "og", "polygon": [[0.365, 0.365], [5, 0.365], [5, 4.4], [0.365, 4.4]] },
-    { "id": "ankleide", "roomId": "eltern", "name": "Ankleide", "floor": "og", "polygon": [[0.365, 4.52], [3.6, 4.52], [3.6, 6], [0.365, 6]] },
-    { "id": "bad", "roomId": "bad", "floor": "og", "polygon": [[0.365, 6.12], [3.6, 6.12], [3.6, 9.135], [0.365, 9.135]] },
-    { "id": "flur-og", "roomId": "flur-og", "floor": "og", "polygon": [[3.72, 4.52], [6.2, 4.52], [6.2, 9.135], [3.72, 9.135]] },
-    { "id": "kind-1", "roomId": "kind-1", "floor": "og", "polygon": [[5.12, 0.365], [7.8, 0.365], [7.8, 4.4], [5.12, 4.4]] },
-    { "id": "kind-2", "roomId": "kind-2", "floor": "og", "polygon": [[7.92, 0.365], [10.635, 0.365], [10.635, 4.4], [7.92, 4.4]] },
-    { "id": "studio", "roomId": "studio", "floor": "og", "polygon": [[6.32, 4.52], [10.635, 4.52], [10.635, 9.135], [6.32, 9.135]] }
+    { "id": "technik", "roomId": "technik", "floor": "kg", "polygon": [[6.265, 0.3], [10.69, 0.3], [10.69, 4.5], [6.265, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "hobbyraum", "roomId": "hobbyraum", "floor": "kg", "polygon": [[16.44, 0.3], [20.665, 0.3], [20.665, 4.5], [16.44, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "flur-kg", "roomId": "flur-kg", "floor": "kg", "polygon": [[6.265, 4.74], [20.665, 4.74], [20.665, 6], [16.2, 6], [16.2, 9.7], [10.93, 9.7], [10.93, 6], [6.265, 6]], "facadeColor": "#f0ead6" },
+    { "id": "vorrat", "roomId": "vorrat", "floor": "kg", "polygon": [[6.265, 6.115], [10.69, 6.115], [10.69, 9.7], [6.265, 9.7]], "facadeColor": "#f0ead6" },
+    { "id": "waschkueche", "roomId": "waschkueche", "floor": "kg", "polygon": [[16.44, 6.115], [20.665, 6.115], [20.665, 9.7], [16.44, 9.7]], "facadeColor": "#f0ead6" },
+    { "id": "terrasse", "roomId": "terrasse", "floor": "kg", "height": 0, "outbuilding": true, "polygon": [[20.965, -1], [24.965, -1], [24.965, 4.6], [20.965, 4.6]], "tags": ["Terrasse"] },
+    { "id": "garage", "roomId": "garage", "floor": "eg", "polygon": [[0.365, 2], [5.965, 2], [5.965, 8], [0.365, 8]], "facadeColor": "#f0ead6", "tags": ["Garage"] },
+    { "id": "arbeitszimmer", "roomId": "arbeitszimmer", "floor": "eg", "polygon": [[6.33, 6.115], [8.75, 6.115], [8.75, 9.635], [6.33, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "gaeste-bad", "roomId": "gaeste-bad", "floor": "eg", "polygon": [[8.865, 6.115], [10.69, 6.115], [10.69, 9.635], [8.865, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "diele", "roomId": "diele", "floor": "eg", "openTo": "og", "polygon": [[10.93, 6.115], [14.85, 6.115], [14.85, 9.635], [10.93, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "treppe", "roomId": "diele", "floor": "eg", "polygon": [[14.965, 6.115], [16.2, 6.115], [16.2, 9.635], [14.965, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "garderobe", "roomId": "garderobe", "floor": "eg", "polygon": [[6.33, 4.74], [16.2, 4.74], [16.2, 6], [6.33, 6]], "facadeColor": "#f0ead6" },
+    { "id": "speis", "roomId": "speis", "floor": "eg", "polygon": [[16.44, 8.095], [17.85, 8.095], [17.85, 9.635], [16.44, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "kueche", "roomId": "kueche", "floor": "eg", "polygon": [[16.44, 4.74], [20.6, 4.74], [20.6, 9.635], [19.965, 9.635], [19.965, 10.6], [17.965, 10.6], [17.965, 7.98], [16.44, 7.98]], "facadeColor": "#f0ead6" },
+    { "id": "wohnen", "roomId": "wohnen-essen", "floor": "eg", "level": -0.36, "polygon": [[10.93, 4.5], [10.93, -4.635], [11.766, -4.635], [12.766, -5.635], [14.364, -5.635], [15.364, -4.635], [16.2, -4.635], [16.2, 4.5]], "facadeColor": "#f0ead6", "name": "Wohnen" },
+    { "id": "essen", "roomId": "wohnen-essen", "floor": "eg", "polygon": [[16.44, 0.365], [20.6, 0.365], [20.6, 4.5], [16.44, 4.5]], "facadeColor": "#f0ead6", "name": "Essen" },
+    { "id": "gaestezimmer", "roomId": "gaestezimmer", "floor": "eg", "polygon": [[6.33, 0.365], [10.69, 0.365], [10.69, 4.5], [6.33, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "veranda", "roomId": "veranda", "floor": "eg", "height": 0, "outbuilding": true, "polygon": [[10.99, 10], [16.15, 10], [16.15, 11.8], [10.99, 11.8]] },
+    { "id": "bad", "roomId": "bad", "floor": "og", "polygon": [[6.33, 6.115], [10.69, 6.115], [10.69, 9.635], [6.33, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "studio", "roomId": "studio", "floor": "og", "polygon": [[14.965, 6.115], [20.6, 6.115], [20.6, 9.635], [14.965, 9.635]], "facadeColor": "#f0ead6" },
+    { "id": "galerie", "roomId": "flur-og", "floor": "og", "polygon": [[6.33, 4.74], [20.6, 4.74], [20.6, 6], [6.33, 6]], "facadeColor": "#f0ead6" },
+    { "id": "kind-1", "roomId": "kind-1", "floor": "og", "polygon": [[6.33, 0.365], [10.69, 0.365], [10.69, 4.5], [6.33, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "ankleide", "roomId": "eltern", "floor": "og", "polygon": [[10.93, 0.365], [12.965, 0.365], [12.965, 4.5], [10.93, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "bad-eltern", "roomId": "bad-eltern", "floor": "og", "polygon": [[13.08, 0.365], [16.2, 0.365], [16.2, 4.5], [13.08, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "kind-2", "roomId": "kind-2", "floor": "og", "polygon": [[16.44, 0.365], [20.6, 0.365], [20.6, 4.5], [16.44, 4.5]], "facadeColor": "#f0ead6" },
+    { "id": "schlafen", "roomId": "eltern", "floor": "og", "polygon": [[10.93, -4.635], [16.2, -4.635], [16.2, 0.25], [10.93, 0.25]], "facadeColor": "#f0ead6" },
+    { "id": "dachterrasse", "roomId": "dachterrasse", "floor": "og", "height": 0, "outbuilding": true, "polygon": [[0.365, 2], [5.965, 2], [5.965, 8], [0.365, 8]], "tags": ["Dachterrasse"] },
+    { "id": "geraetehaus", "roomId": "geraetehaus", "floor": "eg", "outbuilding": true, "exteriorWall": 0.1, "level": -0.95, "height": 1.95, "facadeColor": "#9c7a55", "polygon": [[-3.08, -8.99], [-0.58, -8.99], [-0.58, -6.96], [-3.08, -6.96]], "tags": ["Gerätehaus"] }
+  ],
+  "stairs": [
+    { "id": "treppe-kg", "name": "Kellertreppe", "floor": "kg", "to": "eg", "line": [[15.585, 9.4], [15.585, 6.64]], "width": 0.95, "rises": 14 },
+    { "id": "treppe-diele", "name": "Treppe Diele", "floor": "eg", "to": "og", "line": [[11.45, 7.47], [11.45, 9.135], [12.45, 9.135], [12.45, 6.17]], "width": 1, "rises": 17, "turns": ["landing", "winders"] },
+    { "id": "stufen-wohnen-flur", "name": "Stufen Wohnen", "floor": "eg", "to": "eg", "line": [[13.58, 4.22], [13.58, 4.5]], "width": 1.1, "rises": 2 },
+    { "id": "stufen-wohnen-essen", "name": "Stufen Essen", "floor": "eg", "to": "eg", "line": [[15.92, 2.4], [16.2, 2.4]], "width": 1.6, "rises": 2 }
+  ],
+  "railings": [
+    { "id": "galerie", "floor": "og", "line": [[10.93, 6.06], [14.85, 6.06]], "kind": "bars" },
+    { "id": "balkon", "floor": "og", "line": [[11.65, -5], [12.63, -5.95], [14.5, -5.95], [15.48, -5]], "kind": "glass", "tags": ["Balkon", "outside"] },
+    { "id": "dachterrasse", "floor": "og", "line": [[5.965, 1.72], [0.3, 1.72], [0.3, 8.28], [5.965, 8.28]], "kind": "glass", "tags": ["Dachterrasse"] },
+    { "id": "veranda-west", "floor": "eg", "line": [[11.07, 10.05], [11.07, 11.7], [13.34, 11.7]], "kind": "solid", "height": 0.8, "tags": ["Veranda"] },
+    { "id": "veranda-ost", "floor": "eg", "line": [[14.67, 11.7], [16.07, 11.7], [16.07, 10.05]], "kind": "solid", "height": 0.8, "tags": ["Veranda"] },
+    { "id": "treppe-innen", "name": "Treppengeländer", "stair": "treppe-diele", "side": "right", "kind": "bars", "tags": ["Treppengeländer"] }
   ],
   "openings": [
-    { "id": "hobbyraum-west-1", "kind": "window", "floor": "kg", "start": [0.3, 1.6], "end": [0.3, 3], "sill": 0.95, "top": 2.3, "leaves": 2, "data": { "open": "fenster.hobbyraum-west-1" } },
-    { "id": "technik-east-1", "kind": "window", "floor": "kg", "start": [10.7, 1.5], "end": [10.7, 2.3], "sill": 1.9, "top": 2.4, "operation": "top-hung" },
-    { "id": "waschkueche-north-1", "kind": "window", "floor": "kg", "start": [8, 9.2], "end": [8.9, 9.2], "sill": 1.9, "top": 2.4, "data": { "open": "fenster.waschkueche-north-1" } },
+    { "id": "technik-west-1", "kind": "window", "floor": "kg", "start": [6.265, 0.6], "end": [6.265, 1.4], "sill": 1.6, "top": 2.2, "color": "#8a5a32", "operation": "top-hung" },
+    { "id": "waschkueche-east-1", "kind": "window", "floor": "kg", "start": [20.665, 6.3], "end": [20.665, 7.2], "sill": 1.55, "top": 2.2, "color": "#8a5a32", "data": { "open": "window.waschkueche-east-1" } },
+    { "id": "hobbyraum-east-1", "kind": "door", "floor": "kg", "start": [20.665, 1], "end": [20.665, 2.01], "sill": 0, "top": 2.1, "color": "#8a5a32", "side": "left", "glass": true },
+    { "id": "hobbyraum-east-2", "kind": "window", "floor": "kg", "start": [20.665, 2.6], "end": [20.665, 4], "sill": 0.95, "top": 2.2, "leaves": 2, "color": "#8a5a32", "data": { "open": "window.hobbyraum-east-2" } },
+    { "id": "hobbyraum-south-1", "kind": "window", "floor": "kg", "start": [17.865, 0.3], "end": [19.065, 0.3], "sill": 1.45, "top": 2.25, "color": "#8a5a32" },
+    { "id": "vorrat-flur-kg", "kind": "door", "floor": "kg", "start": [7.96, 6.115], "end": [8.845, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "technik-flur-kg", "kind": "door", "floor": "kg", "start": [7.96, 4.5], "end": [8.845, 4.5], "sill": 0, "top": 2.01 },
+    { "id": "waschkueche-flur-kg", "kind": "door", "floor": "kg", "start": [17.97, 6.115], "end": [18.855, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "hobbyraum-flur-kg", "kind": "door", "floor": "kg", "start": [17.97, 4.5], "end": [18.855, 4.5], "sill": 0, "top": 2.01 },
+    { "id": "arbeitszimmer-north-1", "kind": "window", "floor": "eg", "start": [6.965, 9.635], "end": [8.165, 9.635], "sill": 0.9, "top": 2.3, "color": "#8a5a32" },
     {
-      "id": "wohnen-south-1",
+      "id": "arbeitszimmer-west-1",
       "kind": "window",
       "floor": "eg",
-      "start": [1, 0.365],
-      "end": [4.6, 0.365],
-      "sill": 0,
-      "top": 2.3,
-      "operation": "slide",
-      "leaves": 2,
-      "side": "right",
-      "data": { "open": "fenster.wohnen-south-1" },
-      "shades": [
-        { "kind": "blind", "from": 0, "to": 1.8, "data": { "position": "beschattung.wohnen-south-1.position", "slats": "beschattung.wohnen-south-1.lamellen" } },
-        { "kind": "blind", "from": 1.8, "to": 3.6, "data": { "position": "beschattung.wohnen-south-1-2.position", "slats": "beschattung.wohnen-south-1-2.lamellen" } }
-      ]
-    },
-    {
-      "id": "wohnen-south-2",
-      "kind": "window",
-      "floor": "eg",
-      "start": [5.2, 0.365],
-      "end": [6.4, 0.365],
+      "start": [6.33, 8.365],
+      "end": [6.33, 9.35],
       "sill": 0.9,
       "top": 2.3,
-      "data": { "open": "fenster.wohnen-south-2", "tilted": "fenster.wohnen-south-2.gekippt" },
-      "shades": [{ "kind": "blind", "data": { "position": "beschattung.wohnen-south-2.position", "slats": "beschattung.wohnen-south-2.lamellen" } }]
+      "color": "#8a5a32",
+      "data": { "position": "window.arbeitszimmer-west-1.position" },
+      "shades": [{ "kind": "roller", "data": { "position": "shade.arbeitszimmer-west-1.position" } }]
+    },
+    { "id": "gaeste-bad-north-1", "kind": "window", "floor": "eg", "start": [9.415, 9.635], "end": [10.115, 9.635], "sill": 1.5, "top": 2.2, "color": "#8a5a32", "data": { "open": "window.gaeste-bad-north-1", "tilted": "window.gaeste-bad-north-1.tilted" } },
+    { "id": "diele-north-1", "kind": "door", "floor": "eg", "start": [13.265, 9.635], "end": [14.675, 9.635], "sill": 0, "top": 2.2, "side": "left", "sidelight": { "width": 0.41, "side": "right" }, "color": "#383e42", "data": { "open": "window.diele-north-1" } },
+    { "id": "speis-north-1", "kind": "window", "floor": "eg", "start": [16.815, 9.635], "end": [17.415, 9.635], "sill": 1.6, "top": 2.2, "color": "#8a5a32" },
+    { "id": "kueche-north-1", "kind": "window", "floor": "eg", "start": [18.365, 10.6], "end": [19.565, 10.6], "sill": 0.9, "top": 2.2, "color": "#8a5a32", "operation": "top-hung" },
+    {
+      "id": "kueche-east-1",
+      "kind": "window",
+      "floor": "eg",
+      "start": [20.6, 6.9],
+      "end": [20.6, 8.3],
+      "sill": 0.95,
+      "top": 2.2,
+      "color": "#8a5a32",
+      "data": { "open": "window.kueche-east-1" },
+      "shades": [{ "kind": "roller", "data": { "position": "shade.kueche-east-1.position" } }]
+    },
+    {
+      "id": "essen-east-1",
+      "kind": "window",
+      "floor": "eg",
+      "start": [20.6, 1.6],
+      "end": [20.6, 2.75],
+      "sill": 0.9,
+      "top": 2.3,
+      "color": "#8a5a32",
+      "data": { "open": "window.essen-east-1" },
+      "shades": [{ "kind": "blind", "data": { "position": "shade.essen-east-1.position", "slats": "shade.essen-east-1.slats" } }]
+    },
+    { "id": "essen-south-1", "kind": "window", "floor": "eg", "start": [17.565, 0.365], "end": [18.765, 0.365], "sill": 0.9, "top": 2.3, "color": "#8a5a32" },
+    {
+      "id": "gaestezimmer-south-1",
+      "kind": "window",
+      "floor": "eg",
+      "start": [7.565, 0.365],
+      "end": [9.065, 0.365],
+      "sill": 0.9,
+      "top": 2.3,
+      "color": "#8a5a32",
+      "data": { "open": "window.gaestezimmer-south-1" },
+      "shades": [{ "kind": "blind", "data": { "position": "shade.gaestezimmer-south-1.position", "slats": "shade.gaestezimmer-south-1.slats" } }]
     },
     {
       "id": "wohnen-west-1",
       "kind": "window",
       "floor": "eg",
-      "start": [0.365, 2],
-      "end": [0.365, 3.4],
-      "sill": 0,
+      "start": [10.93, -0.2],
+      "end": [10.93, -3.8],
+      "sill": -0.36,
       "top": 2.3,
+      "operation": "slide",
+      "color": "#8a5a32",
+      "data": { "open": "window.wohnen-west-1" },
+      "shades": [
+        { "kind": "blind", "from": 0, "to": 1.8, "data": { "position": "shade.wohnen-west-1.position", "slats": "shade.wohnen-west-1.slats" } },
+        { "kind": "blind", "from": 1.8, "to": 3.6, "data": { "position": "shade.wohnen-west-1-2.position", "slats": "shade.wohnen-west-1-2.slats" } }
+      ]
+    },
+    {
+      "id": "wohnen-south-1",
+      "kind": "window",
+      "floor": "eg",
+      "start": [11.916, -4.785],
+      "end": [12.616, -5.485],
+      "sill": 0.14,
+      "top": 2.3,
+      "color": "#8a5a32",
+      "shades": [{ "kind": "blind", "data": { "position": "shade.wohnen-erker.position", "slats": "shade.wohnen-erker.slats" } }]
+    },
+    {
+      "id": "wohnen-south-2",
+      "kind": "window",
+      "floor": "eg",
+      "start": [12.965, -5.635],
+      "end": [14.165, -5.635],
+      "sill": 0.14,
+      "top": 2.3,
+      "color": "#8a5a32",
+      "data": { "open": "window.wohnen-erker", "tilted": "window.wohnen-erker.tilted" },
+      "shades": [{ "kind": "blind", "data": { "position": "shade.wohnen-erker.position", "slats": "shade.wohnen-erker.slats" } }]
+    },
+    {
+      "id": "wohnen-south-3",
+      "kind": "window",
+      "floor": "eg",
+      "start": [14.514, -5.485],
+      "end": [15.214, -4.785],
+      "sill": 0.14,
+      "top": 2.3,
+      "color": "#8a5a32",
+      "shades": [{ "kind": "blind", "data": { "position": "shade.wohnen-erker.position", "slats": "shade.wohnen-erker.slats" } }]
+    },
+    {
+      "id": "wohnen-east-1",
+      "kind": "window",
+      "floor": "eg",
+      "start": [16.2, -3.4],
+      "end": [16.2, -2],
+      "sill": -0.36,
+      "top": 2.3,
+      "color": "#8a5a32",
+      "data": { "open": "window.wohnen-east-1" },
+      "shades": [{ "kind": "roller", "data": { "position": "shade.wohnen-east-1.position" } }],
       "fixedBelow": 0.6,
-      "side": "right",
-      "data": { "open": "fenster.wohnen-west-1" },
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.wohnen-west-1.position" } }]
+      "side": "right"
     },
+    { "id": "garage-north-1", "kind": "door", "floor": "eg", "start": [0.965, 8], "end": [5.365, 8], "sill": 0, "top": 2.1, "operation": "overhead", "data": { "position": "gate.garage-north-1.position" } },
+    { "id": "garderobe-garage", "kind": "door", "floor": "eg", "start": [5.965, 4.9], "end": [5.965, 5.785], "sill": 0, "top": 2.01 },
+    { "id": "arbeitszimmer-garderobe", "kind": "door", "floor": "eg", "start": [7.18, 6.115], "end": [8.065, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "gaeste-bad-garderobe", "kind": "door", "floor": "eg", "start": [9.37, 6.115], "end": [10.13, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "diele-garderobe", "kind": "door", "floor": "eg", "start": [11.96, 6.115], "end": [14.56, 6.115], "sill": 0, "top": 2.45, "operation": "none" },
+    { "id": "treppe-garderobe", "kind": "door", "floor": "eg", "start": [15.17, 6.115], "end": [15.93, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "kueche-garderobe", "kind": "door", "floor": "eg", "start": [16.44, 4.9], "end": [16.44, 5.785], "sill": 0, "top": 2.01, "side": "right", "glass": true },
+    { "id": "speis-kueche", "kind": "door", "floor": "eg", "start": [17.85, 8.38], "end": [17.85, 9.14], "sill": 0, "top": 2.01 },
+    { "id": "gaestezimmer-garderobe", "kind": "door", "floor": "eg", "start": [7.98, 4.5], "end": [8.865, 4.5], "sill": 0, "top": 2.01 },
+    { "id": "wohnen-garderobe", "kind": "door", "floor": "eg", "start": [13.03, 4.5], "end": [14.13, 4.5], "sill": 0, "top": 2.1, "side": "right", "glass": true },
+    { "id": "kueche-essen", "kind": "door", "floor": "eg", "start": [16.76, 4.5], "end": [20.26, 4.5], "sill": 0, "top": 2.45, "operation": "none" },
+    { "id": "wohnen-essen", "kind": "door", "floor": "eg", "start": [16.2, 0.365], "end": [16.2, 3.19], "sill": 0, "top": 2.65, "operation": "none" },
+    { "id": "bad-west-1", "kind": "window", "floor": "og", "start": [6.33, 7.4], "end": [6.33, 8.3], "sill": 1.2, "top": 2.1, "color": "#8a5a32", "data": { "open": "window.bad-west-1", "tilted": "window.bad-west-1.tilted" } },
+    { "id": "galerie-west-1", "kind": "window", "floor": "og", "start": [6.33, 4.9], "end": [6.33, 5.85], "sill": 0, "top": 2.1, "color": "#8a5a32" },
     {
-      "id": "kueche-west-1",
-      "kind": "window",
-      "floor": "eg",
-      "start": [0.365, 7],
-      "end": [0.365, 8.4],
-      "sill": 0.95,
-      "top": 2.2,
-      "leaves": 2,
-      "data": { "open": "fenster.kueche-west-1" },
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.kueche-west-1.position" } }]
-    },
-    { "id": "kueche-north-1", "kind": "window", "floor": "eg", "start": [1, 9.135], "end": [2.2, 9.135], "sill": 1.1, "top": 2.2, "operation": "top-hung" },
-    { "id": "diele-north-1", "kind": "door", "floor": "eg", "start": [4.8, 9.135], "end": [6.2, 9.135], "sill": 0, "top": 2.2, "side": "left", "sidelight": { "side": "right", "width": 0.4 }, "color": "#7a2e2a", "data": { "open": "fenster.diele-north-1" } },
-    { "id": "gaeste-wc-north-1", "kind": "window", "floor": "eg", "start": [7.2, 9.135], "end": [7.8, 9.135], "sill": 1.5, "top": 2.2, "data": { "open": "fenster.gaeste-wc-north-1", "tilted": "fenster.gaeste-wc-north-1.gekippt" } },
-    { "id": "gaestezimmer-south-1", "kind": "window", "floor": "eg", "start": [7.5, 0.365], "end": [9, 0.365], "sill": 0.9, "top": 2.3, "operation": "fixed" },
-    {
-      "id": "gaestezimmer-east-1",
-      "kind": "window",
-      "floor": "eg",
-      "start": [10.635, 1.4],
-      "end": [10.635, 2.6],
-      "sill": 0.9,
-      "top": 2.3,
-      "side": "right",
-      "data": { "open": "fenster.gaestezimmer-east-1" },
-      "shades": [{ "kind": "blind", "data": { "position": "beschattung.gaestezimmer-east-1.position", "slats": "beschattung.gaestezimmer-east-1.lamellen" } }]
-    },
-    { "id": "speis-north-1", "kind": "window", "floor": "eg", "start": [9.3, 9.135], "end": [9.9, 9.135], "sill": 1.6, "top": 2.2, "operation": "fixed" },
-    {
-      "id": "arbeitszimmer-south-1",
-      "kind": "window",
-      "floor": "eg",
-      "start": [11.8, 2.6],
-      "end": [13.2, 2.6],
-      "sill": 0.9,
-      "top": 2.3,
-      "data": { "position": "fenster.arbeitszimmer-south-1.position" },
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.arbeitszimmer-south-1.position" } }]
-    },
-    {
-      "id": "arbeitszimmer-east-1",
-      "kind": "window",
-      "floor": "eg",
-      "sill": 0.9,
-      "top": 2.3,
-      "data": { "open": "fenster.arbeitszimmer-east-1" },
-      "shades": [{ "kind": "blind", "data": { "position": "beschattung.arbeitszimmer-east-1.position", "slats": "beschattung.arbeitszimmer-east-1.lamellen" } }],
-      "start": [14.6, 3.98],
-      "end": [14.6, 5.13]
-    },
-    { "id": "arbeitszimmer-north-1", "kind": "window", "floor": "eg", "start": [11.6, 7.2], "end": [12.6, 7.2], "sill": 1.1, "top": 2.3 },
-    { "id": "garage-south-1", "kind": "door", "operation": "overhead", "floor": "eg", "start": [-7.4, 1.15], "end": [-2.6, 1.15], "sill": -0.3, "top": 2.1, "color": "#9a9d9f", "data": { "position": "garage.tor.position" } },
-    {
-      "id": "eltern-west-1",
+      "id": "kind-1-west-1",
       "kind": "window",
       "floor": "og",
-      "start": [0.365, 3],
-      "end": [0.365, 3.9],
+      "start": [6.33, 1.6],
+      "end": [6.33, 2.8],
+      "sill": 0.9,
+      "top": 2.1,
+      "color": "#8a5a32",
+      "shades": [{ "kind": "roller", "data": { "position": "shade.kind-1-west-1.position" } }]
+    },
+    { "id": "schlafen-south-1", "kind": "window", "floor": "og", "start": [11.665, -4.635], "end": [12.565, -4.635], "sill": 0.9, "top": 2.1, "color": "#8a5a32" },
+    {
+      "id": "schlafen-south-2",
+      "kind": "window",
+      "floor": "og",
+      "start": [13.065, -4.635],
+      "end": [14.075, -4.635],
       "sill": 0,
       "top": 2.1,
-      "side": "right",
-      "data": { "open": "fenster.eltern-west-1" },
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.eltern-west-1.position" } }]
+      "color": "#8a5a32",
+      "data": { "open": "window.schlafen-south-2", "tilted": "window.schlafen-south-2.tilted" },
+      "shades": [{ "kind": "roller", "data": { "position": "shade.schlafen-south-2.position" } }]
     },
+    { "id": "schlafen-south-3", "kind": "window", "floor": "og", "start": [14.565, -4.635], "end": [15.465, -4.635], "sill": 0.9, "top": 2.1, "color": "#8a5a32" },
+    { "id": "studio-diele", "kind": "window", "floor": "og", "start": [14.965, 6.6], "end": [14.965, 8], "sill": 0.4, "top": 2, "operation": "fixed", "color": "#8a5a32", "frame": false },
+    { "id": "bad-galerie", "kind": "door", "floor": "og", "start": [8.56, 6.115], "end": [9.445, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "studio-galerie", "kind": "door", "floor": "og", "start": [17.98, 6.115], "end": [18.865, 6.115], "sill": 0, "top": 2.01 },
+    { "id": "kind-1-galerie", "kind": "door", "floor": "og", "start": [7.96, 4.5], "end": [8.845, 4.5], "sill": 0, "top": 2.01 },
+    { "id": "ankleide-galerie", "kind": "door", "floor": "og", "start": [11.48, 4.5], "end": [12.365, 4.5], "sill": 0, "top": 2.01 },
+    { "id": "kind-2-galerie", "kind": "door", "floor": "og", "start": [17.98, 4.5], "end": [18.865, 4.5], "sill": 0, "top": 2.01 },
+    { "id": "schlafen-ankleide", "kind": "door", "floor": "og", "start": [11.58, 0.25], "end": [12.465, 0.25], "sill": 0, "top": 2.01 },
+    { "id": "schlafen-bad-eltern", "kind": "door", "floor": "og", "start": [14.55, 0.25], "end": [15.31, 0.25], "sill": 0, "top": 2.01 },
     {
-      "id": "eltern-west-2",
+      "id": "kind-2-south-1",
       "kind": "window",
       "floor": "og",
-      "start": [0.365, 1.6],
-      "end": [0.365, 2.5],
-      "sill": 0.9,
-      "top": 1.9,
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.eltern-west-2.position" } }]
+      "sill": 1.9,
+      "top": 2.35,
+      "leaves": 2,
+      "color": "#8a5a32",
+      "start": [17.11, 0.65],
+      "end": [18.11, 0.65],
+      "data": { "open": "window.kind-2-south-1", "tilted": "window.kind-2-south-1.tilted" },
+      "shades": [{ "kind": "roller", "data": { "position": "shade.kind-2-south-1.position" } }]
     },
-    { "id": "bad-west-1", "kind": "window", "floor": "og", "start": [0.365, 6.6], "end": [0.365, 7.5], "sill": 1.1, "top": 2, "data": { "open": "fenster.bad-west-1", "tilted": "fenster.bad-west-1.gekippt" } },
-    {
-      "id": "kind-2-east-1",
-      "kind": "window",
-      "floor": "og",
-      "start": [10.635, 2.8],
-      "end": [10.635, 3.9],
-      "sill": 0.9,
-      "top": 2.1,
-      "data": { "open": "fenster.kind-2-east-1" },
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.kind-2-east-1.position" } }]
-    },
-    { "id": "studio-east-1", "kind": "window", "floor": "og", "start": [10.635, 5.4], "end": [10.635, 6.8], "sill": 0.6, "top": 2.3, "leaves": 2, "data": { "open": "fenster.studio-east-1" } }
-  ],
-  "roofWindows": [
-    {
-      "id": "kind-1-roof-south",
-      "roof": "main",
-      "center": [6.45, 2.4],
-      "width": 0.78,
-      "depth": 0.967,
-      "data": { "position": "fenster.kind-1-roof-south" },
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.kind-1-roof-south.position" } }]
-    },
-    {
-      "id": "kind-2-roof-south",
-      "roof": "main",
-      "center": [9.3, 2.4],
-      "width": 0.78,
-      "depth": 0.967,
-      "shades": [{ "kind": "roller", "data": { "position": "beschattung.kind-2-roof-south.position" } }]
-    },
-    { "id": "studio-roof-north", "roof": "main", "center": [8.4, 7.1], "width": 1.14, "depth": 0.967, "data": { "position": "fenster.studio-roof-north" } }
-  ],
-  "pvArrays": [
-    { "id": "pv-main-south", "roof": "main", "center": [2.9, 2.0], "width": 5.2, "depth": 2.8, "columns": 5, "rows": 2 },
-    { "id": "pv-carport", "roof": "carport", "center": [-5, -1.95], "width": 5.2, "depth": 3.4, "columns": 5, "rows": 2 }
+    { "id": "studio-north-1", "kind": "window", "floor": "og", "sill": 1.85, "top": 2.6, "leaves": 2, "color": "#8a5a32", "start": [17.355, 9.4], "end": [18.355, 9.4], "data": { "open": "window.studio-north-1", "tilted": "window.studio-north-1.tilted" } },
+    { "id": "geraetehaus-north-1", "kind": "door", "floor": "eg", "start": [-2.28, -6.96], "end": [-1.48, -6.96], "sill": -0.95, "top": 0.9, "color": "#9c7a55" }
   ],
   "roofs": [
-    { "id": "main", "kind": "gable", "floor": "og", "outline": { "x0": 0, "x1": 11, "y0": 0, "y1": 9.5 }, "overhang": { "north": 0.7, "south": 0.7, "east": 0.6, "west": 0.6 }, "ridge": "east-west", "eaveHeight": 0.99, "ridgeHeight": 4.316, "color": "#3a3d40" },
-    { "id": "wing", "kind": "hip", "floor": "eg", "outline": { "x0": 11, "x1": 14.965, "y0": 2.235, "y1": 7.565 }, "overhang": { "north": 0.235, "south": 0.235, "east": 0.235, "west": 0.1 }, "ridge": "north-south", "eaveHeight": { "north": 2.908, "south": 2.908, "east": 2.908, "west": 2.817 }, "ridgeHeight": 4.2, "color": "#5b4a42" },
-    { "id": "garage", "kind": "flat", "floor": "eg", "outline": { "x0": -8, "x1": -2, "y0": 1, "y1": 7 }, "overhang": 0.3, "height": 2.7, "color": "#8c8f92", "tags": ["Garage"] },
-    { "id": "carport", "kind": "shed", "floor": "eg", "outline": { "x0": -8.3, "x1": -1.7, "y0": -4.6, "y1": 0.7 }, "low": "south", "eaveHeight": 2.35, "ridgeHeight": 2.65, "color": "#8c8f92", "tags": ["Carport", "outside"] },
-    { "id": "terrassendach", "kind": "polygon", "floor": "eg", "outline": [[2.5, -2.5], [13.5, -2.5], [13.5, 2.235], [11, 2.235], [11, 0], [2.5, 0]], "eaveHeight": 2.35, "pitch": 8, "overhang": 0.2, "edges": ["slope", "slope", { "gable": true, "overhang": 0 }, { "gable": true, "overhang": 0 }, { "gable": true, "overhang": 0 }, "gable"], "color": "#9a9da0", "tags": ["Terrassendach", "outside"] }
+    {
+      "id": "main",
+      "kind": "polygon",
+      "floor": "og",
+      "outline": [[5.965, 0], [10.565, 0], [10.565, -5], [16.565, -5], [16.565, 0], [20.965, 0], [20.965, 10], [5.965, 10]],
+      "overhang": 0.5,
+      "edges": [
+        "slope",
+        "slope",
+        { "gable": true, "overhang": 0.3 },
+        "slope",
+        "slope",
+        "slope",
+        "slope",
+        { "gable": true, "overhang": 0.33 }
+      ],
+      "color": "#8a3a2a",
+      "eaveHeight": 1.4,
+      "pitch": 35.03
+    },
+    { "id": "kueche-erker", "kind": "shed", "floor": "eg", "outline": { "x0": 17.6, "x1": 20.33, "y0": 10, "y1": 10.965 }, "low": "north", "eaveHeight": 2.9, "ridgeHeight": 3.35, "overhang": { "north": 0.2, "east": 0.1, "west": 0.1 }, "color": "#8a3a2a" },
+    { "id": "veranda", "kind": "shed", "floor": "eg", "outline": { "x0": 10.86, "x1": 16.25, "y0": 10, "y1": 11.95 }, "low": "north", "eaveHeight": 2.745, "ridgeHeight": 2.95, "tags": ["Veranda"], "color": "#f2f0ea" },
+    { "id": "erker-balkon", "kind": "polygon", "floor": "eg", "outline": [[11.615, -5], [12.615, -6], [14.515, -6], [15.515, -5]], "eaveHeight": 2.85, "pitch": 0, "edges": ["slope", "slope", "slope", "slope"], "color": "#8c8f92" },
+    { "id": "garage", "kind": "flat", "floor": "eg", "outline": { "x0": 0, "x1": 5.965, "y0": 1.635, "y1": 8.365 }, "height": 2.8, "color": "#8c8f92" },
+    {
+      "id": "terrassendach",
+      "kind": "polygon",
+      "floor": "kg",
+      "outline": [[20.965, -0.7], [24.72, -0.7], [24.72, 4.29], [20.965, 4.29]],
+      "eaveHeight": 2.4,
+      "pitch": 8,
+      "overhang": 0.1,
+      "edges": ["slope", "slope", "slope", { "gable": true, "overhang": 0 }],
+      "tags": ["Terrassendach", "Terrasse"],
+      "color": "#f2f0ea"
+    },
+    { "id": "geraetehaus", "kind": "hip", "floor": "eg", "outline": { "x0": -3.18, "x1": -0.48, "y0": -9.09, "y1": -6.86 }, "ridge": "east-west", "eaveHeight": 1, "pitch": 30, "overhang": 0.2, "color": "#8a3a2a", "tags": ["Gerätehaus"] },
+    { "id": "carport", "kind": "gable", "floor": "eg", "outline": { "x0": -5.74, "x1": -0.02, "y0": 1.7, "y1": 8.31 }, "ridge": "east-west", "eaveHeight": 2.1, "ridgeHeight": 2.86, "color": "#8a3a2a", "tags": ["Carport", "outside"] }
+  ],
+  "dormers": [
+    { "id": "gaube-sued", "roof": "main", "kind": "shed", "eaveHeight": 2.45, "pitch": 10, "overhang": 0.1, "front": [[16.66, 0.65], [18.56, 0.65]], "wallColor": "#f0ead6" },
+    { "id": "gaube-nord", "roof": "main", "kind": "gable", "eaveHeight": 2.3, "pitch": 40, "overhang": 0.15, "front": [[16.96, 9.4], [18.75, 9.4]], "wallColor": "#f0ead6" }
+  ],
+  "roofWindows": [
+    { "id": "bad-1", "roof": "main", "center": [7.665, 8.295], "width": 1.14, "depth": 0.97, "data": { "position": "roofwindow.bad.position" } },
+    { "id": "bad-2", "roof": "main", "center": [9.36, 8.295], "width": 1.14, "depth": 0.97, "data": { "position": "roofwindow.bad.position" } },
+    { "id": "diele-1", "roof": "main", "center": [12.87, 8.295], "width": 1.14, "depth": 0.97 },
+    {
+      "id": "kind-1-1",
+      "roof": "main",
+      "center": [8.505, 1.305],
+      "width": 0.78,
+      "depth": 0.97,
+      "data": { "position": "roofwindow.kind-1-1.position" },
+      "shades": [{ "kind": "roller", "data": { "position": "shade.kind-1-1.position" } }]
+    },
+    { "id": "kind-2-1", "roof": "main", "center": [19.96, 2.195], "width": 0.78, "depth": 0.97, "shades": [{ "kind": "roller", "data": { "position": "shade.kind-2-1.position" } }] }
+  ],
+  "pvArrays": [
+    { "id": "pv-sued", "roof": "main", "center": [8.26, 3.305], "width": 3.12, "columns": 3, "rows": 2, "depth": 2.82 },
+    { "id": "pv-carport", "roof": "carport", "center": [-2.8, 3.55], "width": 4.2, "depth": 1.68, "columns": 4, "rows": 1 }
+  ],
+  "structures": [
+    { "id": "pfosten-veranda-west", "name": "Pfosten Veranda", "floor": "eg", "x0": 11.1, "x1": 11.22, "y0": 11.62, "y1": 11.74, "bottom": 0, "top": 2.75, "color": "#f2f0ea", "tags": ["Veranda"] },
+    { "id": "pfosten-veranda-ost", "name": "Pfosten Veranda", "floor": "eg", "x0": 15.95, "x1": 16.07, "y0": 11.62, "y1": 11.74, "bottom": 0, "top": 2.75, "color": "#f2f0ea", "tags": ["Veranda"] },
+    { "id": "pfosten-terrasse-nord", "name": "Pfosten Terrassendach", "floor": "kg", "x0": 24.38, "x1": 24.5, "y0": 4.02, "y1": 4.14, "bottom": 0, "top": 2.4, "tags": ["Terrassendach"], "color": "#f2f0ea" },
+    { "id": "pfosten-terrasse-sued", "name": "Pfosten Terrassendach", "floor": "kg", "x0": 24.38, "x1": 24.5, "y0": -0.54, "y1": -0.42, "bottom": 0, "top": 2.4, "tags": ["Terrassendach"], "color": "#f2f0ea" },
+    { "id": "pfosten-carport-nw", "name": "Pfosten Carport", "floor": "eg", "x0": -5.42, "x1": -5.3, "y0": 7.89, "y1": 8.01, "bottom": -0.4, "top": 2.1, "color": "#9c7a55", "tags": ["Carport", "outside"] },
+    { "id": "pfosten-carport-no", "name": "Pfosten Carport", "floor": "eg", "x0": -0.34, "x1": -0.22, "y0": 7.89, "y1": 8.01, "bottom": -0.4, "top": 2.1, "color": "#9c7a55", "tags": ["Carport", "outside"] },
+    { "id": "pfosten-carport-sw", "name": "Pfosten Carport", "floor": "eg", "x0": -5.42, "x1": -5.3, "y0": 2, "y1": 2.12, "bottom": -0.6, "top": 2.1, "color": "#9c7a55", "tags": ["Carport", "outside"] },
+    { "id": "pfosten-carport-so", "name": "Pfosten Carport", "floor": "eg", "x0": -0.34, "x1": -0.22, "y0": 2, "y1": 2.12, "bottom": -0.6, "top": 2.1, "color": "#9c7a55", "tags": ["Carport", "outside"] },
+    { "id": "veranda-unterbau", "name": "Veranda Unterbau", "floor": "eg", "x0": 10.99, "x1": 16.15, "y0": 10, "y1": 11.8, "bottom": -0.7, "top": -0.03, "color": "#f2f0ea", "tags": ["Veranda"] },
+    { "id": "stufe-veranda", "name": "Stufe Veranda", "floor": "eg", "x0": 13.34, "x1": 14.67, "y0": 11.8, "y1": 12.1, "bottom": -0.7, "top": -0.25, "color": "#b8b4ac", "tags": ["Veranda"] },
+    { "id": "muellhaeuschen", "name": "Müllhäuschen", "floor": "eg", "x0": 5.97, "x1": 7.87, "y0": 11.4, "y1": 12.67, "bottom": -0.4, "top": 1.1, "color": "#9c7a55", "tags": ["Müllhäuschen", "outside"] },
+    { "id": "pool-boden", "name": "Beckenboden", "floor": "eg", "polygon": [[3.58, -9.6], [10.59, -9.6], [10.59, -6.1], [3.58, -6.1]], "bottom": -2.35, "top": -2.3, "color": "#9fd3e6", "tags": ["Pool", "Garten"] },
+    { "id": "pool-wasser", "name": "Wasser im Pool", "floor": "eg", "polygon": [[3.58, -9.6], [10.59, -9.6], [10.59, -6.1], [3.58, -6.1]], "bottom": -1.1, "top": -1.03, "color": "#3d9ad1", "transparent": true, "tags": ["Pool", "Garten"] }
+  ],
+  "pavilions": [
+    { "id": "wintergarten", "roomId": "wintergarten", "floor": "eg", "polygon": [[5.965, 0], [10.565, 0], [10.565, -3.6], [6.565, -3.6], [5.965, -3]], "bottom": -0.38, "top": 2.63, "lowTop": 2.23, "low": "south", "tags": ["Wintergarten"] }
   ],
   "ground": {
     "floor": "eg",
-    "level": -0.3,
-    "outline": [[-18.1, -12], [21.2, -12], [21.2, 12.5], [-18.1, 12.5]],
-    "pits": [{ "name": "Lichtschacht vor dem Hobbyraum", "x0": -1.3, "x1": -0.025, "y0": 1.2, "y1": 3.4, "bottom": -1.75, "railing": true }],
+    "outline": [[-8.03, -12], [27.97, -12], [27.97, 9.53], [24.97, 13], [-8.03, 13]],
+    "heights": [
+      [-8.03, 13, -0.15],
+      [5.97, 13, -0.2],
+      [20.94, 13, -0.4],
+      [24.97, 13, -0.49],
+      [27.97, 9.53, -1.07],
+      [27.97, 8, -1.3],
+      [27.97, 3, -2.4],
+      [27.97, -4.98, -2.8],
+      [27.97, -12, -3.2],
+      [9.96, -12, -1.6],
+      [-8.03, -12, -1.2],
+      [-8.03, -4.98, -0.7],
+      [-8.03, 3, -0.35],
+      [-8.03, 8, -0.25],
+      [-0.41, 8.92, -0.25],
+      [5.54, 10.54, -0.24],
+      [17.2, 11.5, -0.51],
+      [21.39, 10.54, -0.66],
+      [21.97, 8, -0.9],
+      [21.97, 3, -2],
+      [21.97, -4.98, -2.4],
+      [16.97, -3.78, -0.45],
+      [16.97, -5.31, -0.48],
+      [14.78, -6.43, -0.62],
+      [12.37, -6.43, -0.61],
+      [10.13, -5.31, -0.42],
+      [13.56, -9, -1.35],
+      [5.54, -0.28, -0.55],
+      [-0.41, 1.32, -0.47],
+      [4.95, 3, -0.35],
+      [17.4, -0.6, -1.2],
+      [19.8, -0.6, -1.5]
+    ],
     "areas": [
-      { "name": "Terrasse", "x0": 0, "x1": 8.5, "y0": -4, "y1": -0.025, "color": "#6b6560" },
-      { "name": "Zufahrt", "x0": -8.6, "x1": -1.4, "y0": -6, "y1": -4.7, "color": "#55585b" },
-      { "name": "Weg zum Pavillon", "x0": 8.5, "x1": 12, "y0": -3.6, "y1": -2.6, "color": "#7a746c" }
+      { "name": "Zufahrt und Carport", "polygon": [[-5.41, 2], [0, 2], [0, 8.365], [5.38, 8.365], [5.38, 13], [-5.41, 13]], "color": "#9a9a96" },
+      { "name": "Weg zur Haustür", "polygon": [[13.34, 12.1], [14.67, 12.1], [14.67, 13], [13.34, 13]], "color": "#9a9a96" },
+      { "name": "Terrasse am Hobbyraum", "polygon": [[20.965, -1], [24.965, -1], [24.965, 4.6], [20.965, 4.6]], "level": -2.5, "color": "#b8b4ac" },
+      { "name": "Bodenplatte Wintergarten", "polygon": [[5.965, 0], [10.565, 0], [10.565, -3.6], [6.565, -3.6], [5.965, -3]], "level": -0.4, "color": "#b8b4ac" },
+      { "name": "Poolrand Nord", "polygon": [[2.59, -6.1], [11.08, -6.1], [10.6, -5.61], [2.59, -5.61]], "level": -0.95, "color": "#d8c8a8" },
+      { "name": "Poolrand Ost", "polygon": [[10.59, -9.6], [11.38, -9.6], [11.38, -6.4], [11.08, -6.1], [10.59, -6.1]], "level": -0.95, "color": "#d8c8a8" },
+      { "name": "Poolrand Süd", "polygon": [[2.59, -10.59], [11.38, -10.59], [11.38, -9.6], [2.59, -9.6]], "level": -0.95, "color": "#d8c8a8" },
+      { "name": "Poolrand West", "polygon": [[2.59, -9.6], [3.58, -9.6], [3.58, -6.1], [2.59, -6.1]], "level": -0.95, "color": "#d8c8a8" }
+    ],
+    "pits": [
+      { "name": "Lichtschacht Technik", "polygon": [[4.75, 0.55], [5.965, 0.55], [5.965, 1.6], [4.75, 1.6]], "bottom": -1.05, "railing": true, "tags": ["Lichtschacht Technik"] },
+      { "name": "Pool", "x0": 3.58, "x1": 10.59, "y0": -9.6, "y1": -6.1, "bottom": -2.35, "tags": ["Pool"] }
     ]
   },
-  "structures": [
-    { "id": "carport-stuetze-sw", "name": "Carport, Stütze Südwest", "floor": "eg", "x0": -8.18, "x1": -8.02, "y0": -4.48, "y1": -4.32, "bottom": -0.3, "top": 2.35, "color": "#4a4d50", "tags": ["Carport", "outside"] },
-    { "id": "carport-stuetze-so", "name": "Carport, Stütze Südost", "floor": "eg", "x0": -1.98, "x1": -1.82, "y0": -4.48, "y1": -4.32, "bottom": -0.3, "top": 2.35, "color": "#4a4d50", "tags": ["Carport", "outside"] },
-    { "id": "terrassendach-stuetze-sw", "name": "Terrassendach, Stütze Südwest", "floor": "eg", "x0": 2.52, "x1": 2.64, "y0": -2.48, "y1": -2.36, "bottom": -0.3, "top": 2.35, "color": "#4a4d50", "tags": ["Terrassendach", "outside"] },
-    { "id": "terrassendach-stuetze-s", "name": "Terrassendach, Stütze Süd", "floor": "eg", "x0": 7.69, "x1": 7.81, "y0": -2.48, "y1": -2.36, "bottom": -0.3, "top": 2.35, "color": "#4a4d50", "tags": ["Terrassendach", "outside"] },
-    { "id": "terrassendach-stuetze-so", "name": "Terrassendach, Stütze Südost", "floor": "eg", "x0": 13.36, "x1": 13.48, "y0": -2.48, "y1": -2.36, "bottom": -0.3, "top": 2.35, "color": "#4a4d50", "tags": ["Terrassendach", "outside"] },
-    { "id": "terrassendach-stuetze-no", "name": "Terrassendach, Stütze Nordost", "floor": "eg", "x0": 13.36, "x1": 13.48, "y0": 2.09, "y1": 2.21, "bottom": -0.3, "top": 2.35, "color": "#4a4d50", "tags": ["Terrassendach", "outside"] },
-    { "id": "vordach", "name": "Vordach über der Haustür", "floor": "eg", "x0": 4.3, "x1": 6.9, "y0": 9.5, "y1": 10.7, "bottom": 2.5, "top": 2.62, "color": "#d8d4cc" },
-    { "id": "podest", "name": "Podest vor der Haustür", "floor": "eg", "x0": 4.3, "x1": 6.9, "y0": 9.5, "y1": 10.5, "bottom": -0.3, "top": 0, "color": "#c9c6bf" },
-    { "id": "balkon", "name": "Balkon am Westgiebel", "floor": "og", "x0": -1.6, "x1": -0.01, "y0": 1.4, "y1": 4.2, "bottom": -0.22, "top": 0, "color": "#c9c6bf" },
-    { "id": "balkon-bruestung", "name": "Glasbrüstung", "floor": "og", "x0": -1.6, "x1": -1.5, "y0": 1.4, "y1": 4.2, "bottom": 0, "top": 1, "color": "#9fb8c8", "transparent": true }
-  ],
-  "pavilions": [{ "id": "pavillon", "name": "Pavillon", "roomId": "pavillon", "floor": "eg", "x0": 12, "x1": 15, "y0": -6, "y1": -3, "bottom": -0.3, "top": 2.6, "lowTop": 2.2, "low": "east" }],
-  "lights": [
-    { "id": "esstisch-1", "kind": "pendant", "shape": "tube", "floor": "eg", "position": [1.6, 5], "height": 1.6, "data": { "lightColor": "light.wohnen.essen" } },
-    { "id": "esstisch-2", "kind": "pendant", "shape": "tube", "floor": "eg", "position": [2.2, 5], "height": 1.45, "data": { "lightColor": "light.wohnen.essen" } },
-    { "id": "esstisch-3", "kind": "pendant", "shape": "tube", "floor": "eg", "position": [2.8, 5], "height": 1.55, "data": { "lightColor": "light.wohnen.essen" } },
-    { "id": "kueche-spot-1", "kind": "ceilingSpot", "floor": "eg", "position": [1.4, 7.7] },
-    { "id": "kueche-spot-2", "kind": "ceilingSpot", "floor": "eg", "position": [3, 7.7] },
-    { "id": "kueche-vitrine", "kind": "strip", "on": { "furniture": "oberschrank", "edge": "bottom-front" }, "data": { "light": "kueche-vitrine.light" } },
-    { "id": "flur-og-wand", "kind": "wallLight", "floor": "og", "position": [3.72, 6.8], "side": "inside", "height": 1.8, "beam": "both" },
-    { "id": "eingang-wand", "kind": "wallLight", "floor": "eg", "position": [4.55, 9.135], "side": "outside", "height": 2.1, "beam": "both", "data": { "lightColor": "light.aussen.eingang" } },
-    { "id": "eingang-vordach", "kind": "ceilingSpot", "floor": "eg", "position": [5.6, 10.1], "height": 2.5, "data": { "lightColor": "light.aussen.eingang" } },
-    { "id": "weg-1", "kind": "lantern", "floor": "eg", "position": [9, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] },
-    { "id": "weg-2", "kind": "lantern", "floor": "eg", "position": [10.3, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] },
-    { "id": "weg-3", "kind": "lantern", "floor": "eg", "position": [11.6, -3.75], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] },
-    { "id": "fassade-strahler", "kind": "groundSpot", "floor": "eg", "position": [10.3, -0.35], "data": { "lightColor": "light.aussen.weg" }, "tags": ["Garten"] }
-  ],
-  "furniture": [
-    { "id": "kuechenzeile", "name": "Küchenzeile", "floor": "eg", "x0": 3.48, "x1": 4.08, "y0": 6.5, "y1": 8.7, "front": "west", "bottom": 0, "top": 0.9 },
-    { "id": "oberschrank", "name": "Oberschrank", "floor": "eg", "from": [4.08, 8.7], "to": [4.08, 6.5], "depth": 0.35, "bottom": 1.5, "top": 2.25 },
-    { "id": "esstisch", "name": "Esstisch", "floor": "eg", "x0": 1.3, "x1": 3.1, "y0": 4.55, "y1": 5.45, "front": "south", "bottom": 0, "top": 0.75, "color": "#c9a27e" }
-  ],
+  "data": { "outsideBrightness": "aussen.helligkeit", "outsideTemperature": "aussen.temperatur", "feltTemperature": "aussen.gefuehlte-temperatur", "humidity": "aussen.luftfeuchte", "windSpeed": "aussen.wind", "windDirection": "aussen.windrichtung", "windWarning": "aussen.windwarnung", "rain": "aussen.regen", "sunshine": "aussen.sonnenschein", "weatherType": "aussen.wettertyp" },
   "indicators": [
+    {
+      "id": "musik-wohnen-essen",
+      "kind": "music",
+      "room": "wohnen-essen",
+      "rules": [
+        { "when": { "datapoint": "wohnen-essen.audio", "equals": 2 } },
+        { "when": { "datapoint": "wohnen-essen.audio", "equals": 1 }, "kind": "music-paused" }
+      ]
+    },
+    {
+      "id": "musik-kueche",
+      "kind": "music",
+      "room": "kueche",
+      "rules": [
+        { "when": { "datapoint": "kueche.audio", "equals": 2 } },
+        { "when": { "datapoint": "kueche.audio", "equals": 1 }, "kind": "music-paused" }
+      ]
+    },
+    {
+      "id": "musik-arbeitszimmer",
+      "kind": "music",
+      "room": "arbeitszimmer",
+      "rules": [
+        { "when": { "datapoint": "arbeitszimmer.audio", "equals": 2 } },
+        { "when": { "datapoint": "arbeitszimmer.audio", "equals": 1 }, "kind": "music-paused" }
+      ]
+    },
+    {
+      "id": "musik-bad",
+      "kind": "music",
+      "room": "bad",
+      "rules": [
+        { "when": { "datapoint": "bad.audio", "equals": 2 } },
+        { "when": { "datapoint": "bad.audio", "equals": 1 }, "kind": "music-paused" }
+      ]
+    },
+    {
+      "id": "musik-kind-1",
+      "kind": "music",
+      "room": "kind-1",
+      "rules": [
+        { "when": { "datapoint": "kind-1.audio", "equals": 2 } },
+        { "when": { "datapoint": "kind-1.audio", "equals": 1 }, "kind": "music-paused" }
+      ]
+    },
     {
       "id": "musik-hobbyraum",
       "kind": "music",
@@ -282,16 +469,16 @@
         {
           "when": {
             "any": [
-              { "datapoint": "musik.hobbyraum", "equals": 2 },
-              { "datapoint": "musik.hobbyraum.fitness", "equals": 2 }
+              { "datapoint": "hobbyraum.audio", "equals": 2 },
+              { "datapoint": "hobbyraum.audio-fitness", "equals": 2 }
             ]
           }
         },
         {
           "when": {
             "any": [
-              { "datapoint": "musik.hobbyraum", "equals": 1 },
-              { "datapoint": "musik.hobbyraum.fitness", "equals": 1 }
+              { "datapoint": "hobbyraum.audio", "equals": 1 },
+              { "datapoint": "hobbyraum.audio-fitness", "equals": 1 }
             ]
           },
           "kind": "music-paused"
@@ -299,107 +486,94 @@
       ]
     },
     {
-      "id": "musik-wohnen",
-      "kind": "music",
-      "room": "wohnen",
-      "rules": [
-        { "when": { "datapoint": "musik.wohnen", "equals": 2 } },
-        { "when": { "datapoint": "musik.wohnen", "equals": 1 }, "kind": "music-paused" }
-      ]
-    },
-    {
-      "id": "musik-kueche",
-      "kind": "music",
-      "room": "kueche",
-      "rules": [
-        { "when": { "datapoint": "musik.kueche", "equals": 2 } },
-        { "when": { "datapoint": "musik.kueche", "equals": 1 }, "kind": "music-paused" }
-      ]
-    },
-    {
-      "id": "musik-arbeitszimmer",
-      "kind": "music",
-      "room": "arbeitszimmer",
-      "rules": [
-        { "when": { "datapoint": "musik.arbeitszimmer", "equals": 2 } },
-        { "when": { "datapoint": "musik.arbeitszimmer", "equals": 1 }, "kind": "music-paused" }
-      ]
-    },
-    {
-      "id": "musik-bad",
-      "kind": "music",
-      "room": "bad",
-      "rules": [
-        { "when": { "datapoint": "musik.bad", "equals": 2 } },
-        { "when": { "datapoint": "musik.bad", "equals": 1 }, "kind": "music-paused" }
-      ]
-    },
-    {
-      "id": "musik-kind-1",
-      "kind": "music",
-      "room": "kind-1",
-      "rules": [
-        { "when": { "datapoint": "musik.kind-1", "equals": 2 } },
-        { "when": { "datapoint": "musik.kind-1", "equals": 1 }, "kind": "music-paused" }
-      ]
-    },
-    {
       "id": "waschmaschine",
-      "kind": "washing",
+      "kind": "washing-machine",
       "room": "waschkueche",
+      "value": { "datapoint": "waschkueche.waschmaschine-leistung" },
       "rules": [
-        {
-          "when": {
-            "all": [
-              { "datapoint": "waschmaschine.status", "equals": "läuft" },
-              { "datapoint": "waschmaschine.leistung", "above": 5 }
-            ]
-          }
-        }
+        { "when": { "datapoint": "waschkueche.waschmaschine-status", "equals": "läuft" } },
+        { "when": { "datapoint": "waschkueche.waschmaschine-status", "equals": "fertig" }, "kind": "washing-done" }
       ]
     },
     {
       "id": "briefkasten",
       "kind": "mail",
-      "position": { "floor": "eg", "x": 6.75, "y": 9.65, "height": 1.1 },
+      "position": { "floor": "eg", "x": 13.15, "y": 12.85, "height": 0.8 },
       "rules": [
-        { "when": { "datapoint": "briefkasten.paket", "equals": 1 }, "kind": "package" },
-        { "when": { "datapoint": "briefkasten.post", "equals": 1 } }
+        { "when": { "datapoint": "postkasten.packet", "equals": 1 }, "kind": "package" },
+        { "when": { "datapoint": "postkasten.mail", "equals": 1 } }
       ]
     },
-    {
-      "id": "teich",
-      "kind": "thermometer",
-      "position": { "floor": "eg", "x": 6.5, "y": -5.2, "height": 0.4 },
-      "tags": ["Garten"],
-      "value": { "datapoint": "aussen.teich" },
-      "rules": [{}]
-    },
-    { "id": "pv-dach-sued", "kind": "pv", "pvArray": "pv-main-south", "value": { "datapoint": "pv.dach-sued" }, "rules": [{}] },
-    { "id": "pv-carport", "kind": "pv", "pvArray": "pv-carport", "value": { "datapoint": "pv.carport" }, "rules": [{}] },
+    { "id": "pooltemperatur", "kind": "thermometer", "position": { "floor": "eg", "x": 7.08, "y": -7.85, "height": 0.2 }, "value": { "datapoint": "aussen.pooltemperatur" }, "rules": [{}] },
     {
       "id": "wallbox",
       "kind": "wallbox",
-      "position": { "floor": "eg", "x": -7.62, "y": 0.95, "height": 0.9 },
-      "tags": ["E-Auto"],
-      "value": { "datapoint": "wallbox.carport.leistung" },
-      "rules": [{ "when": { "datapoint": "wallbox.carport.verbunden", "equals": 1 } }]
+      "position": { "floor": "eg", "x": -0.4, "y": 5, "height": 1.2 },
+      "value": { "datapoint": "wallbox.leistung" },
+      "rules": [{ "when": { "datapoint": "wallbox.connected", "equals": 1 } }],
+      "tags": ["Carport"]
     },
-    {
-      "id": "auto-ladestand",
-      "kind": "car-battery",
-      "position": { "floor": "eg", "x": -5, "y": -2, "height": 1.7 },
-      "tags": ["E-Auto"],
-      "value": { "datapoint": "auto.ladestand" },
-      "rules": [{}]
-    },
-    {
-      "id": "auto-reichweite",
-      "kind": "car-range",
-      "position": { "floor": "eg", "x": -5, "y": -2, "height": 1.1 },
-      "tags": ["E-Auto"],
-      "value": { "datapoint": "auto.reichweite" },
-      "rules": [{}]
-    }
+    { "id": "pv-dach-sued", "kind": "pv", "pvArray": "pv-sued", "value": { "datapoint": "pv.dach-sued" }, "rules": [{}] },
+    { "id": "pv-carport", "kind": "pv", "pvArray": "pv-carport", "value": { "datapoint": "pv.carport" }, "rules": [{}] },
+    { "id": "auto-ladestand", "kind": "car-battery", "position": { "floor": "eg", "x": -2.835, "y": 5, "height": 1.7 }, "tags": ["E-Auto"], "value": { "datapoint": "auto.ladestand" }, "rules": [{}] },
+    { "id": "auto-reichweite", "kind": "car-range", "position": { "floor": "eg", "x": -2.835, "y": 5, "height": 1.1 }, "tags": ["E-Auto"], "value": { "datapoint": "auto.reichweite" }, "rules": [{}] }
+  ],
+  "lights": [
+    { "id": "poller-weg-1", "kind": "lantern", "floor": "eg", "position": [13.1, 12.55], "height": 0.4, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Poller Wege", "Garten"] },
+    { "id": "poller-weg-2", "kind": "lantern", "floor": "eg", "position": [14.9, 12.55], "height": 0.35, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Poller Wege", "Garten"] },
+    { "id": "poller-zufahrt-1", "kind": "lantern", "floor": "eg", "position": [5.6, 9.6], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Poller Wege", "Garten"] },
+    { "id": "poller-zufahrt-2", "kind": "lantern", "floor": "eg", "position": [5.6, 12.2], "height": 0.5, "data": { "lightColor": "light.aussen.weg" }, "tags": ["Poller Wege", "Garten"] },
+    { "id": "veranda-decke-west", "kind": "ceilingSpot", "floor": "eg", "position": [12.3, 10.9], "height": 2.78, "data": { "lightColor": "light.aussen.eingang" }, "tags": ["Veranda"] },
+    { "id": "veranda-decke-ost", "kind": "ceilingSpot", "floor": "eg", "position": [14.8, 10.9], "height": 2.78, "data": { "lightColor": "light.aussen.eingang" }, "tags": ["Veranda"] },
+    { "id": "wandleuchte-eingang-links", "kind": "wallLight", "floor": "eg", "position": [13, 9.635], "side": "outside", "height": 2, "data": { "lightColor": "light.aussen.eingang" }, "tags": ["Wandleuchten Eingang"] },
+    { "id": "wandleuchte-eingang-rechts", "kind": "wallLight", "floor": "eg", "position": [15, 9.635], "side": "outside", "height": 2, "data": { "lightColor": "light.aussen.eingang" }, "tags": ["Wandleuchten Eingang"] },
+    { "id": "bodenleuchte-terrasse-1", "kind": "groundSpot", "floor": "kg", "position": [24.6, 0.4], "data": { "lightColor": "light.aussen.terrasse" }, "tags": ["Bodenleuchten Terrasse"] },
+    { "id": "bodenleuchte-terrasse-2", "kind": "groundSpot", "floor": "kg", "position": [24.6, 3.2], "data": { "lightColor": "light.aussen.terrasse" }, "tags": ["Bodenleuchten Terrasse"] },
+    { "id": "bodenleuchte-dachterrasse-1", "kind": "groundSpot", "floor": "og", "position": [0.8, 3], "data": { "lightColor": "light.dachterrasse.bodenleuchten" }, "tags": ["Bodenleuchten Dachterrasse"] },
+    { "id": "bodenleuchte-dachterrasse-2", "kind": "groundSpot", "floor": "og", "position": [0.8, 7], "data": { "lightColor": "light.dachterrasse.bodenleuchten" }, "tags": ["Bodenleuchten Dachterrasse"] },
+    { "id": "bodenleuchte-dachterrasse-3", "kind": "groundSpot", "floor": "og", "position": [3.2, 2.4], "data": { "lightColor": "light.dachterrasse.bodenleuchten" }, "tags": ["Bodenleuchten Dachterrasse"] },
+    { "id": "bodenleuchte-dachterrasse-4", "kind": "groundSpot", "floor": "og", "position": [3.2, 7.6], "data": { "lightColor": "light.dachterrasse.bodenleuchten" }, "tags": ["Bodenleuchten Dachterrasse"] },
+    { "id": "wandleuchte-dachterrasse", "kind": "wallLight", "floor": "og", "position": [6.33, 6.4], "side": "outside", "height": 2, "data": { "lightColor": "light.dachterrasse.wandleuchte" }, "tags": ["Wandleuchte Dachterrasse"] },
+    { "id": "poller-pool-nw", "kind": "lantern", "floor": "eg", "position": [2.75, -5.77], "height": 0, "data": { "lightColor": "light.aussen.pool" }, "tags": ["Pool-Beleuchtung", "Garten"] },
+    { "id": "poller-pool-no", "kind": "lantern", "floor": "eg", "position": [11.05, -6.3], "height": 0, "data": { "lightColor": "light.aussen.pool" }, "tags": ["Pool-Beleuchtung", "Garten"] },
+    { "id": "poller-pool-so", "kind": "lantern", "floor": "eg", "position": [11.22, -10.43], "height": 0, "data": { "lightColor": "light.aussen.pool" }, "tags": ["Pool-Beleuchtung", "Garten"] },
+    { "id": "poller-pool-sw", "kind": "lantern", "floor": "eg", "position": [2.75, -10.43], "height": 0, "data": { "lightColor": "light.aussen.pool" }, "tags": ["Pool-Beleuchtung", "Garten"] },
+    { "id": "poolleuchte-west", "kind": "groundSpot", "floor": "eg", "position": [5.3, -7.85], "data": { "lightColor": "light.aussen.pool" }, "tags": ["Pool-Beleuchtung", "Garten"] },
+    { "id": "poolleuchte-ost", "kind": "groundSpot", "floor": "eg", "position": [8.9, -7.85], "data": { "lightColor": "light.aussen.pool" }, "tags": ["Pool-Beleuchtung", "Garten"] },
+    { "id": "esstisch-1", "kind": "pendant", "shape": "tube", "floor": "eg", "position": [17.865, 2.35], "height": 1.5, "data": { "lightColor": "light.wohnen-essen.essplatz" }, "tags": ["Esstischleuchten"] },
+    { "id": "esstisch-2", "kind": "pendant", "shape": "tube", "floor": "eg", "position": [18.465, 2.35], "height": 1.35, "data": { "lightColor": "light.wohnen-essen.essplatz" }, "tags": ["Esstischleuchten"] },
+    { "id": "esstisch-3", "kind": "pendant", "shape": "tube", "floor": "eg", "position": [19.065, 2.35], "height": 1.45, "data": { "lightColor": "light.wohnen-essen.essplatz" }, "tags": ["Esstischleuchten"] },
+    { "id": "stehleuchte-sofa", "kind": "lantern", "floor": "eg", "position": [12.5, 1.1], "height": 1.15, "data": { "lightColor": "light.wohnen-essen.stehleuchten" }, "tags": ["Stehleuchten"] },
+    { "id": "stehleuchte-erker", "kind": "lantern", "floor": "eg", "position": [15.2, -4], "height": 1.05, "data": { "lightColor": "light.wohnen-essen.stehleuchten" }, "tags": ["Stehleuchten"] },
+    { "id": "couchtisch-pendel", "kind": "pendant", "floor": "eg", "position": [14.45, -0.8], "height": 1.3, "tags": ["Leuchte Couchtisch"] },
+    { "id": "regal-west-top-back", "kind": "strip", "on": { "furniture": "wohnen-regal-west", "edge": "top-back" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "regal-west-front-right", "kind": "strip", "on": { "furniture": "wohnen-regal-west", "edge": "front-right" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "regal-ost-top-back", "kind": "strip", "on": { "furniture": "wohnen-regal-ost", "edge": "top-back" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "regal-ost-front-left", "kind": "strip", "on": { "furniture": "wohnen-regal-ost", "edge": "front-left" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "fernseher-top-back", "kind": "strip", "on": { "furniture": "wohnen-fernseher", "edge": "top-back" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "fernseher-bottom-back", "kind": "strip", "on": { "furniture": "wohnen-fernseher", "edge": "bottom-back" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "lowboard-bottom-front", "kind": "strip", "on": { "furniture": "wohnen-lowboard", "edge": "bottom-front" }, "data": { "lightColor": "light.wohnen-essen.regal" } },
+    { "id": "kueche-spot-1", "kind": "ceilingSpot", "floor": "eg", "position": [17.2, 7.45], "tags": ["Küchenspots"] },
+    { "id": "kueche-spot-2", "kind": "ceilingSpot", "floor": "eg", "position": [19.165, 8.4], "tags": ["Küchenspots"] },
+    { "id": "kochinsel-pendel", "kind": "pendant", "floor": "eg", "position": [18.565, 6.5], "height": 1.65, "tags": ["Leuchte Kochinsel"] },
+    { "id": "erker-pendel", "kind": "pendant", "floor": "eg", "position": [18.965, 10.1], "height": 1.65, "tags": ["Leuchte Küchenerker"] },
+    { "id": "kueche-vitrine", "kind": "strip", "on": { "furniture": "oberschrank", "edge": "bottom-front" }, "data": { "light": "light.kueche.vitrine" }, "tags": ["Küchenzeile"] },
+    { "id": "flur-og-wand", "kind": "wallLight", "floor": "og", "position": [8.965, 6], "side": "inside", "height": 1.8, "beam": "both", "tags": ["Wandleuchte Flur OG"] },
+    { "id": "terrasse-leiste", "kind": "strip", "floor": "kg", "from": [21.015, -0.4], "to": [21.015, 4], "height": 2.25, "tags": ["Lichtleiste Terrasse"], "data": { "lightColor": "light.aussen.terrasse" } }
+  ],
+  "weatherStation": { "floor": "og", "position": [10.8, 5], "height": 5.9 },
+  "furniture": [
+    { "id": "kochinsel", "name": "Kochinsel", "floor": "eg", "x0": 17.465, "x1": 19.665, "y0": 6, "y1": 7, "front": "north", "bottom": 0, "top": 0.9, "color": "#d8d4cc", "tags": ["Kochinsel"] },
+    { "id": "kuechenzeile", "name": "Küchenzeile", "floor": "eg", "x0": 20, "x1": 20.6, "y0": 4.95, "y1": 9.5, "front": "west", "bottom": 0, "top": 0.9, "tags": ["Küchenzeile"] },
+    { "id": "oberschrank", "name": "Oberschrank", "floor": "eg", "from": [20.6, 6.7], "to": [20.6, 4.95], "depth": 0.35, "bottom": 1.5, "top": 2.25, "tags": ["Küchenzeile"] },
+    { "id": "esstisch", "name": "Esstisch", "floor": "eg", "x0": 17.565, "x1": 19.365, "y0": 1.9, "y1": 2.8, "front": "south", "bottom": 0, "top": 0.75, "color": "#c9a27e", "tags": ["Esstisch"] },
+    { "id": "wohnen-regal-west", "name": "Regal", "floor": "eg", "from": [11.2, 4.47], "to": [12.8, 4.47], "depth": 0.35, "bottom": -0.36, "top": 1.85, "color": "#b98a5c", "tags": ["Wohnwand"] },
+    { "id": "wohnen-regal-ost", "name": "Regal", "floor": "eg", "from": [14.35, 4.47], "to": [15.6, 4.47], "depth": 0.35, "bottom": -0.36, "top": 1.85, "color": "#b98a5c", "tags": ["Wohnwand"] },
+    { "id": "wohnen-lowboard", "name": "Lowboard", "floor": "eg", "from": [16.17, 0.2], "to": [16.17, -1.8], "depth": 0.42, "bottom": -0.16, "top": 0.22, "color": "#b98a5c", "tags": ["Wohnwand"] },
+    { "id": "wohnen-fernseher", "name": "Fernseher", "floor": "eg", "from": [16.17, -0.15], "to": [16.17, -1.45], "depth": 0.08, "bottom": 0.5, "top": 1.25, "color": "#2a2e34", "opacity": 0.9, "tags": ["Wohnwand"] },
+    { "id": "wohnen-sofa", "name": "Sofa", "floor": "eg", "x0": 12.6, "x1": 13.5, "y0": -2.2, "y1": 0.6, "front": "east", "bottom": -0.36, "top": 0.07, "color": "#8d99a6", "opacity": 0.45, "tags": ["Sitzgruppe"] },
+    { "id": "wohnen-sofa-lehne", "name": "Sofalehne", "floor": "eg", "x0": 12.38, "x1": 12.6, "y0": -2.2, "y1": 0.6, "front": "east", "bottom": -0.36, "top": 0.44, "color": "#8d99a6", "opacity": 0.45, "tags": ["Sitzgruppe"] },
+    { "id": "wohnen-sessel", "name": "Sessel", "floor": "eg", "x0": 13.9, "x1": 14.7, "y0": -4, "y1": -3.2, "front": "north", "bottom": -0.36, "top": 0.1, "color": "#8d99a6", "opacity": 0.45, "tags": ["Sitzgruppe"] },
+    { "id": "wohnen-couchtisch", "name": "Couchtisch", "floor": "eg", "x0": 14.15, "x1": 14.75, "y0": -1.3, "y1": -0.3, "front": "east", "bottom": -0.36, "top": 0.02, "color": "#c9a27e", "tags": ["Sitzgruppe"] }
   ]
 }
